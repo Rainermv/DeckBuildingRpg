@@ -12,8 +12,9 @@ using UnityEngine.UI;
 
 public class CardView : MonoBehaviour, IPointerClickHandler
 {
-    public Button CardButton;
     public TextMeshProUGUI TextName;
+
+    public Action OnCardViewClicked;
 
     // Start is called before the first frame update
     void Awake()
@@ -33,7 +34,7 @@ public class CardView : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        //OnCardViewClicked?.Invoke();
+        OnCardViewClicked?.Invoke();
 
     }
 

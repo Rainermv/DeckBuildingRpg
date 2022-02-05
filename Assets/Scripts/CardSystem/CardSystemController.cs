@@ -5,20 +5,38 @@ using UnityEngine;
 public class CardSystemController
 {
 
-    private Dictionary<string, Deck> _decks { get; set; } = new();
+    private Dictionary<string, CardCollection> _cardCollections { get; set; } = new();
 
 
-    public Dictionary<string, Deck> Initialize()
+    public Dictionary<string, CardCollection> Initialize()
     {
         // shuffle cards,
         // do other stuff
 
-        return _decks;
+        return _cardCollections;
     }
 
 
-    public void AddDeck(string deckIdentifier, Deck deck)
+    public void AddCardCollection(string identifier, CardCollection cardCollection)
     {
-        _decks.Add(deckIdentifier, deck);
+        _cardCollections.Add(identifier, cardCollection);
+    }
+
+    public void DrawCards(string from, string to, int quantity = 1)
+    {
+        if (!_cardCollections.TryGetValue(from, out var fromCollection) ||
+            !_cardCollections.TryGetValue(to, out var toCollection) ||
+            fromCollection.Cards.Count < quantity)
+        {
+            Debug.Log($"Not able to get [{quantity}] cards from [{from}] to [{to}]");
+            return;
+        }
+        var cards = fromCollection.Pop(quantity);
+        toCollection.Push(cards);
+          
+
+
+
+
     }
 }

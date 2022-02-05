@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using Assets.Scripts.CardSystem;
 using Assets.Scripts.CardSystem.CardCommand;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    public CardViewController CardViewController;
+    public CardSystemViewController CardSystemViewController;
 
     
 
@@ -17,32 +16,48 @@ public class GameController : MonoBehaviour
     void Start()
     {
         _cardSystemController = new CardSystemController();
-        _cardSystemController.AddDeck("Deck", 
-            MakeDeck(
+
+        _cardSystemController.AddCardCollection(COLLECTION_DECK, 
+            CardCollection.Make(
                 new List<Card>()
                 {
                     MakeCard("Card 1", 1),
                     MakeCard("Card 2", 2)
                 }));
-        
+
+        _cardSystemController.AddCardCollection(COLLECTION_HAND,
+            CardCollection.Make(
+                new List<Card>()
+                {
+                    MakeCard("Card 3", 1)
+                }));
+
         var decks = _cardSystemController.Initialize();
 
-        CardViewController.Initialize(decks, OnCardClicked);
+        CardSystemViewController.Initialize(decks, OnCardClicked, OnCardCollectionClicked);
 
     }
 
-    private void OnCardClicked(Card card)
+    private const string COLLECTION_HAND = "Hand";
+    private const string COLLECTION_DECK = "Deck";
+
+    private void OnCardClicked(Card card, CardView cardView)
     {
-        card.Play();
+        if (cardView.isActiveAndEnabled){
+            card.Play();
+        }
     }
 
-    // Probably another class later
-    
-
-    private Deck MakeDeck(List<Card> cards)
+    private void OnCardCollectionClicked(CardCollection cardCollection, CardCollectionView cardCollectionView)
     {
-        return Deck.Make(cards);
+        switch (cardCollection.CollectionType)
+        {
+            case CardCollection.Types.DECK:
+                _cardSystemController.DrawCards(COLLECTION_DECK, COLLECTION_HAND);
+                break;
+        }
     }
+
 
     private Card MakeCard(string cardName, int cardType)
     {
