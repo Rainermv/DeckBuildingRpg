@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.CardSystem.CardCommand;
+using Assets.Scripts.CardSystem.Model.CardCommand;
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.CardSystem.Model
 {
     public class Card 
     {
@@ -36,7 +36,7 @@ namespace Assets.Scripts.CardSystem
                 CardCommandReports = Commands.Select(command => new CardCommandReport(CardCommandStatus.Start)).ToList()
             };
 
-            OnStartPlay?.Invoke(this, cardPlayReport);
+            OnStartPlay(this, cardPlayReport);
 
             Debug.Log($"{Name} was played with {Commands.Count} commands");
 
@@ -46,12 +46,12 @@ namespace Assets.Scripts.CardSystem
                 var commandReport = Commands[index].Run();
 
                 cardPlayReport.CardCommandReports[index] = commandReport;
-                OnComandRun?.Invoke(this, cardPlayReport, commandReport);
+                OnComandRun(this, cardPlayReport, commandReport);
             }
 
             // Finish play card
-            OnFinishPlay?.Invoke(this, cardPlayReport);
-            OnUpdate?.Invoke();
+            OnFinishPlay(this, cardPlayReport);
+            OnUpdate();
 
             return cardPlayReport;
         }

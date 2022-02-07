@@ -1,68 +1,96 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem;
+using Assets.Scripts.CardSystem.Model;
+using Assets.Scripts.CardSystem.Model.CardCollection;
 using UnityEngine;
 
-public class CardSystemViewController : MonoBehaviour
+namespace Assets.Scripts.CardSystem.View
 {
-
-    public CardCollectionView CardCollectionPrefab;
-    public CardView CardPrefab;
-
-    private Action<Card, CardView> _onCardClicked;
-    private Action<CardCollection, CardCollectionView> _onCardCollectionClicked;
-
-    private Dictionary<string, CardCollectionView> DeckComponents { get; set; }
-
-    public void Initialize(Dictionary<string, CardCollection> cardCollections,
-        Action<Card, CardView> onCardClicked,
-        Action<CardCollection, CardCollectionView> onCardCollectionClicked)
+    public class CardSystemViewController : MonoBehaviour
     {
-        _onCardClicked = onCardClicked;
-        _onCardCollectionClicked = onCardCollectionClicked;
+        public RectTransform DrawArea;
+        public RectTransform HandArea;
+        public RectTransform DiscardArea;
 
-        var viewControllerTransform = GetComponent<RectTransform>();
 
-        foreach (var (identifier, cardCollection) in cardCollections)
+        public CardCollectionView DeckCollectionViewPrefab;
+        public CardCollectionView HandcollectionViewPrefab;
+        public CardView CardPrefab;
+
+        private List<CardCollectionView> CardCollectionViews { get; set; } = new();
+
+        public void Initialize(Dictionary<string, CardCollection> cardCollections,
+            Action<Card, CardView> onCardClicked,
+            Action<CardCollection, CardCollectionView> OnCardCollectionClicked)
         {
-            var cardCollectionView = Instantiate(CardCollectionPrefab);
 
-            //var CardCollectionTransform = cardCollectionView.GetComponent<RectTransform>();
+            var viewControllerTransform = GetComponent<RectTransform>();
 
-            cardCollectionView.GetComponent<RectTransform>().SetParent(viewControllerTransform, false);
-            cardCollectionView.Initialize(OnInstantiateCardViews, identifier, onCardClicked);
-            cardCollectionView.OnCollectionClicked = () => _onCardCollectionClicked(cardCollection, cardCollectionView);
+            var collectionViewOptions = new Dictionary<string, CardCollectionViewOptions>()
+            {
+                {DeckSystemConstants.COLLECTION_DECK, CardCollectionViewOptions.MakeDeck(DrawArea)},
+                {DeckSystemConstants.COLLECTION_HAND, CardCollectionViewOptions.MakeHand(HandArea)},
+                {DeckSystemConstants.COLLECTION_DISCARD, CardCollectionViewOptions.MakeDeck(DiscardArea)}
+            };
 
 
-            cardCollection.OnUpdate += () => cardCollectionView.OnDeckUpdate(cardCollection);
+            foreach (var (identifier, cardCollection) in cardCollections)
+            {
+                var cardCollectionView = InstantiateCollectionPrefabFor(identifier);
 
-            cardCollection.OnUpdate?.Invoke();
+                cardCollectionView.GetComponent<RectTransform>().SetParent(viewControllerTransform, false);
+                cardCollectionView.Initialize(OnInstantiateCardViews,
+                    identifier,
+                    onCardClicked,
+                    () => OnCardCollectionClicked(cardCollection,
+                        cardCollectionView),
+                    collectionViewOptions[identifier]);
 
-        }
+
+                CardCollectionViews.Add(cardCollectionView);
+
+                cardCollection.OnUpdate += () => cardCollectionView.OnDeckUpdate(cardCollection);
+
+                cardCollection.OnUpdate();
+
+            }
 
         
-    }
-
-    private List<CardView> OnInstantiateCardViews(int numberOfCards, CardCollectionView collectionView)
-    {
-        var cardCollectionTransform = collectionView.GetComponent<RectTransform>();
-        var cardViews = new List<CardView>();
-        for (int i = 0; i < numberOfCards; i++)
-
-        {
-            var cardView = Instantiate(CardPrefab);
-            cardView.GetComponent<RectTransform>().SetParent(cardCollectionTransform, false);
-
-            cardViews.Add(cardView);
-
-            // VIEW -> CONTROLLER
-            //cardView.CardButton.onClick.AddListener(() => _onCardClicked(card, cardView));
-
-            //card.OnUpdate?.Invoke();
         }
 
-        return cardViews;
+        private CardCollectionView InstantiateCollectionPrefabFor(string identifier)
+        {
+            switch (identifier)
+            {
+                case DeckSystemConstants.COLLECTION_DECK:
+                    return Instantiate(DeckCollectionViewPrefab);
+                case DeckSystemConstants.COLLECTION_HAND:
+                    return Instantiate(HandcollectionViewPrefab);
+            }
+
+            Debug.LogError($"No Prefab for [{identifier}] when instantiating");
+            return null;
+        }
+
+        private List<CardView> OnInstantiateCardViews(int numberOfCards, RectTransform parent)
+        {
+            var cardViews = new List<CardView>();
+            for (int i = 0; i < numberOfCards; i++)
+
+            {
+                var cardView = Instantiate(CardPrefab);
+                cardView.GetComponent<RectTransform>().SetParent(parent, false);
+                cardViews.Add(cardView);
+
+                // VIEW -> CONTROLLER
+                //cardView.CardButton.onClick.AddListener(() => _onCardClicked(card, cardView));
+
+                //card.OnUpdate();
+            }
+
+            return cardViews;
+
+        }
 
     }
-
 }

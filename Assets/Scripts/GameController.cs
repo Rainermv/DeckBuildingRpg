@@ -1,104 +1,108 @@
-using Assets.Scripts.CardSystem;
-using Assets.Scripts.CardSystem.CardCommand;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Assets.Scripts.CardSystem;
+using Assets.Scripts.CardSystem.Model;
+using Assets.Scripts.CardSystem.Model.CardCollection;
+using Assets.Scripts.CardSystem.Model.CardCommand;
+using Assets.Scripts.CardSystem.View;
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+namespace Assets.Scripts
 {
-    public CardSystemViewController CardSystemViewController;
-
-    
-
-
-    private CardSystemController _cardSystemController;
-
-    // Start is called before the first frame update
-    void Start()
+    public class GameController : MonoBehaviour
     {
-        _cardSystemController = new CardSystemController();
+        public CardSystemViewController CardSystemViewController;
 
-        _cardSystemController.AddCardCollection(COLLECTION_DECK, 
-            CardCollection.Make(
-                new List<Card>()
-                {
-                    MakeCard("Card 1", 1),
-                    MakeCard("Card 2", 2)
-                }));
+        private CardSystemController _cardSystemController;
 
-        _cardSystemController.AddCardCollection(COLLECTION_HAND,
-            CardCollection.Make(
-                new List<Card>()
-                {
-                    MakeCard("Card 3", 1)
-                }));
-
-        var decks = _cardSystemController.Initialize();
-
-        CardSystemViewController.Initialize(decks, OnCardClicked, OnCardCollectionClicked);
-
-    }
-
-    private const string COLLECTION_HAND = "Hand";
-    private const string COLLECTION_DECK = "Deck";
-
-    private void OnCardClicked(Card card, CardView cardView)
-    {
-        if (cardView.isActiveAndEnabled){
-            card.Play();
-        }
-    }
-
-    private void OnCardCollectionClicked(CardCollection cardCollection, CardCollectionView cardCollectionView)
-    {
-        switch (cardCollection.CollectionType)
+        // Start is called before the first frame update
+        void Start()
         {
-            case CardCollection.Types.DECK:
-                _cardSystemController.DrawCards(COLLECTION_DECK, COLLECTION_HAND);
-                break;
+            _cardSystemController = new CardSystemController();
+
+            _cardSystemController.AddCardCollection(DeckSystemConstants.COLLECTION_DECK, 
+                CardCollection.Make(
+                    new List<Card>()
+                    {
+                        MakeCard("Card 1", 1),
+                        MakeCard("Card 2", 2)
+                    }));
+
+            _cardSystemController.AddCardCollection(DeckSystemConstants.COLLECTION_HAND,
+                CardCollection.Make(
+                    new List<Card>()
+                    {
+                        MakeCard("Card 3", 1)
+                    }));
+
+            var decks = _cardSystemController.Initialize();
+
+            CardSystemViewController.Initialize(decks, OnCardClicked, onDeckClicked);
+
         }
-    }
 
-
-    private Card MakeCard(string cardName, int cardType)
-    {
-        var card = Card.Make(cardName);
-
-        card.Commands = new List<ICardCommand>()
+        private void OnCardClicked(Card card, CardView cardView)
         {
-            new SwitchTypeCommand(card)
-        };
+            if (cardView.isActiveAndEnabled){
+                card.Play();
+            }
+        }
 
-        card.OnUpdate += () => OnCardUpdate(card);
 
-        card.OnStartPlay += OnCardStartPlay;
-        card.OnComandRun += OnCardCommandRun;
-        card.OnFinishPlay += OnCardFinishPlay;
+        private async void onDeckClicked(CardCollection cardCollection, CardCollectionView cardCollectionView)
+        {
+            switch (cardCollectionView.Identifier)
+            {
+                case DeckSystemConstants.COLLECTION_DECK:
+                    await _cardSystemController.DrawCards(DeckSystemConstants.COLLECTION_DECK, DeckSystemConstants.COLLECTION_HAND);
+                    break;
+                    
+            }
 
-        card.CardType = cardType;
+        }
 
-        return card;
 
-    }
+        private Card MakeCard(string cardName, int cardType)
+        {
+            var card = Card.Make(cardName);
 
-    private void OnCardUpdate(Card obj)
-    {
-    }
+            card.Commands = new List<ICardCommand>()
+            {
+                new SwitchTypeCommand(card)
+            };
 
-    private void OnCardFinishPlay(Card c, CardPlayReport carPlayReport)
-    {
-    }
+            card.OnUpdate += () => OnCardUpdate(card);
 
-    private void OnCardCommandRun(Card c, CardPlayReport arg2, CardCommandReport arg3)
-    {
-    }
+            card.OnStartPlay += OnCardStartPlay;
+            card.OnComandRun += OnCardCommandRun;
+            card.OnFinishPlay += OnCardFinishPlay;
 
-    private void OnCardStartPlay(Card c, CardPlayReport arg2)
-    {
-    }
+            card.CardType = cardType;
 
-    // Update is called once per frame
-    void Update()
-    {
+            return card;
 
+        }
+
+        private void OnCardUpdate(Card obj)
+        {
+        }
+
+        private void OnCardFinishPlay(Card c, CardPlayReport carPlayReport)
+        {
+        }
+
+        private void OnCardCommandRun(Card c, CardPlayReport arg2, CardCommandReport arg3)
+        {
+        }
+
+        private void OnCardStartPlay(Card c, CardPlayReport arg2)
+        {
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }

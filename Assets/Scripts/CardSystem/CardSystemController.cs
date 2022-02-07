@@ -1,42 +1,51 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Assets.Scripts.CardSystem.Model.CardCollection;
 using UnityEngine;
 
-public class CardSystemController
+namespace Assets.Scripts.CardSystem
 {
-
-    private Dictionary<string, CardCollection> _cardCollections { get; set; } = new();
-
-
-    public Dictionary<string, CardCollection> Initialize()
+    public class CardSystemController
     {
-        // shuffle cards,
-        // do other stuff
 
-        return _cardCollections;
-    }
+        private Dictionary<string, CardCollection> _cardCollections { get; set; } = new();
 
 
-    public void AddCardCollection(string identifier, CardCollection cardCollection)
-    {
-        _cardCollections.Add(identifier, cardCollection);
-    }
-
-    public void DrawCards(string from, string to, int quantity = 1)
-    {
-        if (!_cardCollections.TryGetValue(from, out var fromCollection) ||
-            !_cardCollections.TryGetValue(to, out var toCollection) ||
-            fromCollection.Cards.Count < quantity)
+        public Dictionary<string, CardCollection> Initialize()
         {
-            Debug.Log($"Not able to get [{quantity}] cards from [{from}] to [{to}]");
-            return;
+            // shuffle cards,
+            // do other stuff
+
+            return _cardCollections;
         }
-        var cards = fromCollection.Pop(quantity);
-        toCollection.Push(cards);
-          
+
+
+        public void AddCardCollection(string identifier, CardCollection cardCollection)
+        {
+            _cardCollections.Add(identifier, cardCollection);
+        }
+
+        public async Task DrawCards(string from, string to, int quantity = 1)
+        {
+            if (!_cardCollections.TryGetValue(from, out var fromCollection) || fromCollection == null ||
+                !_cardCollections.TryGetValue(to, out var toCollection) || toCollection == null ||
+                fromCollection.Cards.Count < quantity)
+            {
+                Debug.Log($"FAILED DRAW [{quantity}] cards from [{from}] to [{to}]");
+                return;
+            }
+
+            var cards = fromCollection.Pop(quantity);
+
+            toCollection.Push(cards);
+
+            Debug.Log($"DRAW [{string.Join(",", cards.Select(c => c.Name))}] from [{from}] to [{to}]");
+
+            // Do card animation here
 
 
 
-
+        }
     }
 }

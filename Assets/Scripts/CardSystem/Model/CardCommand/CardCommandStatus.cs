@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CardSystem.CardCommand
+namespace Assets.Scripts.CardSystem.Model.CardCommand
 {
     public enum CardCommandStatus
     {

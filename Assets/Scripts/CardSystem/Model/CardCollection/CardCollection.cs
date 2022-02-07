@@ -1,42 +1,38 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem;
 
-public class CardCollection
+namespace Assets.Scripts.CardSystem.Model.CardCollection
 {
-    internal List<Card> Cards { get; set; }
-    public Action OnUpdate { get; set; }
-    public int CollectionType { get; set; }
-
-    public static CardCollection Make(List<Card> cards)
+    public class CardCollection
     {
+        internal List<Card> Cards { get; set; }
+        public Action OnUpdate { get; set; }
 
-        return new CardCollection()
+
+        public static CardCollection Make(List<Card> cards)
         {
-            Cards = cards,
-        };
-    }
+            return new CardCollection()
+            {
+                Cards = cards,
+            };
+        }
+        
 
-    public class Types
-    {
-        public const int DECK = 0;
-        public const int HAND = 1;
-    }
+        public IEnumerable<Card> Pop(int quantity)
+        {
+            var cards = Cards.GetRange(0, quantity);
+            Cards.RemoveRange(0, quantity);
 
-    public IEnumerable<Card> Pop(int quantity)
-    {
-        var cards = Cards.GetRange(0, quantity);
-        Cards.RemoveRange(0, quantity);
+            OnUpdate();
 
-        OnUpdate?.Invoke();
+            return cards;
+        }
 
-        return cards;
-    }
+        public void Push(IEnumerable<Card> cards)
+        {
+            Cards.AddRange(cards);
 
-    public void Push(IEnumerable<Card> cards)
-    {
-        Cards.AddRange(cards);
-
-        OnUpdate?.Invoke();
+            OnUpdate();
+        }
     }
 }

@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.CardSystem;
-using Assets.Scripts.CardSystem.CardCommand;
+using Assets.Scripts.CardSystem.Model;
+using Assets.Scripts.CardSystem.Model.CardCommand;
 using NUnit.Framework;
 
 namespace Assets.Tests

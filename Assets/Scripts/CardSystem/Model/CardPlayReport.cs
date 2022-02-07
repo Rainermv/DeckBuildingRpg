@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem.CardCommand;
+using Assets.Scripts.CardSystem.Model.CardCommand;
 
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.CardSystem.Model
 {
     public class CardPlayReport
     {

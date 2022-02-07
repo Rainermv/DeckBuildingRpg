@@ -1,32 +1,32 @@
-using Assets.Scripts.CardSystem;
-using Assets.Scripts.CardSystem.CardCommand;
-
-internal class SwitchTypeCommand : ICardCommand
+namespace Assets.Scripts.CardSystem.Model.CardCommand
 {
-    private readonly Card _affectedCard;
-
-    public SwitchTypeCommand(Card affectedCard)
+    internal class SwitchTypeCommand : ICardCommand
     {
-        _affectedCard = affectedCard;
-    }
+        private readonly Card _affectedCard;
 
-    public CardCommandReport Run()
-    {
-        switch (_affectedCard.CardType)
+        public SwitchTypeCommand(Card affectedCard)
         {
-            case 1: 
-                _affectedCard.CardType = 2;
-                break;
-
-            case 2:
-                _affectedCard.CardType = 1;
-                break;
-
-            default:
-                _affectedCard.CardType = 0;
-                break;
+            _affectedCard = affectedCard;
         }
 
-        return new CardCommandReport(CardCommandStatus.Success);
+        public CardCommandReport Run()
+        {
+            switch (_affectedCard.CardType)
+            {
+                case 1: 
+                    _affectedCard.CardType = 2;
+                    break;
+
+                case 2:
+                    _affectedCard.CardType = 1;
+                    break;
+
+                default:
+                    _affectedCard.CardType = 0;
+                    break;
+            }
+
+            return new CardCommandReport(CardCommandStatus.Success);
+        }
     }
 }

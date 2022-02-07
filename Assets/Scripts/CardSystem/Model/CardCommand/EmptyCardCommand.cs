@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.CardCommand
+namespace Assets.Scripts.CardSystem.Model.CardCommand
 {
     public class EmptyCardCommand : ICardCommand
     {

@@ -1,13 +1,15 @@
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem;
 
-public class CardCollectionFactory
+namespace Assets.Scripts.CardSystem.Model.CardCollection
 {
-    public static CardCollection MakeDeck(List<Card> cards)
+    public class CardCollectionFactory
     {
-        return new CardCollection()
+        public static CardCollection MakeDeck(List<Card> cards)
         {
-            Cards = cards
-        };
+            return new CardCollection()
+            {
+                Cards = cards
+            };
+        }
     }
 }
