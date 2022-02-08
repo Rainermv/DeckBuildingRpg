@@ -12,28 +12,18 @@ namespace Assets.Scripts.CardSystem.View
     {
         public TextMeshProUGUI TextName;
 
-        public Action OnCardViewClicked;
+        private Action<CardView> _onCardViewClicked;
+        public Card Card { get; private set; }
 
         // Start is called before the first frame update
-        void Awake()
+        public void Initialize(Action<CardView> onCardViewClicked)
         {
-        }
-
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
+            _onCardViewClicked = onCardViewClicked;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            OnCardViewClicked();
-
+            _onCardViewClicked(this);
         }
 
         public void OnStartPlay(Card card, CardPlayReport cardPlayReport)
@@ -48,13 +38,18 @@ namespace Assets.Scripts.CardSystem.View
         {
         }
 
-        public void OnCardUpdate(Card card)
+        public void SetCard(Card card)
         {
+            Card = card;
+            card.OnUpdate = OnCardUpdate;
+        }
 
-            gameObject.name = card.Name;
-            TextName.text = card.Name;
+        public void OnCardUpdate()
+        {
+            gameObject.name = Card.Name;
+            TextName.text = Card.Name;
 
-            switch (card.CardType)
+            switch (Card.CardType)
             {
                 case 1:
                     GetComponent<Image>().color = Color.blue;
@@ -64,9 +59,9 @@ namespace Assets.Scripts.CardSystem.View
                     GetComponent<Image>().color = Color.red;
                     break;
             }
-
         }
 
-    
+
+        
     }
 }

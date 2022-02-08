@@ -6,24 +6,26 @@ namespace Assets.Scripts.CardSystem.Model.CardCollection
     public class CardCollection
     {
         internal List<Card> Cards { get; set; }
-        public Action OnUpdate { get; set; }
+        public CardCollectionIdentifier CollectionIdentifier { get; set; }
+
+        public Action OnCardListUpdate { get; set; }
 
 
-        public static CardCollection Make(List<Card> cards)
+        public static CardCollection Make(CardCollectionIdentifier collectionIdentifier, List<Card> cards = null)
         {
             return new CardCollection()
             {
-                Cards = cards,
+                Cards = cards?? new List<Card>(),
+                CollectionIdentifier = collectionIdentifier
             };
         }
-        
 
         public IEnumerable<Card> Pop(int quantity)
         {
             var cards = Cards.GetRange(0, quantity);
             Cards.RemoveRange(0, quantity);
 
-            OnUpdate();
+            OnCardListUpdate();
 
             return cards;
         }
@@ -32,7 +34,7 @@ namespace Assets.Scripts.CardSystem.Model.CardCollection
         {
             Cards.AddRange(cards);
 
-            OnUpdate();
+            OnCardListUpdate();
         }
     }
 }

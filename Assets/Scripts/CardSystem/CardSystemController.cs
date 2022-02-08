@@ -9,24 +9,23 @@ namespace Assets.Scripts.CardSystem
     public class CardSystemController
     {
 
-        private Dictionary<string, CardCollection> _cardCollections { get; set; } = new();
+        private Dictionary<CardCollectionIdentifier, CardCollection> _cardCollections { get; set; } = new();
 
 
-        public Dictionary<string, CardCollection> Initialize()
+        public Dictionary<CardCollectionIdentifier, CardCollection> Initialize()
         {
             // shuffle cards,
             // do other stuff
-
             return _cardCollections;
         }
 
 
-        public void AddCardCollection(string identifier, CardCollection cardCollection)
+        public void AddCardCollection(CardCollection cardCollection)
         {
-            _cardCollections.Add(identifier, cardCollection);
+            _cardCollections.Add(cardCollection.CollectionIdentifier, cardCollection);
         }
 
-        public async Task DrawCards(string from, string to, int quantity = 1)
+        public async Task DrawCards(CardCollectionIdentifier from, CardCollectionIdentifier to, int quantity = 1)
         {
             if (!_cardCollections.TryGetValue(from, out var fromCollection) || fromCollection == null ||
                 !_cardCollections.TryGetValue(to, out var toCollection) || toCollection == null ||
@@ -36,8 +35,7 @@ namespace Assets.Scripts.CardSystem
                 return;
             }
 
-            var cards = fromCollection.Pop(quantity);
-
+            var cards = fromCollection.Pop(quantity).ToList();
             toCollection.Push(cards);
 
             Debug.Log($"DRAW [{string.Join(",", cards.Select(c => c.Name))}] from [{from}] to [{to}]");

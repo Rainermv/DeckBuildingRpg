@@ -20,20 +20,23 @@ namespace Assets.Scripts
         {
             _cardSystemController = new CardSystemController();
 
-            _cardSystemController.AddCardCollection(DeckSystemConstants.COLLECTION_DECK, 
-                CardCollection.Make(
+            _cardSystemController.AddCardCollection( 
+                CardCollection.Make(CardCollectionIdentifier.PlayerDeck,
                     new List<Card>()
                     {
                         MakeCard("Card 1", 1),
                         MakeCard("Card 2", 2)
                     }));
 
-            _cardSystemController.AddCardCollection(DeckSystemConstants.COLLECTION_HAND,
-                CardCollection.Make(
+            _cardSystemController.AddCardCollection(
+                CardCollection.Make(CardCollectionIdentifier.PlayerHand,
                     new List<Card>()
                     {
                         MakeCard("Card 3", 1)
                     }));
+
+            _cardSystemController.AddCardCollection(
+                CardCollection.Make(CardCollectionIdentifier.PlayerDiscard));
 
             var decks = _cardSystemController.Initialize();
 
@@ -41,20 +44,20 @@ namespace Assets.Scripts
 
         }
 
-        private void OnCardClicked(Card card, CardView cardView)
+        private void OnCardClicked(CardView cardView)
         {
             if (cardView.isActiveAndEnabled){
-                card.Play();
+                cardView.Card.Play();
             }
         }
 
 
-        private async void onDeckClicked(CardCollection cardCollection, CardCollectionView cardCollectionView)
+        private async void onDeckClicked(CardCollectionView collectionView)
         {
-            switch (cardCollectionView.Identifier)
+            switch (collectionView.CardCollection.CollectionIdentifier)
             {
-                case DeckSystemConstants.COLLECTION_DECK:
-                    await _cardSystemController.DrawCards(DeckSystemConstants.COLLECTION_DECK, DeckSystemConstants.COLLECTION_HAND);
+                case CardCollectionIdentifier.PlayerDeck:
+                    await _cardSystemController.DrawCards(CardCollectionIdentifier.PlayerDeck, CardCollectionIdentifier.PlayerHand);
                     break;
                     
             }

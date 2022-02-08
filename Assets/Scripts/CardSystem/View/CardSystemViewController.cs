@@ -8,69 +8,55 @@ namespace Assets.Scripts.CardSystem.View
 {
     public class CardSystemViewController : MonoBehaviour
     {
-        public RectTransform DrawArea;
-        public RectTransform HandArea;
-        public RectTransform DiscardArea;
-
-
-        public CardCollectionView DeckCollectionViewPrefab;
-        public CardCollectionView HandcollectionViewPrefab;
-        public CardView CardPrefab;
-
-        private List<CardCollectionView> CardCollectionViews { get; set; } = new();
-
-        public void Initialize(Dictionary<string, CardCollection> cardCollections,
-            Action<Card, CardView> onCardClicked,
-            Action<CardCollection, CardCollectionView> OnCardCollectionClicked)
-        {
-
-            var viewControllerTransform = GetComponent<RectTransform>();
-
-            var collectionViewOptions = new Dictionary<string, CardCollectionViewOptions>()
-            {
-                {DeckSystemConstants.COLLECTION_DECK, CardCollectionViewOptions.MakeDeck(DrawArea)},
-                {DeckSystemConstants.COLLECTION_HAND, CardCollectionViewOptions.MakeHand(HandArea)},
-                {DeckSystemConstants.COLLECTION_DISCARD, CardCollectionViewOptions.MakeDeck(DiscardArea)}
-            };
-
-
-            foreach (var (identifier, cardCollection) in cardCollections)
-            {
-                var cardCollectionView = InstantiateCollectionPrefabFor(identifier);
-
-                cardCollectionView.GetComponent<RectTransform>().SetParent(viewControllerTransform, false);
-                cardCollectionView.Initialize(OnInstantiateCardViews,
-                    identifier,
-                    onCardClicked,
-                    () => OnCardCollectionClicked(cardCollection,
-                        cardCollectionView),
-                    collectionViewOptions[identifier]);
-
-
-                CardCollectionViews.Add(cardCollectionView);
-
-                cardCollection.OnUpdate += () => cardCollectionView.OnDeckUpdate(cardCollection);
-
-                cardCollection.OnUpdate();
-
-            }
-
+        //public Dictionary<CardCollectionIdentifier, CardCollectionView> SceneCardCollectionViews;
+        public CardCollectionView PlayerDeckCollectionView;
+        public CardCollectionView PlayerHandCollectionView;
+        public CardCollectionView PlayerDiscardCollectionView;
         
-        }
+        public CardView CardPrefab;
+        private Action<CardView> _onCardViewClicked;
 
-        private CardCollectionView InstantiateCollectionPrefabFor(string identifier)
+        public void Initialize(Dictionary<CardCollectionIdentifier, CardCollection> cardCollections,
+            Action<CardView> onCardViewClicked,
+            Action<CardCollectionView> onCardCollectionViewClicked)
         {
-            switch (identifier)
-            {
-                case DeckSystemConstants.COLLECTION_DECK:
-                    return Instantiate(DeckCollectionViewPrefab);
-                case DeckSystemConstants.COLLECTION_HAND:
-                    return Instantiate(HandcollectionViewPrefab);
-            }
+            _onCardViewClicked = onCardViewClicked;
 
-            Debug.LogError($"No Prefab for [{identifier}] when instantiating");
-            return null;
+            foreach (var (cardCollectionIdentifier, cardCollection) in cardCollections)
+            {
+                var cardCollectionView = CollectionViewFromIdentifier(cardCollectionIdentifier);
+                if (cardCollectionView == null)
+                {
+                    Debug.LogError($"{cardCollectionIdentifier.ToString()} not found in SceneCardCollectionViews");
+                    continue;
+                }
+
+                cardCollectionView.Initialize(OnInstantiateCardViews,
+                    cardCollection,
+                    onCardCollectionViewClicked);
+
+                cardCollectionView.UpdateCardCollectionView();
+            }
         }
+
+        private CardCollectionView CollectionViewFromIdentifier(CardCollectionIdentifier cardCollectionIdentifier)
+        {
+            switch (cardCollectionIdentifier)
+            {
+                case CardCollectionIdentifier.PlayerDeck:
+                    return PlayerDeckCollectionView;
+
+                case CardCollectionIdentifier.PlayerHand:
+                    return PlayerHandCollectionView;
+
+                case CardCollectionIdentifier.PlayerDiscard:
+                    return PlayerDiscardCollectionView;
+
+                default:
+                    return null;
+            }
+        }
+
 
         private List<CardView> OnInstantiateCardViews(int numberOfCards, RectTransform parent)
         {
@@ -82,6 +68,7 @@ namespace Assets.Scripts.CardSystem.View
                 cardView.GetComponent<RectTransform>().SetParent(parent, false);
                 cardViews.Add(cardView);
 
+                cardView.Initialize(_onCardViewClicked);
                 // VIEW -> CONTROLLER
                 //cardView.CardButton.onClick.AddListener(() => _onCardClicked(card, cardView));
 

@@ -17,42 +17,42 @@ namespace Assets.Scripts.CardSystem.View
         public TextMeshProUGUI TitleText;
         public TextMeshProUGUI CardCounterText;
 
+        [SerializeField] private CardCollectionViewOptions viewOptions;
+
         private List<CardView> _cardViews = new();
         private Func<int, RectTransform, List<CardView>> _onInstantiateCardViews;
-        private Action<Card, CardView> _onCardClicked;
-        private Action _onCollectionClicked;
+        private Action<CardCollectionView> _onCollectionClicked;
 
-        private CardCollectionViewOptions _collectionViewOptions;
-
-        public string Identifier { get; set; }
+        public CardCollection CardCollection { get; private set; }
 
         public void Initialize(Func<int, RectTransform, List<CardView>> onInstantiateCardViews,
-            string identifier, Action<Card, CardView> onCardClicked,
-            Action onCardCollectionClicked,
-            CardCollectionViewOptions cardCollectionViewOptions)
+            CardCollection cardCollection,
+            Action<CardCollectionView> onCardCollectionClicked)
         {
-            _onCardClicked = onCardClicked;
+            this.CardCollection = cardCollection;
+
             _onInstantiateCardViews = onInstantiateCardViews;
-            name = identifier;
-            _collectionViewOptions = cardCollectionViewOptions;
+
             _onCollectionClicked = onCardCollectionClicked;
-            Identifier = identifier;
 
-            GetComponent<RectTransform>().anchoredPosition = cardCollectionViewOptions.RectPosition;
+            name = cardCollection.CollectionIdentifier.ToString();
+            TitleText.text = cardCollection.CollectionIdentifier.ToString();
 
-            TitleText.text = cardCollectionViewOptions.Title;
+            cardCollection.OnCardListUpdate += UpdateCardCollectionView;
 
             _cardViews.AddRange(GetComponentsInChildren<CardView>());
-
 
         }
 
 
-        public void OnDeckUpdate(CardCollection cardCollection)
+        public void UpdateCardCollectionView()
         {
-            var cards = cardCollection.Cards;
+            var cards = CardCollection.Cards;
 
-            ResetCardViews();
+            foreach (var cardView in _cardViews)
+            {
+                cardView.gameObject.SetActive(false);
+            }
 
             if (_cardViews.Count < cards.Count)
             {
@@ -62,35 +62,25 @@ namespace Assets.Scripts.CardSystem.View
 
             for (var i = 0; i < cards.Count; i++)
             {
-                var card = cards[i];
                 var cardView = _cardViews[i];
 
-                //Bind
-                cardView.OnCardViewClicked = () => _onCardClicked(card, cardView);
-                card.OnUpdate = () => cardView.OnCardUpdate(card);
-
-                cardView.gameObject.SetActive(_collectionViewOptions.DisplayCards);
+                cardView.SetCard(cards[i]);
+                cardView.gameObject.SetActive(viewOptions.DisplayCards);
 
                 // Trigger card on update
-                card.OnUpdate();
+                cardView.OnCardUpdate();
             }
 
             CardCounterText.text = cards.Count.ToString();
 
         }
 
-
-        private void ResetCardViews()
-        {
-            foreach (var cardView in _cardViews)
-            {
-                cardView.gameObject.SetActive(false);
-            }
-        }
-
+        
         public void OnPointerClick(PointerEventData eventData)
         {
-            _onCollectionClicked();
+            _onCollectionClicked(this);
         }
+
+        
     }
 }
