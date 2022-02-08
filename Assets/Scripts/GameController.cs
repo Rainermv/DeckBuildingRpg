@@ -2,15 +2,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Assets.Scripts.CardSystem;
 using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.CardCollection;
-using Assets.Scripts.CardSystem.Model.CardCommand;
+using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Model.Command;
 using Assets.Scripts.CardSystem.View;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts
 {
     public class GameController : MonoBehaviour
     {
+
         public CardSystemViewController CardSystemViewController;
 
         private CardSystemController _cardSystemController;
@@ -19,45 +21,37 @@ namespace Assets.Scripts
         void Start()
         {
             _cardSystemController = new CardSystemController();
+            var cardSystemModel = _cardSystemController.Initialize(CardSystemModelFactory.Build());
 
-            _cardSystemController.AddCardCollection( 
-                CardCollection.Make(CardCollectionIdentifier.PlayerDeck,
-                    new List<Card>()
-                    {
-                        MakeCard("Card 1", 1),
-                        MakeCard("Card 2", 2)
-                    }));
+            CardSystemViewController.Initialize(cardSystemModel, OnCardClicked, onDeckClicked);
 
-            _cardSystemController.AddCardCollection(
-                CardCollection.Make(CardCollectionIdentifier.PlayerHand,
-                    new List<Card>()
-                    {
-                        MakeCard("Card 3", 1)
-                    }));
-
-            _cardSystemController.AddCardCollection(
-                CardCollection.Make(CardCollectionIdentifier.PlayerDiscard));
-
-            var decks = _cardSystemController.Initialize();
-
-            CardSystemViewController.Initialize(decks, OnCardClicked, onDeckClicked);
 
         }
 
-        private void OnCardClicked(CardView cardView)
+        private async void OnCardClicked(CardView cardView)
         {
-            if (cardView.isActiveAndEnabled){
-                cardView.Card.Play();
+            var player = cardView.Card.Collection.CardPlayer;
+            
+            switch (cardView.Card.Collection.CollectionIdentifier)
+            {
+                case CardCollectionIdentifier.Hand:
+                    await _cardSystemController.MoveCardTo(cardView.Card, player.CardCollections[CardCollectionIdentifier.Discard]);
+                    break;
+
             }
         }
 
 
         private async void onDeckClicked(CardCollectionView collectionView)
         {
+            var player = collectionView.CardCollection.CardPlayer;
+            
             switch (collectionView.CardCollection.CollectionIdentifier)
             {
-                case CardCollectionIdentifier.PlayerDeck:
-                    await _cardSystemController.DrawCards(CardCollectionIdentifier.PlayerDeck, CardCollectionIdentifier.PlayerHand);
+                case CardCollectionIdentifier.Deck:
+                    await _cardSystemController.DrawCards(player,
+                        player.CardCollections[CardCollectionIdentifier.Deck],
+                        player.CardCollections[CardCollectionIdentifier.Hand]);
                     break;
                     
             }
@@ -67,7 +61,7 @@ namespace Assets.Scripts
 
         private Card MakeCard(string cardName, int cardType)
         {
-            var card = Card.Make(cardName);
+            var card = Card.Make(cardName, cardType);
 
             card.Commands = new List<ICardCommand>()
             {

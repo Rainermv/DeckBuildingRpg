@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem.Model.CardCommand;
+using Assets.Scripts.CardSystem.Model.Command;
 
 namespace Assets.Scripts.CardSystem.Model
 {

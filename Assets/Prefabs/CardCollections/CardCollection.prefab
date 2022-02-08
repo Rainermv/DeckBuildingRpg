@@ -137,9 +137,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad842868ff481504fa9cf3b59acf2892, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Image: {fileID: 3298201922081313863}
   CardsContainer: {fileID: 1568883793599590611}
   TitleText: {fileID: 2859773940715830732}
   CardCounterText: {fileID: 5978125000561983805}
+  viewOptions:
+    CardsVisible: 0
 --- !u!1 &5021134317620555180
 GameObject:
   m_ObjectHideFlags: 0

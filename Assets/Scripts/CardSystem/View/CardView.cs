@@ -1,6 +1,6 @@
 using System;
 using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.CardCommand;
+using Assets.Scripts.CardSystem.Model.Command;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -26,6 +26,12 @@ namespace Assets.Scripts.CardSystem.View
             _onCardViewClicked(this);
         }
 
+        public void Reset(bool isActive)
+        {
+            gameObject.SetActive(isActive);
+
+        }
+
         public void OnStartPlay(Card card, CardPlayReport cardPlayReport)
         {
         }
@@ -38,10 +44,13 @@ namespace Assets.Scripts.CardSystem.View
         {
         }
 
-        public void SetCard(Card card)
+        public void Display(Card card)
         {
             Card = card;
             card.OnUpdate = OnCardUpdate;
+
+            // Trigger update to display data
+            OnCardUpdate();
         }
 
         public void OnCardUpdate()
@@ -51,12 +60,16 @@ namespace Assets.Scripts.CardSystem.View
 
             switch (Card.CardType)
             {
+                case 0:
+                    GetComponent<Image>().color = Color.gray;
+                    break;
+
                 case 1:
-                    GetComponent<Image>().color = Color.blue;
+                    GetComponent<Image>().color = Color.cyan;
                     break;
 
                 case 2:
-                    GetComponent<Image>().color = Color.red;
+                    GetComponent<Image>().color = Color.magenta;
                     break;
             }
         }

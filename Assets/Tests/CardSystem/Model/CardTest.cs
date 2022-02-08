@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.CardSystem;
 using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.CardCommand;
+using Assets.Scripts.CardSystem.Model.Command;
 using NUnit.Framework;
 
 namespace Assets.Tests

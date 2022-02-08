@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.CardCollection;
+using Assets.Scripts.CardSystem.Model.Collection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,7 +12,7 @@ namespace Assets.Scripts.CardSystem.View
 {
     public class CardCollectionView : MonoBehaviour, IPointerClickHandler
     {
-        
+        public Image Image;
         public RectTransform CardsContainer;
         public TextMeshProUGUI TitleText;
         public TextMeshProUGUI CardCounterText;
@@ -21,37 +21,56 @@ namespace Assets.Scripts.CardSystem.View
 
         private List<CardView> _cardViews = new();
         private Func<int, RectTransform, List<CardView>> _onInstantiateCardViews;
-        private Action<CardCollectionView> _onCollectionClicked;
+        private Action<CardCollectionView> _onCardCollectionViewClicked;
 
         public CardCollection CardCollection { get; private set; }
 
         public void Initialize(Func<int, RectTransform, List<CardView>> onInstantiateCardViews,
-            CardCollection cardCollection,
-            Action<CardCollectionView> onCardCollectionClicked)
+            Action<CardCollectionView> onCardCollectionViewClicked)
+        {
+            _onInstantiateCardViews = onInstantiateCardViews;
+            _onCardCollectionViewClicked = onCardCollectionViewClicked;
+
+            CardsContainer.gameObject.SetActive(viewOptions.CardsVisible);
+
+        }
+
+        public void Display(CardCollection cardCollection)
         {
             this.CardCollection = cardCollection;
-
-            _onInstantiateCardViews = onInstantiateCardViews;
-
-            _onCollectionClicked = onCardCollectionClicked;
 
             name = cardCollection.CollectionIdentifier.ToString();
             TitleText.text = cardCollection.CollectionIdentifier.ToString();
 
-            cardCollection.OnCardListUpdate += UpdateCardCollectionView;
+            cardCollection.OnCardListUpdate = (cards) => UpdateCardList(cards);
 
-            _cardViews.AddRange(GetComponentsInChildren<CardView>());
+            switch (cardCollection.CardPlayer.Name)
+            {
+                case CardSystemConstants.PLAYER_1:
+                    Image.color = Color.blue;
+                    break;
+
+                case CardSystemConstants.PLAYER_2:
+                    Image.color = Color.red;
+                    break;
+
+                case CardSystemConstants.PLAYER_3:
+                    Image.color = Color.green;
+                    break;
+
+            }
+
+            // Trigger update to display data
+            UpdateCardList(cardCollection.Cards);
 
         }
 
-
-        public void UpdateCardCollectionView()
+        public void UpdateCardList(List<Card> cards)
         {
-            var cards = CardCollection.Cards;
 
             foreach (var cardView in _cardViews)
             {
-                cardView.gameObject.SetActive(false);
+                cardView.Reset(false);
             }
 
             if (_cardViews.Count < cards.Count)
@@ -62,13 +81,8 @@ namespace Assets.Scripts.CardSystem.View
 
             for (var i = 0; i < cards.Count; i++)
             {
-                var cardView = _cardViews[i];
-
-                cardView.SetCard(cards[i]);
-                cardView.gameObject.SetActive(viewOptions.DisplayCards);
-
-                // Trigger card on update
-                cardView.OnCardUpdate();
+                _cardViews[i].Display(cards[i]);
+                _cardViews[i].Reset(true);
             }
 
             CardCounterText.text = cards.Count.ToString();
@@ -78,8 +92,9 @@ namespace Assets.Scripts.CardSystem.View
         
         public void OnPointerClick(PointerEventData eventData)
         {
-            _onCollectionClicked(this);
+            _onCardCollectionViewClicked(this);
         }
+
 
         
     }

@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.CardCollection;
+using Assets.Scripts.CardSystem.Model.Collection;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.CardSystem.View
 {
     public class CardSystemViewController : MonoBehaviour
     {
+        public Button ChangePlayerButton;
+
         //public Dictionary<CardCollectionIdentifier, CardCollectionView> SceneCardCollectionViews;
         public CardCollectionView PlayerDeckCollectionView;
         public CardCollectionView PlayerHandCollectionView;
@@ -16,13 +20,53 @@ namespace Assets.Scripts.CardSystem.View
         public CardView CardPrefab;
         private Action<CardView> _onCardViewClicked;
 
-        public void Initialize(Dictionary<CardCollectionIdentifier, CardCollection> cardCollections,
+
+        private int _displayedPlayer;
+
+        public void Initialize(CardSystemModel cardSystemModel,
             Action<CardView> onCardViewClicked,
             Action<CardCollectionView> onCardCollectionViewClicked)
         {
             _onCardViewClicked = onCardViewClicked;
 
-            foreach (var (cardCollectionIdentifier, cardCollection) in cardCollections)
+            PlayerDeckCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
+            PlayerHandCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
+            PlayerDiscardCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
+
+            currentPlayer = cardSystemModel.CardPlayers.Values.FirstOrDefault();
+
+            DisplayPlayer(currentPlayer);
+
+            linkedPlayerList = new LinkedList<CardPlayer>(cardSystemModel.CardPlayers.Values);
+
+            ChangePlayerButton.onClick.AddListener(() =>
+            {
+                DisplayPlayer(GetNextPlayer());
+            });
+
+        }
+
+        private CardPlayer currentPlayer;
+        private LinkedList<CardPlayer> linkedPlayerList;
+
+        public CardPlayer GetNextPlayer()
+        {
+            // Find the current node
+            var curNode = linkedPlayerList.Find(currentPlayer);
+
+            // Point to the next
+            LinkedListNode<CardPlayer> nextNode = curNode.Next;
+
+            // Check if at the end of the list
+            nextNode = nextNode == null ? linkedPlayerList.First : nextNode;
+
+            currentPlayer = nextNode.Value;
+            return currentPlayer;
+        }
+
+        private void DisplayPlayer(CardPlayer cardPlayer)
+        {
+            foreach (var (cardCollectionIdentifier, cardCollection) in cardPlayer.CardCollections)
             {
                 var cardCollectionView = CollectionViewFromIdentifier(cardCollectionIdentifier);
                 if (cardCollectionView == null)
@@ -31,11 +75,9 @@ namespace Assets.Scripts.CardSystem.View
                     continue;
                 }
 
-                cardCollectionView.Initialize(OnInstantiateCardViews,
-                    cardCollection,
-                    onCardCollectionViewClicked);
+                cardCollectionView.Display(cardCollection);
 
-                cardCollectionView.UpdateCardCollectionView();
+                //cardCollection.OnUpdate();
             }
         }
 
@@ -43,13 +85,13 @@ namespace Assets.Scripts.CardSystem.View
         {
             switch (cardCollectionIdentifier)
             {
-                case CardCollectionIdentifier.PlayerDeck:
+                case CardCollectionIdentifier.Deck:
                     return PlayerDeckCollectionView;
 
-                case CardCollectionIdentifier.PlayerHand:
+                case CardCollectionIdentifier.Hand:
                     return PlayerHandCollectionView;
 
-                case CardCollectionIdentifier.PlayerDiscard:
+                case CardCollectionIdentifier.Discard:
                     return PlayerDiscardCollectionView;
 
                 default:

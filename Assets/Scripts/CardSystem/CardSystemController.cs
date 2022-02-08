@@ -1,47 +1,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Assets.Scripts.CardSystem.Model.CardCollection;
+using Assets.Scripts.CardSystem.Model;
+using Assets.Scripts.CardSystem.Model.Collection;
 using UnityEngine;
 
 namespace Assets.Scripts.CardSystem
 {
     public class CardSystemController
     {
+        private CardSystemModel _cardSystemModel = new CardSystemModel();
 
-        private Dictionary<CardCollectionIdentifier, CardCollection> _cardCollections { get; set; } = new();
 
-
-        public Dictionary<CardCollectionIdentifier, CardCollection> Initialize()
+        public CardSystemModel Initialize(CardSystemModel cardSystemModel)
         {
+            _cardSystemModel = cardSystemModel;
             // shuffle cards,
             // do other stuff
-            return _cardCollections;
+            return _cardSystemModel;
         }
 
 
-        public void AddCardCollection(CardCollection cardCollection)
+        public async Task DrawCards(CardPlayer cardPlayer, CardCollection from,
+            CardCollection to, int quantity = 1)
         {
-            _cardCollections.Add(cardCollection.CollectionIdentifier, cardCollection);
-        }
 
-        public async Task DrawCards(CardCollectionIdentifier from, CardCollectionIdentifier to, int quantity = 1)
-        {
-            if (!_cardCollections.TryGetValue(from, out var fromCollection) || fromCollection == null ||
-                !_cardCollections.TryGetValue(to, out var toCollection) || toCollection == null ||
-                fromCollection.Cards.Count < quantity)
+            if (from.CardsCount < quantity)
             {
                 Debug.Log($"FAILED DRAW [{quantity}] cards from [{from}] to [{to}]");
                 return;
             }
 
-            var cards = fromCollection.Pop(quantity).ToList();
-            toCollection.Push(cards);
+            var cards = from.Pop(quantity).ToList();
+            to.InsertCards(cards); // insert to top
 
             Debug.Log($"DRAW [{string.Join(",", cards.Select(c => c.Name))}] from [{from}] to [{to}]");
 
             // Do card animation here
+        }
 
+        public async Task MoveCardTo(Card card, CardCollection to)
+        {
+            var from = card.Collection;
+
+            if (card.Collection.RemoveCard(card))
+            {
+                to.InsertCards(new List<Card>(){card}, 0);
+                Debug.Log($"MOVE [{card.Name}] from [{from}] to [{to}]");
+            }
 
 
         }

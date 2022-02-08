@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.Model.CardCommand
+namespace Assets.Scripts.CardSystem.Model.Command
 {
     public class NumberCommand : ICardCommand
     {

@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CardSystem.Model.CardCommand
+namespace Assets.Scripts.CardSystem.Model.Command
 {
     internal class SwitchTypeCommand : ICardCommand
     {
