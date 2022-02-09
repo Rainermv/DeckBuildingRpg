@@ -5,8 +5,10 @@ namespace Assets.Scripts.CardSystem.Model
 {
     public class CardPlayer
     {
-        public Dictionary<CardCollectionIdentifier, CardCollection> CardCollections { get; private set; } = new();
         public string Name { get; set; }
+
+        public Dictionary<CardCollectionIdentifier, CardCollection> CardCollections { get; set; } = new();
+        public Dictionary<string, Resource> Resources { get; set; } = new();
 
 
         public static CardPlayer Make(string playerName)
@@ -26,7 +28,15 @@ namespace Assets.Scripts.CardSystem.Model
             cardCollection.CollectionIdentifier = identifier;
             cardCollection.CardPlayer = this;
             CardCollections.Add(identifier, cardCollection);
-
         }
+
+        public Resource AddNewResource(string name)
+        {
+            var resource = new Resource(name);
+            Resources.Add(name, resource);
+            return resource;
+        }
+
+
     }
 }

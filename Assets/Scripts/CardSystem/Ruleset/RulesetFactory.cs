@@ -6,7 +6,7 @@ namespace Assets.Scripts
     {
         public static ICardRuleset Build()
         {
-            return new CardRuleset(
+            return new StandardCardRuleset(
                 new RandomCollectionShuffler());
         }
     }

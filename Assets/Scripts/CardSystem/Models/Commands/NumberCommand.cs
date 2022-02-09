@@ -12,7 +12,7 @@ namespace Assets.Scripts.CardSystem.Model.Command
             Value = value;
         }
 
-        public CardCommandReport Run()
+        public CardCommandReport Run(Card sourceCard, GameContext gameContext)
         {
             Debug.Log($"Number Command Was Run. Value: [{Value}]");
 

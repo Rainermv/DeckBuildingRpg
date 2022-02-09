@@ -5,11 +5,11 @@ using Assets.Scripts.CardSystem.Model.Collection;
 
 namespace Assets.Scripts
 {
-    internal class CardRuleset : ICardRuleset
+    internal class StandardCardRuleset : ICardRuleset
     {
         private ICollectionShuffler _collectionShuffler;
 
-        public CardRuleset(ICollectionShuffler collectionShuffler)
+        public StandardCardRuleset(ICollectionShuffler collectionShuffler)
         {
             _collectionShuffler = collectionShuffler;
         }
@@ -20,7 +20,10 @@ namespace Assets.Scripts
 
         public void SetupPlayer(CardPlayer cardPlayer)
         {
+            cardPlayer.Resources[PlayerResourceNames.Power].Value = 10;
         }
+
+        
 
         public void SetupCollection(CardCollection cardCollection)
         {
@@ -41,5 +44,6 @@ namespace Assets.Scripts
             }
             
         }
+
     }
 }

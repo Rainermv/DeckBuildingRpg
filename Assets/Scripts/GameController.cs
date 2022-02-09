@@ -19,17 +19,22 @@ namespace Assets.Scripts
         public CardSystemViewController CardSystemViewController;
 
         private CardSystemController _cardSystemController;
+        private GameContext _gameContext;
 
         // Start is called before the first frame update
         void Start()
         {
+            _gameContext = new GameContext()
+            {
+                CardSystemModel = CardSystemModelFactory.Build()
+            };
+
             _cardSystemController = new CardSystemController(RulesetFactory.Build());
 
+            _gameContext.CardSystemModel = _cardSystemController.Setup(_gameContext.CardSystemModel);
 
-            var cardSystemModel = _cardSystemController.Setup(CardSystemModelFactory.Build());
-            
-            CardSystemViewController.Initialize(cardSystemModel, OnCardClicked, onDeckClicked);
-            CardSystemViewController.DisplayPlayer(cardSystemModel.CardPlayers.Values.First());
+            CardSystemViewController.Initialize(_gameContext.CardSystemModel, OnCardClicked, onDeckClicked);
+            CardSystemViewController.DisplayPlayer(_gameContext.CardSystemModel.CardPlayers.Values.First());
         }
 
         private async void OnCardClicked(CardView cardView)
@@ -39,6 +44,7 @@ namespace Assets.Scripts
             switch (cardView.Card.Collection.CollectionIdentifier)
             {
                 case CardCollectionIdentifier.Hand:
+                    cardView.Card.Play(_gameContext);
                     await _cardSystemController.MoveCardTo(cardView.Card, player.CardCollections[CardCollectionIdentifier.Discard]);
                     break;
 
@@ -65,7 +71,7 @@ namespace Assets.Scripts
 
         private Card MakeCard(string cardName, int cardType)
         {
-            var card = Card.Make(cardName, cardType);
+            var card = Card.Make(cardName);
 
             card.Commands = new List<ICardCommand>()
             {
@@ -77,8 +83,6 @@ namespace Assets.Scripts
             card.OnStartPlay += OnCardStartPlay;
             card.OnComandRun += OnCardCommandRun;
             card.OnFinishPlay += OnCardFinishPlay;
-
-            card.CardType = cardType;
 
             return card;
 

@@ -11,7 +11,7 @@ namespace Assets.Scripts.CardSystem.Model.Command
             _v2 = v2;
         }
 
-        public CardCommandReport Run()
+        public CardCommandReport Run(Card sourceCard, GameContext gameContext)
         {
             return
                 new CardCommandReport((_v1 == _v2)

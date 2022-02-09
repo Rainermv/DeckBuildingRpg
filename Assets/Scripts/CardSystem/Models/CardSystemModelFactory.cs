@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using Assets.Scripts.CardSystem.Model;
 using Assets.Scripts.CardSystem.Model.Collection;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Assets.Scripts.CardSystem
 {
@@ -26,14 +28,32 @@ namespace Assets.Scripts.CardSystem
 
             cardPlayer.AddNewCollection(CardCollectionIdentifier.Hand);
             cardPlayer.AddNewCollection(CardCollectionIdentifier.Discard);
+
+            cardPlayer.AddNewResource(PlayerResourceNames.Power).OnValueChanged += (res) =>
+            {
+                Debug.Log(res.Value);
+            };
         }
 
         private static List<Card> BuildCards(int numOfCards)
         {
+            var random = new Random();
+
             var cards = new List<Card>();
             for (var i = 0; i < numOfCards; i++)
             {
-                cards.Add(Card.Make($"{i}", 0));
+                var powerEfectType = random.Next(1, 3);
+                var powerEffect = random.Next(1, 5);
+
+                var sign = powerEfectType == 1 ? "+" : "-";
+                var card = Card.Make($"{sign}{powerEffect}");
+
+                card.AddNewResource(CardResourceNames.POWER_EFFECT_TYPE, powerEfectType);
+                card.AddNewResource(CardResourceNames.POWER_EFFECT, powerEffect);
+
+                card.Commands.Add(new ChangePowerCardCommand());
+
+                cards.Add(card);
             }
 
             return cards;

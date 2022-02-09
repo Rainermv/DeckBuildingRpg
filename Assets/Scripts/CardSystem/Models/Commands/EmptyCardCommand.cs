@@ -4,7 +4,7 @@ namespace Assets.Scripts.CardSystem.Model.Command
 {
     public class EmptyCardCommand : ICardCommand
     {
-        public CardCommandReport Run()
+        public CardCommandReport Run(Card sourceCard, GameContext gameContext)
         {
             Debug.Log("A basic command was run");
 

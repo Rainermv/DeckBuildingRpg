@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.CardSystem.Model;
 using Assets.Scripts.CardSystem.Model.Collection;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ namespace Assets.Scripts.CardSystem.View
 {
     public class CardSystemViewController : MonoBehaviour
     {
+        public TextMeshProUGUI PowerText;
         public Button ChangePlayerButton;
 
         //public Dictionary<CardCollectionIdentifier, CardCollectionView> SceneCardCollectionViews;
@@ -76,7 +78,11 @@ namespace Assets.Scripts.CardSystem.View
 
                 //cardCollection.OnUpdate();
             }
+
+            PowerText.text = cardPlayer.Resources[PlayerResourceNames.Power].Value.ToString();
+            cardPlayer.Resources[PlayerResourceNames.Power].OnValueChanged = (res) => PowerText.text = res.Value.ToString();
         }
+
 
         private CardCollectionView CollectionViewFromIdentifier(CardCollectionIdentifier cardCollectionIdentifier)
         {

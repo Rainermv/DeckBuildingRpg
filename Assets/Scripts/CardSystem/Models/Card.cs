@@ -11,34 +11,32 @@ namespace Assets.Scripts.CardSystem.Model
     {
         public string Name { get; set; }
         public List<ICardCommand> Commands { get; set; } = new();
-        public int CardType { get; set; }
-
         public CardCollection Collection { get; set; }
-        
+
+        public Dictionary<string, Resource> Resources { get; set; } = new();
+
+
         public Action<Card, CardPlayReport> OnStartPlay { get; set; }
         public Action<Card, CardPlayReport, CardCommandReport> OnComandRun { get; set; }
         public Action<Card, CardPlayReport> OnFinishPlay { get; set; }
         public Action OnUpdate { get; set; }
 
 
-        public static Card Make(string name, int type)
+        public static Card Make(string name)
         {
             return new Card()
             {
                 Name = name,
-                CardType = type
             };
         }
 
-        /*
-        public void Reset()
+        public void AddNewResource(string name, int value)
         {
-            OnUpdate = null;
+            Resources.Add(name, new Resource(name, value));
         }
-        */
+        
 
-
-        public CardPlayReport Play()
+        public CardPlayReport Play(GameContext gameContext)
         {
             // Initialize reports
             var cardPlayReport = new CardPlayReport()
@@ -46,22 +44,22 @@ namespace Assets.Scripts.CardSystem.Model
                 CardCommandReports = Commands.Select(command => new CardCommandReport(CardCommandStatus.Start)).ToList()
             };
 
-            OnStartPlay(this, cardPlayReport);
+            OnStartPlay?.Invoke(this, cardPlayReport);
 
             Debug.Log($"{Name} was played with {Commands.Count} commands");
 
             // Run commands in sequence
             for (var index = 0; index < Commands.Count; index++)
             {
-                var commandReport = Commands[index].Run();
+                var commandReport = Commands[index].Run(this, gameContext);
 
                 cardPlayReport.CardCommandReports[index] = commandReport;
-                OnComandRun(this, cardPlayReport, commandReport);
+                OnComandRun?.Invoke(this, cardPlayReport, commandReport);
             }
 
             // Finish play card
-            OnFinishPlay(this, cardPlayReport);
-            OnUpdate();
+            OnFinishPlay?.Invoke(this, cardPlayReport);
+            OnUpdate?.Invoke();
 
             return cardPlayReport;
         }
