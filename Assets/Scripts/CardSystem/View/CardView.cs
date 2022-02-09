@@ -10,10 +10,15 @@ namespace Assets.Scripts.CardSystem.View
 {
     public class CardView : MonoBehaviour, IPointerClickHandler
     {
-        public TextMeshProUGUI TextName;
+        public RectTransform RectTransform;
+        [SerializeField] private TextMeshProUGUI _textName;
 
         private Action<CardView> _onCardViewClicked;
         public Card Card { get; private set; }
+
+        void Awake()
+        {
+        }
 
         // Start is called before the first frame update
         public void Initialize(Action<CardView> onCardViewClicked)
@@ -56,7 +61,7 @@ namespace Assets.Scripts.CardSystem.View
         public void OnCardUpdate()
         {
             gameObject.name = Card.Name;
-            TextName.text = Card.Name;
+            _textName.text = Card.Name;
 
             switch (Card.CardType)
             {

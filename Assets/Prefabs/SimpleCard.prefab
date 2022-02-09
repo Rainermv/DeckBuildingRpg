@@ -270,4 +270,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 394353509887f3f429b28133d729ea65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TextName: {fileID: 3298201920707402730}
+  RectTransform: {fileID: 3298201922081313880}
+  _textName: {fileID: 3298201920707402730}

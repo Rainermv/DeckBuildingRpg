@@ -9,14 +9,33 @@ namespace Assets.Scripts.CardSystem
 {
     public class CardSystemController
     {
-        private CardSystemModel _cardSystemModel = new CardSystemModel();
+        private CardSystemModel _cardSystemModel = new();
+        private ICardRuleset _cardRuleset;
 
 
-        public CardSystemModel Initialize(CardSystemModel cardSystemModel)
+        public CardSystemController(ICardRuleset cardRuleset)
+        {
+            _cardRuleset = cardRuleset;
+        }
+
+
+        public CardSystemModel Setup(CardSystemModel cardSystemModel)
         {
             _cardSystemModel = cardSystemModel;
-            // shuffle cards,
-            // do other stuff
+
+            _cardRuleset.SetupSystem(cardSystemModel);
+
+            foreach (var cardPlayer in _cardSystemModel.CardPlayers.Values)
+            {
+                _cardRuleset.SetupPlayer(cardPlayer);
+
+                foreach (var cardCollection in cardPlayer.CardCollections.Values)
+                {
+                    _cardRuleset.SetupCollection(cardCollection);
+
+                }
+            }
+
             return _cardSystemModel;
         }
 

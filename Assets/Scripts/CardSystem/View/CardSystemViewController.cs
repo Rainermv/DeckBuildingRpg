@@ -20,8 +20,8 @@ namespace Assets.Scripts.CardSystem.View
         public CardView CardPrefab;
         private Action<CardView> _onCardViewClicked;
 
-
-        private int _displayedPlayer;
+        private CardPlayer _displayedPlayer;
+        private LinkedList<CardPlayer> _linkedPlayerList;
 
         public void Initialize(CardSystemModel cardSystemModel,
             Action<CardView> onCardViewClicked,
@@ -33,11 +33,7 @@ namespace Assets.Scripts.CardSystem.View
             PlayerHandCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
             PlayerDiscardCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
 
-            currentPlayer = cardSystemModel.CardPlayers.Values.FirstOrDefault();
-
-            DisplayPlayer(currentPlayer);
-
-            linkedPlayerList = new LinkedList<CardPlayer>(cardSystemModel.CardPlayers.Values);
+            _linkedPlayerList = new LinkedList<CardPlayer>(cardSystemModel.CardPlayers.Values);
 
             ChangePlayerButton.onClick.AddListener(() =>
             {
@@ -46,26 +42,27 @@ namespace Assets.Scripts.CardSystem.View
 
         }
 
-        private CardPlayer currentPlayer;
-        private LinkedList<CardPlayer> linkedPlayerList;
+        
 
         public CardPlayer GetNextPlayer()
         {
             // Find the current node
-            var curNode = linkedPlayerList.Find(currentPlayer);
+            var curNode = _linkedPlayerList.Find(_displayedPlayer);
 
             // Point to the next
             LinkedListNode<CardPlayer> nextNode = curNode.Next;
 
             // Check if at the end of the list
-            nextNode = nextNode == null ? linkedPlayerList.First : nextNode;
+            nextNode = nextNode == null ? _linkedPlayerList.First : nextNode;
 
-            currentPlayer = nextNode.Value;
-            return currentPlayer;
+            _displayedPlayer = nextNode.Value;
+            return _displayedPlayer;
         }
 
-        private void DisplayPlayer(CardPlayer cardPlayer)
+        public void DisplayPlayer(CardPlayer cardPlayer)
         {
+            _displayedPlayer = cardPlayer;
+
             foreach (var (cardCollectionIdentifier, cardCollection) in cardPlayer.CardCollections)
             {
                 var cardCollectionView = CollectionViewFromIdentifier(cardCollectionIdentifier);
@@ -107,7 +104,8 @@ namespace Assets.Scripts.CardSystem.View
 
             {
                 var cardView = Instantiate(CardPrefab);
-                cardView.GetComponent<RectTransform>().SetParent(parent, false);
+
+                cardView.RectTransform.SetParent(parent, false);
                 cardViews.Add(cardView);
 
                 cardView.Initialize(_onCardViewClicked);

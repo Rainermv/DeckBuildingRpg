@@ -81,7 +81,7 @@ namespace Assets.Scripts.CardSystem.View
 
             for (var i = 0; i < cards.Count; i++)
             {
-                _cardViews[i].Display(cards[i]);
+                _cardViews[i].Display(cards[cards.Count - i - 1]);
                 _cardViews[i].Reset(true);
             }
 

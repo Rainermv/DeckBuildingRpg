@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Assets.Scripts.CardSystem;
 using Assets.Scripts.CardSystem.Model;
@@ -20,12 +23,13 @@ namespace Assets.Scripts
         // Start is called before the first frame update
         void Start()
         {
-            _cardSystemController = new CardSystemController();
-            var cardSystemModel = _cardSystemController.Initialize(CardSystemModelFactory.Build());
+            _cardSystemController = new CardSystemController(RulesetFactory.Build());
 
+
+            var cardSystemModel = _cardSystemController.Setup(CardSystemModelFactory.Build());
+            
             CardSystemViewController.Initialize(cardSystemModel, OnCardClicked, onDeckClicked);
-
-
+            CardSystemViewController.DisplayPlayer(cardSystemModel.CardPlayers.Values.First());
         }
 
         private async void OnCardClicked(CardView cardView)
