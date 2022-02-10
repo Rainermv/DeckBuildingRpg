@@ -1,4 +1,5 @@
 using System;
+using Assets.Scripts.CardSystem.Constants;
 using Assets.Scripts.CardSystem.Model;
 using Assets.Scripts.CardSystem.Model.Command;
 using TMPro;
@@ -37,18 +38,6 @@ namespace Assets.Scripts.CardSystem.View
 
         }
 
-        public void OnStartPlay(Card card, CardPlayReport cardPlayReport)
-        {
-        }
-
-        public void OnCommandRun(Card card, CardPlayReport cardPlayReport, CardCommandReport cardCommandReport)
-        {
-        }
-
-        public void OnFinishPlay(Card card, CardPlayReport cardPlayReport)
-        {
-        }
-
         public void Display(Card card)
         {
             Card = card;
@@ -63,17 +52,17 @@ namespace Assets.Scripts.CardSystem.View
             gameObject.name = Card.Name;
             _textName.text = Card.Name;
 
-            switch (Card.AttributeSet.GetValue(CardAttributeNames.POWER_EFFECT_TYPE))
+            switch (Card.AttributeSet.GetValue(CardAttributeNames.TYPE))
             {
-                case 0:
+                case CardTypes.DRAW:
                     GetComponent<Image>().color = Color.gray;
                     break;
 
-                case 1:
+                case CardTypes.POWER:
                     GetComponent<Image>().color = Color.cyan;
                     break;
 
-                case 2:
+                case CardTypes.ATTACK:
                     GetComponent<Image>().color = Color.magenta;
                     break;
             }

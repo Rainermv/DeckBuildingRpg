@@ -21,7 +21,7 @@ namespace Assets.Scripts.CardSystem.Model
         public Action OnUpdate { get; set; }
 
 
-        public static Card Make(string name)
+        public static Card Make(string name = "")
         {
             return new Card()
             {

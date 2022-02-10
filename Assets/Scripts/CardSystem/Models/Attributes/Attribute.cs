@@ -4,12 +4,16 @@ namespace Assets.Scripts.CardSystem.Model
 {
     public class Attribute
     {
+        private readonly string _name;
         private int _value;
 
-        public Attribute(string name, int value = 0)
+        private Action<string, int> OnValueChanged { get; set; }
+
+        public Attribute(string name, int value, Action<string, int> onValueChanged)
         {
-            Name = name;
+            _name = name;
             Value = value;
+            OnValueChanged = onValueChanged;
         }
 
         public int Value
@@ -18,13 +22,10 @@ namespace Assets.Scripts.CardSystem.Model
             set
             {
                 _value = value;
-                OnValueChanged?.Invoke(this);
+                OnValueChanged?.Invoke(_name, value);
             }
         }
 
-        public string Name { get; set; }
-
-
-        public Action<Attribute> OnValueChanged { get; set; }
+        
     }
 }

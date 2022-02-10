@@ -6,7 +6,7 @@ using Assets.Scripts.CardSystem.Model.Collection;
 
 namespace Assets.Scripts
 {
-    internal class RandomCollectionShuffler : ICollectionShuffler
+    internal class RandomCardShuffler : ICardShuffler
     {
         public List<Card> Run(List<Card> cards)
         {

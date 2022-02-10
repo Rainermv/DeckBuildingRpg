@@ -4,7 +4,7 @@ using Assets.Scripts.CardSystem.Model.Collection;
 
 namespace Assets.Scripts.CardSystem
 {
-    public interface ICollectionShuffler
+    public interface ICardShuffler
     {
         List<Card> Run(List<Card> cards);
     }

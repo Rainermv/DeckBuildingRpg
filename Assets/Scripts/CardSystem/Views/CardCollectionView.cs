@@ -46,15 +46,15 @@ namespace Assets.Scripts.CardSystem.View
 
             switch (cardCollection.CardPlayerParent.Name)
             {
-                case CardSystemConstants.PLAYER_1:
+                case PlayerNames.PLAYER_1:
                     Image.color = Color.blue;
                     break;
 
-                case CardSystemConstants.PLAYER_2:
+                case PlayerNames.PLAYER_2:
                     Image.color = Color.red;
                     break;
 
-                case CardSystemConstants.PLAYER_3:
+                case PlayerNames.PLAYER_3:
                     Image.color = Color.green;
                     break;
 

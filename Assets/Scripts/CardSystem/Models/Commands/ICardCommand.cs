@@ -2,6 +2,6 @@ namespace Assets.Scripts.CardSystem.Model.Command
 {
     public interface ICardCommand
     {
-        CardCommandReport Run(Card sourceCard, GameContext gameContext);
+        CardCommandReport  Run(Card sourceCard, GameContext gameContext);
     }
 }

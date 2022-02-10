@@ -11,7 +11,7 @@ namespace Assets.Scripts.CardSystem.View
 {
     public class CardSystemViewController : MonoBehaviour
     {
-        public TextMeshProUGUI PowerText;
+        public TextMeshProUGUI PlayerPowerText;
         public Button ChangePlayerButton;
 
         //public Dictionary<CardCollectionIdentifier, CardCollectionView> SceneCardCollectionViews;
@@ -77,8 +77,20 @@ namespace Assets.Scripts.CardSystem.View
                 cardCollectionView.Display(cardCollection);
             }
 
-            PowerText.text = cardPlayer.AttributeSet.GetValue(PlayerAttributeNames.Power).ToString();
-            cardPlayer.AttributeSet.Get(PlayerAttributeNames.Power).OnValueChanged = (res) => PowerText.text = res.Value.ToString();
+            cardPlayer.AttributeSet.OnAttributeValueChange = (s, i) =>
+            {
+                Debug.Log($"{cardPlayer.Name}: {s} is now {i}");
+                switch (s)
+                {
+                    case PlayerAttributeNames.Power:
+                        PlayerPowerText.text = $"{i}";
+                        return;
+
+                }
+            };
+
+            PlayerPowerText.text = $"{cardPlayer.AttributeSet.GetValue(PlayerAttributeNames.Power)}";
+
         }
 
 

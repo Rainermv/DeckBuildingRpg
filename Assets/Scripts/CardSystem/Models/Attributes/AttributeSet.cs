@@ -1,4 +1,7 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.CardSystem.Model.Collection;
 
 namespace Assets.Scripts.CardSystem.Model
@@ -6,56 +9,55 @@ namespace Assets.Scripts.CardSystem.Model
     public class AttributeSet
     {
         private Dictionary<string, Attribute> _attributeDictionary = new();
+        public Action<string, int> OnAttributeValueChange { get; set; }
 
         /// <summary>
-        /// Gets the value of an attribute using resourceName as key
-        /// Creates a new resource if the resource does not exist and return its value
+        /// Gets the value of an attribute using attributeName as key
+        /// Creates a new attribute if the attribute does not exist and return its value
         /// </summary>
-        /// <param name="resourceName"></param>
+        /// <param name="attributeName"></param>
         /// <returns></returns>
-        public int GetValue(string resourceName)
+        public int GetValue(string attributeName)
         {
-            if (_attributeDictionary.TryGetValue(resourceName, out var resource))
+            if (_attributeDictionary.TryGetValue(attributeName, out var attribute))
             {
-                return resource.Value;
+                return attribute.Value;
             };
 
-            return Add(resourceName).Value;
+            return Add(attributeName).Value;
         }
 
-        /// <summary>
-        /// Gets an attribute using resourceName as key
-        /// Creates a new resource if the resource does not exist
-        /// </summary>
-        /// <param name="resourceName"></param>
-        /// <returns></returns>
-        public Attribute Get(string resourceName)
+       
+        public Attribute Set(string attributeName, int value)
         {
-            if (_attributeDictionary.TryGetValue(resourceName, out var resource))
+            if (_attributeDictionary.TryGetValue(attributeName, out var attribute))
             {
-                return resource;
+                attribute.Value = value;
+                return attribute;
             };
 
-            return Add(resourceName);
+            return Add(attributeName, value);
         }
 
-        public Attribute Set(string resourceName, int value)
+        public Attribute Sum(string attributeName, int sumValue)
         {
-            if (_attributeDictionary.TryGetValue(resourceName, out var resource))
+            if (_attributeDictionary.TryGetValue(attributeName, out var attribute))
             {
-                resource.Value = value;
-                return resource;
+                attribute.Value += sumValue;
+                return attribute;
             };
 
-            return Add(resourceName, value);
+            return Add(attributeName, sumValue);
         }
 
-        private Attribute Add(string resourceName, int value = 0)
+        private Attribute Add(string attributeName, int value = 0)
         {
-            var resource = new Attribute(resourceName, value);
-            _attributeDictionary.Add(resourceName, resource);
-            return resource;
+            var attribute = new Attribute(attributeName, value, 
+                (s, i) => OnAttributeValueChange?.Invoke(s,i));
+            _attributeDictionary.Add(attributeName, attribute);
+            return attribute;
         }
+
 
         
     }
