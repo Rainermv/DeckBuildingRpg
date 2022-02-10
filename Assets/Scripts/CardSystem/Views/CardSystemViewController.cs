@@ -75,12 +75,10 @@ namespace Assets.Scripts.CardSystem.View
                 }
 
                 cardCollectionView.Display(cardCollection);
-
-                //cardCollection.OnUpdate();
             }
 
-            PowerText.text = cardPlayer.Resources[PlayerResourceNames.Power].Value.ToString();
-            cardPlayer.Resources[PlayerResourceNames.Power].OnValueChanged = (res) => PowerText.text = res.Value.ToString();
+            PowerText.text = cardPlayer.AttributeSet.GetValue(PlayerAttributeNames.Power).ToString();
+            cardPlayer.AttributeSet.Get(PlayerAttributeNames.Power).OnValueChanged = (res) => PowerText.text = res.Value.ToString();
         }
 
 

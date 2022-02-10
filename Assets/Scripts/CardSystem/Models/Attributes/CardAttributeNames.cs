@@ -1,6 +1,6 @@
 namespace Assets.Scripts.CardSystem
 {
-    internal class CardResourceNames
+    internal class CardAttributeNames
     {
         public const string POWER_EFFECT = "Power Effect";
         public const string POWER_EFFECT_TYPE = "Power Effect Type";

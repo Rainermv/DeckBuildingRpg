@@ -63,7 +63,7 @@ namespace Assets.Scripts.CardSystem.View
             gameObject.name = Card.Name;
             _textName.text = Card.Name;
 
-            switch (Card.Resources[CardResourceNames.POWER_EFFECT_TYPE].Value)
+            switch (Card.AttributeSet.GetValue(CardAttributeNames.POWER_EFFECT_TYPE))
             {
                 case 0:
                     GetComponent<Image>().color = Color.gray;

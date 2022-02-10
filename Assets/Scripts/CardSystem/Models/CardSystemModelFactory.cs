@@ -22,17 +22,14 @@ namespace Assets.Scripts.CardSystem
         private static void BuildPlayer(CardSystemModel cardSystemModel, string playerName)
         {
             var cardPlayer = cardSystemModel.AddNewPlayer(playerName);
-            cardPlayer.AddNewCollection(CardCollectionIdentifier.Deck);
+            cardPlayer.AddNewCardCollection(CardCollectionIdentifier.Deck);
             cardPlayer.CardCollections[CardCollectionIdentifier.Deck]
                 .InsertCards(BuildCards(20));
 
-            cardPlayer.AddNewCollection(CardCollectionIdentifier.Hand);
-            cardPlayer.AddNewCollection(CardCollectionIdentifier.Discard);
+            cardPlayer.AddNewCardCollection(CardCollectionIdentifier.Hand);
+            cardPlayer.AddNewCardCollection(CardCollectionIdentifier.Discard);
 
-            cardPlayer.AddNewResource(PlayerResourceNames.Power).OnValueChanged += (res) =>
-            {
-                Debug.Log(res.Value);
-            };
+            cardPlayer.AttributeSet.Set(PlayerAttributeNames.Power, 0);
         }
 
         private static List<Card> BuildCards(int numOfCards)
@@ -43,13 +40,12 @@ namespace Assets.Scripts.CardSystem
             for (var i = 0; i < numOfCards; i++)
             {
                 var powerEfectType = random.Next(1, 3);
-                var powerEffect = random.Next(1, 5);
 
                 var sign = powerEfectType == 1 ? "+" : "-";
-                var card = Card.Make($"{sign}{powerEffect}");
+                var card = Card.Make($"{sign}{i}");
 
-                card.AddNewResource(CardResourceNames.POWER_EFFECT_TYPE, powerEfectType);
-                card.AddNewResource(CardResourceNames.POWER_EFFECT, powerEffect);
+                card.AttributeSet.Set(CardAttributeNames.POWER_EFFECT_TYPE, powerEfectType);
+                card.AttributeSet.Set(CardAttributeNames.POWER_EFFECT, i);
 
                 card.Commands.Add(new ChangePowerCardCommand());
 

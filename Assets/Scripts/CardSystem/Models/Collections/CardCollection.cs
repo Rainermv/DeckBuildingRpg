@@ -10,7 +10,7 @@ namespace Assets.Scripts.CardSystem.Model.Collection
 
         public Action<List<Card>> OnCardListUpdate { get; set; }
         public int CardsCount => Cards.Count;
-        public CardPlayer CardPlayer { get; set; }
+        public CardPlayer CardPlayerParent { get; set; }
 
 
         public static CardCollection Make()
@@ -36,7 +36,7 @@ namespace Assets.Scripts.CardSystem.Model.Collection
             Cards.InsertRange(index, cards);
             foreach (var card in cards)
             {
-                card.Collection = this;
+                card.CardCollectionParent = this;
             }
 
             OnUpdate();

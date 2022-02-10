@@ -39,9 +39,9 @@ namespace Assets.Scripts
 
         private async void OnCardClicked(CardView cardView)
         {
-            var player = cardView.Card.Collection.CardPlayer;
+            var player = cardView.Card.CardCollectionParent.CardPlayerParent;
             
-            switch (cardView.Card.Collection.CollectionIdentifier)
+            switch (cardView.Card.CardCollectionParent.CollectionIdentifier)
             {
                 case CardCollectionIdentifier.Hand:
                     cardView.Card.Play(_gameContext);
@@ -54,7 +54,7 @@ namespace Assets.Scripts
 
         private async void onDeckClicked(CardCollectionView collectionView)
         {
-            var player = collectionView.CardCollection.CardPlayer;
+            var player = collectionView.CardCollection.CardPlayerParent;
             
             switch (collectionView.CardCollection.CollectionIdentifier)
             {
@@ -81,7 +81,7 @@ namespace Assets.Scripts
             card.OnUpdate += () => OnCardUpdate(card);
 
             card.OnStartPlay += OnCardStartPlay;
-            card.OnComandRun += OnCardCommandRun;
+            card.OnCommandRun += OnCardCommandRun;
             card.OnFinishPlay += OnCardFinishPlay;
 
             return card;

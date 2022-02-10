@@ -8,35 +8,27 @@ namespace Assets.Scripts.CardSystem.Model
         public string Name { get; set; }
 
         public Dictionary<CardCollectionIdentifier, CardCollection> CardCollections { get; set; } = new();
-        public Dictionary<string, Resource> Resources { get; set; } = new();
+        public AttributeSet AttributeSet { get; set; }
 
 
         public static CardPlayer Make(string playerName)
         {
             return new CardPlayer()
             {
-                Name = playerName
+                Name = playerName,
+                AttributeSet = new AttributeSet()
             };
         }
 
 
         private CardPlayer(){}
 
-        public void AddNewCollection(CardCollectionIdentifier identifier)
+        public void AddNewCardCollection(CardCollectionIdentifier identifier)
         {
             var cardCollection = CardCollection.Make();
             cardCollection.CollectionIdentifier = identifier;
-            cardCollection.CardPlayer = this;
+            cardCollection.CardPlayerParent = this;
             CardCollections.Add(identifier, cardCollection);
         }
-
-        public Resource AddNewResource(string name)
-        {
-            var resource = new Resource(name);
-            Resources.Add(name, resource);
-            return resource;
-        }
-
-
     }
 }

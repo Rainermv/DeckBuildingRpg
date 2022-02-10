@@ -2,11 +2,11 @@ using System;
 
 namespace Assets.Scripts.CardSystem.Model
 {
-    public class Resource
+    public class Attribute
     {
         private int _value;
 
-        public Resource(string name, int value = 0)
+        public Attribute(string name, int value = 0)
         {
             Name = name;
             Value = value;
@@ -25,6 +25,6 @@ namespace Assets.Scripts.CardSystem.Model
         public string Name { get; set; }
 
 
-        public Action<Resource> OnValueChanged { get; set; }
+        public Action<Attribute> OnValueChanged { get; set; }
     }
 }

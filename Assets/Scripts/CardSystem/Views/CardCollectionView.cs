@@ -44,7 +44,7 @@ namespace Assets.Scripts.CardSystem.View
 
             cardCollection.OnCardListUpdate = (cards) => UpdateCardList(cards);
 
-            switch (cardCollection.CardPlayer.Name)
+            switch (cardCollection.CardPlayerParent.Name)
             {
                 case CardSystemConstants.PLAYER_1:
                     Image.color = Color.blue;

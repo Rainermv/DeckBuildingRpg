@@ -11,13 +11,12 @@ namespace Assets.Scripts.CardSystem.Model
     {
         public string Name { get; set; }
         public List<ICardCommand> Commands { get; set; } = new();
-        public CardCollection Collection { get; set; }
-
-        public Dictionary<string, Resource> Resources { get; set; } = new();
+        public CardCollection CardCollectionParent { get; set; }
+        public AttributeSet AttributeSet { get; set; }
 
 
         public Action<Card, CardPlayReport> OnStartPlay { get; set; }
-        public Action<Card, CardPlayReport, CardCommandReport> OnComandRun { get; set; }
+        public Action<Card, CardPlayReport, CardCommandReport> OnCommandRun { get; set; }
         public Action<Card, CardPlayReport> OnFinishPlay { get; set; }
         public Action OnUpdate { get; set; }
 
@@ -26,15 +25,10 @@ namespace Assets.Scripts.CardSystem.Model
         {
             return new Card()
             {
+                AttributeSet = new AttributeSet(),
                 Name = name,
             };
         }
-
-        public void AddNewResource(string name, int value)
-        {
-            Resources.Add(name, new Resource(name, value));
-        }
-        
 
         public CardPlayReport Play(GameContext gameContext)
         {
@@ -54,7 +48,7 @@ namespace Assets.Scripts.CardSystem.Model
                 var commandReport = Commands[index].Run(this, gameContext);
 
                 cardPlayReport.CardCommandReports[index] = commandReport;
-                OnComandRun?.Invoke(this, cardPlayReport, commandReport);
+                OnCommandRun?.Invoke(this, cardPlayReport, commandReport);
             }
 
             // Finish play card

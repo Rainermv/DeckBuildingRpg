@@ -7,18 +7,18 @@ namespace Assets.Scripts.CardSystem
     {
         public CardCommandReport Run(Card sourceCard, GameContext gameContext)
         {
-            var effectType = sourceCard.Resources[CardResourceNames.POWER_EFFECT_TYPE];
-            var effectValue = sourceCard.Resources[CardResourceNames.POWER_EFFECT];
-            var playerResource = sourceCard.Collection.CardPlayer.Resources[PlayerResourceNames.Power];
+            var effectType = sourceCard.AttributeSet.GetValue(CardAttributeNames.POWER_EFFECT_TYPE);
+            var effectValue = sourceCard.AttributeSet.GetValue(CardAttributeNames.POWER_EFFECT);
+            var playerPower = sourceCard.CardCollectionParent.CardPlayerParent.AttributeSet.Get(PlayerAttributeNames.Power);
 
-            switch (effectType.Value)
+            switch (effectType)
             {
                 case 1:
-                    playerResource.Value += effectValue.Value;
+                    playerPower.Value += effectValue;
                     return new CardCommandReport(CardCommandStatus.Success);
 
                 case 2:
-                    playerResource.Value -= effectValue.Value;
+                    playerPower.Value -= effectValue;
                     return new CardCommandReport(CardCommandStatus.Success);
 
             }

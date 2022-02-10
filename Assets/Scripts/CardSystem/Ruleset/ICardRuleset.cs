@@ -8,5 +8,6 @@ namespace Assets.Scripts.CardSystem
         void SetupSystem(CardSystemModel cardSystemModel);
         void SetupPlayer(CardPlayer cardPlayer);
         void SetupCollection(CardCollection cardCollection);
+        void SetupCard(Card card);
     }
 }

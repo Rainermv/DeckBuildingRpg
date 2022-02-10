@@ -20,7 +20,7 @@ namespace Assets.Scripts
 
         public void SetupPlayer(CardPlayer cardPlayer)
         {
-            cardPlayer.Resources[PlayerResourceNames.Power].Value = 10;
+            cardPlayer.AttributeSet.Set(PlayerAttributeNames.Power, 10);
         }
 
         
@@ -45,5 +45,9 @@ namespace Assets.Scripts
             
         }
 
+        public void SetupCard(Card card)
+        {
+
+        }
     }
 }

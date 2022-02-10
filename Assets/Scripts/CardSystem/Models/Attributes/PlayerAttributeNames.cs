@@ -1,6 +1,6 @@
 namespace Assets.Scripts
 {
-    internal static class PlayerResourceNames
+    internal static class PlayerAttributeNames
     {
         public const string Power = "Power";
     }

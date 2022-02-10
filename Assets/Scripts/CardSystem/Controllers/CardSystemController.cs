@@ -33,6 +33,11 @@ namespace Assets.Scripts.CardSystem
                 {
                     _cardRuleset.SetupCollection(cardCollection);
 
+                    foreach (var card in cardCollection.Cards)
+                    {
+                       _cardRuleset.SetupCard(card);
+                    }
+
                 }
             }
 
@@ -60,9 +65,9 @@ namespace Assets.Scripts.CardSystem
 
         public async Task MoveCardTo(Card card, CardCollection to)
         {
-            var from = card.Collection;
+            var from = card.CardCollectionParent;
 
-            if (card.Collection.RemoveCard(card))
+            if (card.CardCollectionParent.RemoveCard(card))
             {
                 to.InsertCards(new List<Card>(){card}, 0);
                 Debug.Log($"MOVE [{card.Name}] from [{from}] to [{to}]");
