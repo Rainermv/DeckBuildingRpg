@@ -1,17 +1,18 @@
 using System;
+using Assets.Scripts.Ruleset;
 
 namespace Assets.Scripts.CardSystem.Models.Attributes
 {
     public class Attribute
     {
-        private readonly string _name;
+        private readonly AttributeKey _key;
         private int _value;
 
-        private Action<string, int> OnValueChanged { get; set; }
+        private Action<AttributeKey, int> OnValueChanged { get; set; }
 
-        public Attribute(string name, int value, Action<string, int> onValueChanged)
+        public Attribute(AttributeKey key, int value, Action<AttributeKey, int> onValueChanged)
         {
-            _name = name;
+            _key = key;
             Value = value;
             OnValueChanged = onValueChanged;
         }
@@ -22,7 +23,7 @@ namespace Assets.Scripts.CardSystem.Models.Attributes
             set
             {
                 _value = value;
-                OnValueChanged?.Invoke(_name, value);
+                OnValueChanged?.Invoke(_key, value);
             }
         }
 

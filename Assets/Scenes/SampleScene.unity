@@ -1092,6 +1092,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 635aa711835dc244cb037e21b8160ddc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpriteLibrary:
+  - {fileID: 21300000, guid: 89ca37544c831844aa5f313b00a7a127, type: 3}
+  - {fileID: 21300000, guid: e44ab631740328048bbaeb9dc22bcd2e, type: 3}
+  - {fileID: 21300000, guid: 3feb0cb21ec193c48a66a8e19ae6a4f1, type: 3}
   PlayerPowerText: {fileID: 70534843}
   ChangePlayerButton: {fileID: 2129814579}
   PlayerDeckCollectionView: {fileID: 975819263}
@@ -1215,12 +1219,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3931999173235873084, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
       propertyPath: m_Type
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3931999173235873084, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 039e7853aeb4acb489dc641df7576f2a, type: 3}
+      objectReference: {fileID: 21300000, guid: 40f222e9bc5ab4d91ba5773487e261ff, type: 3}
     - target: {fileID: 3931999173235873084, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
       propertyPath: m_PreserveAspect
       value: 0
@@ -1363,7 +1367,7 @@ PrefabInstance:
     - target: {fileID: 3931999173235873084, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 1002bf77eccd74f87ad0e83f302965d4, type: 3}
+      objectReference: {fileID: 21300000, guid: dca65574e4fa64cdfa9e8376aaccc45d, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
 --- !u!224 &647299114 stripped

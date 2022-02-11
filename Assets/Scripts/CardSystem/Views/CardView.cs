@@ -4,6 +4,7 @@ using Assets.Scripts.CardSystem.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.CardSystem.Views
 {
@@ -13,8 +14,10 @@ namespace Assets.Scripts.CardSystem.Views
 
         [SerializeField] private TextMeshProUGUI _textName;
         [SerializeField] private TextMeshProUGUI _textBlock;
+        [SerializeField] private Image _cardImage;
 
         private Action<CardView> _onCardViewClicked;
+        private Func<int, Sprite> _onGetSpriteFromIndex;
         public Card Card { get; private set; }
 
         void Awake()
@@ -22,8 +25,9 @@ namespace Assets.Scripts.CardSystem.Views
         }
 
         // Start is called before the first frame update
-        public void Initialize(Action<CardView> onCardViewClicked)
+        public void Initialize(Action<CardView> onCardViewClicked, Func<int, Sprite> onGetSpriteFromIndex)
         {
+            _onGetSpriteFromIndex = onGetSpriteFromIndex;
             _onCardViewClicked = onCardViewClicked;
         }
 
@@ -52,29 +56,15 @@ namespace Assets.Scripts.CardSystem.Views
             gameObject.name = Card.Name;
             _textName.text = Card.Name;
             _textBlock.text = Card.TextBlock;
+            _cardImage.sprite = _onGetSpriteFromIndex(Card.ImageIndex);
 
             foreach (var attributeView in GetComponentsInChildren<ICardAttributeView>())
             {
-                if (Card.AttributeSet.Contains(attributeView.AttributeName))
+                if (Card.AttributeSet.Contains(attributeView.AttributeKey))
                 {
-                    attributeView.Display(Card.AttributeSet.GetValue(attributeView.AttributeName));
+                    attributeView.Display(Card.AttributeSet.GetValue(attributeView.AttributeKey));
                 }
                 
-            }
-
-            switch (Card.AttributeSet.GetValue(CardAttributeNames.TYPE))
-            {
-                case CardTypes.DRAW:
-                    //GetComponent<Image>().color = Color.gray;
-                    break;
-
-                case CardTypes.POWER:
-                    //GetComponent<Image>().color = Color.cyan;
-                    break;
-
-                case CardTypes.ATTACK:
-                    //GetComponent<Image>().color = Color.magenta;
-                    break;
             }
         }
 

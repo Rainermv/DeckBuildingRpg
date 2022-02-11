@@ -21,7 +21,7 @@ namespace Assets.Scripts.Ruleset
         public void Setup(GameContext gameContext)
         {
             _gameContext = gameContext;
-            gameContext.GlobalAttributeSet.Set(GlobalAttributeNames.ENEMY_HEALTH, 100);
+            gameContext.GlobalAttributeSet.Set(AttributeKey.Health, 100);
 
             foreach (var cardPlayer in gameContext.CardSystemModel.CardPlayers.Values)
             {
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Ruleset
        
         private void SetupPlayer(CardPlayer cardPlayer)
         {
-            cardPlayer.AttributeSet.Set(PlayerAttributeNames.Power, 5);
+            cardPlayer.AttributeSet.Set(AttributeKey.Power, 5);
 
         }
 
@@ -62,8 +62,9 @@ namespace Assets.Scripts.Ruleset
 
             var cardType = random.Next(0, possibleCardTypes.Length);
             var powerCost = 0;
+            card.ImageIndex = cardType;
 
-            card.AttributeSet.Set(CardAttributeNames.TYPE, cardType);
+            card.AttributeSet.Set(AttributeKey.CardType, cardType);
 
             switch (cardType)
             {
@@ -73,6 +74,7 @@ namespace Assets.Scripts.Ruleset
 
                     card.Name = $"Insight";
 
+
                     card.Commands.Add(
                         new DrawCardsCommand(
                             cardPlayer.CardCollections[CardCollectionIdentifier.Deck],
@@ -81,13 +83,12 @@ namespace Assets.Scripts.Ruleset
                     break;
 
                 case CardTypes.ATTACK: // Attack
-                    powerCost = card.AttributeSet.Set(CardAttributeNames.POWER_COST, random.Next(1, 6)).Value;
-                    var attackValue = powerCost * 2;
+                    powerCost = random.Next(1, 6);
 
                     card.Name = $"Sword Attack";
 
                     card.Commands.Add(
-                        new SumGlobalAttributeCommand(GlobalAttributeNames.ENEMY_HEALTH, -attackValue));
+                        new SumGlobalAttributeCommand(AttributeKey.Health, -powerCost * 2));
                     break;
 
                 case CardTypes.POWER: // Attack
@@ -95,12 +96,12 @@ namespace Assets.Scripts.Ruleset
                     card.Name = $"Empower";
 
                     card.Commands.Add(
-                        new SumAttributeCommand(cardPlayer.AttributeSet, PlayerAttributeNames.Power, powerGenerated));
+                        new SumAttributeCommand(cardPlayer.AttributeSet, AttributeKey.Power, powerGenerated));
                     break;
 
             }
 
-            card.AttributeSet.Set(CardAttributeNames.POWER_COST, powerCost);
+            card.AttributeSet.Set(AttributeKey.PowerCost, powerCost);
         }
 
 
@@ -148,5 +149,13 @@ namespace Assets.Scripts.Ruleset
                 CardService.DrawCards(cardCollection, cardCollection.CardPlayerParent.CardCollections[CardCollectionIdentifier.Hand], 1);
             }
         }
+    }
+
+    public enum AttributeKey
+    {
+        Power,
+        Health,
+        CardType,
+        PowerCost
     }
 }

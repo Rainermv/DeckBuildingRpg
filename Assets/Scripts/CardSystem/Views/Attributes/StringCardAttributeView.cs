@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Ruleset;
 using TMPro;
 using UnityEngine;
 
@@ -10,23 +11,17 @@ namespace Assets.Scripts.CardSystem.Views
         public TextMeshProUGUI Text;
     
         [SerializeField]
-        private string _attributeName;
+        private AttributeKey _attributeKey;
 
-        public string AttributeName
+        public AttributeKey AttributeKey
         {
-            get => _attributeName;
-            set => _attributeName = value;
+            get => _attributeKey;
+            set => _attributeKey = value;
         }
 
         public void Display(int value)
         {
             Text.text = value.ToString();
         }
-    }
-
-    public interface ICardAttributeView
-    {
-        string AttributeName { get; set; }
-        void Display(int value);
     }
 }

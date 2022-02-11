@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.CardSystem.Constants;
 using Assets.Scripts.CardSystem.Models;
 using Assets.Scripts.CardSystem.Models.Collections;
+using Assets.Scripts.Ruleset;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +13,9 @@ namespace Assets.Scripts.CardSystem.Views
 {
     public class CardSystemViewController : MonoBehaviour
     {
+        public Sprite[] SpriteLibrary;
+        private List<Sprite> _spriteLibraryList;
+
         public TextMeshProUGUI PlayerPowerText;
         public Button ChangePlayerButton;
 
@@ -29,6 +34,7 @@ namespace Assets.Scripts.CardSystem.Views
             Action<CardView> onCardViewClicked,
             Action<CardCollectionView> onCardCollectionViewClicked)
         {
+            _spriteLibraryList = SpriteLibrary.ToList();
             _onCardViewClicked = onCardViewClicked;
 
             PlayerDeckCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
@@ -82,14 +88,14 @@ namespace Assets.Scripts.CardSystem.Views
                 Debug.Log($"{cardPlayer.Name}: {s} is now {i}");
                 switch (s)
                 {
-                    case PlayerAttributeNames.Power:
+                    case AttributeKey.Power:
                         PlayerPowerText.text = $"{i}";
                         return;
 
                 }
             };
 
-            PlayerPowerText.text = $"{cardPlayer.AttributeSet.GetValue(PlayerAttributeNames.Power)}";
+            PlayerPowerText.text = $"{cardPlayer.AttributeSet.GetValue(AttributeKey.Power)}";
 
         }
 
@@ -124,7 +130,16 @@ namespace Assets.Scripts.CardSystem.Views
                 cardView.RectTransform.SetParent(parent, false);
                 cardViews.Add(cardView);
 
-                cardView.Initialize(_onCardViewClicked);
+                cardView.Initialize(_onCardViewClicked, index =>
+                {
+                    if (index <= _spriteLibraryList.Count)
+                    {
+                        return _spriteLibraryList[index];
+                    }
+
+                    return Sprite.Create(Texture2D.blackTexture, new Rect(this.GetComponent<RectTransform>().rect),Vector2.zero);
+
+                });
                 // VIEW -> CONTROLLER
                 //cardView.CardButton.onClick.AddListener(() => _onCardClicked(card, cardView));
 

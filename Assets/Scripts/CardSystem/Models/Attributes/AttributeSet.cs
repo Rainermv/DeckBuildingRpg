@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Assets.Scripts.Ruleset;
 
 namespace Assets.Scripts.CardSystem.Models.Attributes
 {
     public class AttributeSet
     {
-        private Dictionary<string, Attribute> _attributeDictionary = new();
-        public Action<string, int> OnAttributeValueChange { get; set; }
+        private Dictionary<AttributeKey, Attribute> _attributeDictionary = new();
+        public Action<AttributeKey, int> OnAttributeValueChange { get; set; }
 
         /// <summary>
         /// Gets the value of an attribute using attributeName as key
@@ -14,51 +15,51 @@ namespace Assets.Scripts.CardSystem.Models.Attributes
         /// </summary>
         /// <param name="attributeName"></param>
         /// <returns></returns>
-        public int GetValue(string attributeName)
+        public int GetValue(AttributeKey attributeKey)
         {
-            if (_attributeDictionary.TryGetValue(attributeName, out var attribute))
+            if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {
                 return attribute.Value;
             };
 
-            return Add(attributeName).Value;
+            return Add(attributeKey).Value;
         }
 
        
-        public Attribute Set(string attributeName, int value)
+        public Attribute Set(AttributeKey attributeKey, int value)
         {
-            if (_attributeDictionary.TryGetValue(attributeName, out var attribute))
+            if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {
                 attribute.Value = value;
                 return attribute;
             };
 
-            return Add(attributeName, value);
+            return Add(attributeKey, value);
         }
 
-        public Attribute Sum(string attributeName, int sumValue)
+        public Attribute Sum(AttributeKey attributeKey, int sumValue)
         {
-            if (_attributeDictionary.TryGetValue(attributeName, out var attribute))
+            if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {
                 attribute.Value += sumValue;
                 return attribute;
             };
 
-            return Add(attributeName, sumValue);
+            return Add(attributeKey, sumValue);
         }
 
-        private Attribute Add(string attributeName, int value = 0)
+        private Attribute Add(AttributeKey attributeKey, int value = 0)
         {
-            var attribute = new Attribute(attributeName, value, 
-                (s, i) => OnAttributeValueChange?.Invoke(s,i));
-            _attributeDictionary.Add(attributeName, attribute);
+            var attribute = new Attribute(attributeKey, value, 
+                (key, value) => OnAttributeValueChange?.Invoke(key,value));
+            _attributeDictionary.Add(attributeKey, attribute);
             return attribute;
         }
 
 
-        public bool Contains(string attributeName)
+        public bool Contains(AttributeKey attributeKey)
         {
-            return _attributeDictionary.ContainsKey(attributeName);
+            return _attributeDictionary.ContainsKey(attributeKey);
         }
     }
 }

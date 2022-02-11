@@ -12,6 +12,8 @@ namespace Assets.Scripts.CardSystem.Views
 {
     public class CardCollectionView : MonoBehaviour, IPointerClickHandler
     {
+
+
         public Image Image;
         public RectTransform CardsContainer;
         public TextMeshProUGUI TitleText;

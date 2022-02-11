@@ -10,6 +10,8 @@ namespace Assets.Scripts.CardSystem.Models
 {
     public class Card 
     {
+        public int ImageIndex { get; set; }
+
         public string Name { get; set; }
         public List<ICardCommand> Commands { get; set; } = new();
         public CardCollection CardCollectionParent { get; set; }

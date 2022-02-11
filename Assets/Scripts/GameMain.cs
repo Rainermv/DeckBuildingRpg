@@ -48,13 +48,13 @@ namespace Assets.Scripts
                 Debug.Log($"GLOBAL: {s} is now {i}");
                 switch (s)
                 {
-                    case GlobalAttributeNames.ENEMY_HEALTH:
+                    case AttributeKey.Health:
                         HealthText.text = $"{i}";
                         return;
 
                 }
             };
-            HealthText.text = $"{_gameContext.GlobalAttributeSet.GetValue(GlobalAttributeNames.ENEMY_HEALTH)}";
+            HealthText.text = $"{_gameContext.GlobalAttributeSet.GetValue(AttributeKey.Health)}";
 
 
         }

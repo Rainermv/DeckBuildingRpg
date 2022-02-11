@@ -1,19 +1,21 @@
+using Assets.Scripts.Ruleset;
+
 namespace Assets.Scripts.CardSystem.Models.Commands
 {
     internal class SumGlobalAttributeCommand : ICardCommand
     {
-        private readonly string _gameContextAttributeName;
+        private readonly AttributeKey _attributeKey;
         private readonly int _sumValue;
 
-        public SumGlobalAttributeCommand(string gameContextAttributeName, int sumValue)
+        public SumGlobalAttributeCommand(AttributeKey attributeKey, int sumValue)
         {
-            _gameContextAttributeName = gameContextAttributeName;
+            _attributeKey = attributeKey;
             _sumValue = sumValue;
         }
 
         public CardCommandReport Run(Card sourceCard, GameContext gameContext)
         {
-            gameContext.GlobalAttributeSet.Sum(_gameContextAttributeName, _sumValue);
+            gameContext.GlobalAttributeSet.Sum(_attributeKey, _sumValue);
             return new CardCommandReport(CardCommandStatus.Success);
         }
 
@@ -22,8 +24,8 @@ namespace Assets.Scripts.CardSystem.Models.Commands
             get
             {
                 if (_sumValue >= 0)
-                    return $"Add {_sumValue} to {_gameContextAttributeName}";
-                return $"Subtract {_sumValue - _sumValue} to {_gameContextAttributeName}";
+                    return $"Add {_sumValue} to {_attributeKey}";
+                return $"Subtract {_sumValue - _sumValue} to {_attributeKey}";
             }
         }
     }
