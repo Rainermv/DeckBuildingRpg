@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Models.Attributes;
+using Assets.Scripts.CardSystem.Models.Collections;
 
-namespace Assets.Scripts.CardSystem.Model
+namespace Assets.Scripts.CardSystem.Models
 {
     public class CardPlayer
     {

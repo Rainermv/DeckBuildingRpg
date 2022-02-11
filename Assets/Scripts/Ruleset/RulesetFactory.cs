@@ -1,6 +1,6 @@
-using Assets.Scripts.CardSystem;
+using Assets.Scripts.CardSystem.Utility;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Ruleset
 {
     internal class RulesetFactory
     {

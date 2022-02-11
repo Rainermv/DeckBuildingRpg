@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Constants;
+using Assets.Scripts.CardSystem.Models;
+using Assets.Scripts.CardSystem.Models.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.CardSystem.View
+namespace Assets.Scripts.CardSystem.Views
 {
     public class CardSystemViewController : MonoBehaviour
     {

@@ -1,4 +1,5 @@
-using Assets.Scripts.CardSystem.Model;
+using Assets.Scripts.CardSystem.Models;
+using Assets.Scripts.CardSystem.Models.Attributes;
 
 namespace Assets.Scripts
 {

@@ -1,18 +1,18 @@
 using System;
 using Assets.Scripts.CardSystem.Constants;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Command;
+using Assets.Scripts.CardSystem.Models;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-namespace Assets.Scripts.CardSystem.View
+namespace Assets.Scripts.CardSystem.Views
 {
     public class CardView : MonoBehaviour, IPointerClickHandler
     {
         public RectTransform RectTransform;
+
         [SerializeField] private TextMeshProUGUI _textName;
+        [SerializeField] private TextMeshProUGUI _textBlock;
 
         private Action<CardView> _onCardViewClicked;
         public Card Card { get; private set; }
@@ -51,19 +51,29 @@ namespace Assets.Scripts.CardSystem.View
         {
             gameObject.name = Card.Name;
             _textName.text = Card.Name;
+            _textBlock.text = Card.TextBlock;
+
+            foreach (var attributeView in GetComponentsInChildren<ICardAttributeView>())
+            {
+                if (Card.AttributeSet.Contains(attributeView.AttributeName))
+                {
+                    attributeView.Display(Card.AttributeSet.GetValue(attributeView.AttributeName));
+                }
+                
+            }
 
             switch (Card.AttributeSet.GetValue(CardAttributeNames.TYPE))
             {
                 case CardTypes.DRAW:
-                    GetComponent<Image>().color = Color.gray;
+                    //GetComponent<Image>().color = Color.gray;
                     break;
 
                 case CardTypes.POWER:
-                    GetComponent<Image>().color = Color.cyan;
+                    //GetComponent<Image>().color = Color.cyan;
                     break;
 
                 case CardTypes.ATTACK:
-                    GetComponent<Image>().color = Color.magenta;
+                    //GetComponent<Image>().color = Color.magenta;
                     break;
             }
         }

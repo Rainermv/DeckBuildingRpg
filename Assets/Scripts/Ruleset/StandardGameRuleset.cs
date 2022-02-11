@@ -1,10 +1,11 @@
 using System;
-using Assets.Scripts.CardSystem;
 using Assets.Scripts.CardSystem.Constants;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Models;
+using Assets.Scripts.CardSystem.Models.Collections;
+using Assets.Scripts.CardSystem.Models.Commands;
+using Assets.Scripts.CardSystem.Utility;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Ruleset
 {
     internal class StandardGameRuleset : IGameRuleset
     {
@@ -70,7 +71,7 @@ namespace Assets.Scripts
                     var cardsToDraw = random.Next(1, 4); //1 to 3
                     powerCost = cardsToDraw * 2;
 
-                    card.Name = $"Draw {cardsToDraw} ({powerCost})";
+                    card.Name = $"Insight";
 
                     card.Commands.Add(
                         new DrawCardsCommand(
@@ -83,7 +84,7 @@ namespace Assets.Scripts
                     powerCost = card.AttributeSet.Set(CardAttributeNames.POWER_COST, random.Next(1, 6)).Value;
                     var attackValue = powerCost * 2;
 
-                    card.Name = $"Attack {attackValue} ({powerCost})";
+                    card.Name = $"Sword Attack";
 
                     card.Commands.Add(
                         new SumGlobalAttributeCommand(GlobalAttributeNames.ENEMY_HEALTH, -attackValue));
@@ -91,7 +92,7 @@ namespace Assets.Scripts
 
                 case CardTypes.POWER: // Attack
                     var powerGenerated = 3;
-                    card.Name = $"Power {powerGenerated}";
+                    card.Name = $"Empower";
 
                     card.Commands.Add(
                         new SumAttributeCommand(cardPlayer.AttributeSet, PlayerAttributeNames.Power, powerGenerated));

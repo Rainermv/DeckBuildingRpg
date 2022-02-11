@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CardSystem.Model.Command
+namespace Assets.Scripts.CardSystem.Models.Commands
 {
     public class CardCommandReport
     {

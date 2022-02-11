@@ -1,8 +1,7 @@
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Models;
 
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.CardSystem.Utility
 {
     public interface ICardShuffler
     {

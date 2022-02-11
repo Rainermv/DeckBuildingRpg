@@ -1,7 +1,6 @@
 using System;
-using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.View
+namespace Assets.Scripts.CardSystem.Views
 {
     [Serializable]
     public class CardCollectionViewOptions

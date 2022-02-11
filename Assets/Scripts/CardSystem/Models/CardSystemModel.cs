@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Assets.Scripts.CardSystem.Model
+namespace Assets.Scripts.CardSystem.Models
 {
     public class CardSystemModel
     {

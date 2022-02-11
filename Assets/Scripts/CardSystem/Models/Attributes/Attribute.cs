@@ -1,6 +1,6 @@
 using System;
 
-namespace Assets.Scripts.CardSystem.Model
+namespace Assets.Scripts.CardSystem.Models.Attributes
 {
     public class Attribute
     {

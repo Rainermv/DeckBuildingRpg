@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Models.Collections;
 
 namespace Assets.Scripts
 {

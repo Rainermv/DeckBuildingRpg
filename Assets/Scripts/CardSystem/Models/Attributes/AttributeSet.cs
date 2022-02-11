@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Assets.Scripts.CardSystem.Model.Collection;
 
-namespace Assets.Scripts.CardSystem.Model
+namespace Assets.Scripts.CardSystem.Models.Attributes
 {
     public class AttributeSet
     {
@@ -59,6 +56,9 @@ namespace Assets.Scripts.CardSystem.Model
         }
 
 
-        
+        public bool Contains(string attributeName)
+        {
+            return _attributeDictionary.ContainsKey(attributeName);
+        }
     }
 }

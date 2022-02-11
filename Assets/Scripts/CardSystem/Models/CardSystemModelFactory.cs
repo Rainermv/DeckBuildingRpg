@@ -1,11 +1,8 @@
 using System.Collections.Generic;
 using Assets.Scripts.CardSystem.Constants;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
-using UnityEngine;
-using Random = System.Random;
+using Assets.Scripts.CardSystem.Models.Collections;
 
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.CardSystem.Models
 {
     internal class CardSystemModelFactory
     {

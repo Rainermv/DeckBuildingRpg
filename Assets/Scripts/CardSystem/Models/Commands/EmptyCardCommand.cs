@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.Model.Command
+namespace Assets.Scripts.CardSystem.Models.Commands
 {
     public class EmptyCardCommand : ICardCommand
     {
@@ -10,5 +10,7 @@ namespace Assets.Scripts.CardSystem.Model.Command
 
             return new CardCommandReport(CardCommandStatus.Success);
         }
+
+        public string Text => string.Empty;
     }
 }

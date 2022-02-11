@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Assets.Scripts.CardSystem.Model.Collection
+namespace Assets.Scripts.CardSystem.Models.Collections
 {
     public class CardCollection
     {

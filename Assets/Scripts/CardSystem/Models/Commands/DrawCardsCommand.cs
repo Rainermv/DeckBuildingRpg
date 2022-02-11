@@ -1,9 +1,7 @@
-using System.Threading.Tasks;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
-using Assets.Scripts.CardSystem.Model.Command;
+using Assets.Scripts.CardSystem.Models.Collections;
+using Assets.Scripts.CardSystem.Utility;
 
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.CardSystem.Models.Commands
 {
     internal class DrawCardsCommand : ICardCommand
     {
@@ -34,5 +32,7 @@ namespace Assets.Scripts.CardSystem
             return new CardCommandReport(CardCommandStatus.Success);
 
         }
+
+        public string Text => $"Draw {_cardsToDraw} Cards from {_fromCollection.CollectionIdentifier.ToString()}";
     }
 }

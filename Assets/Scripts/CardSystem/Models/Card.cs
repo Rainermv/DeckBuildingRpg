@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.CardSystem.Model.Collection;
-using Assets.Scripts.CardSystem.Model.Command;
+using Assets.Scripts.CardSystem.Models.Attributes;
+using Assets.Scripts.CardSystem.Models.Collections;
+using Assets.Scripts.CardSystem.Models.Commands;
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.Model
+namespace Assets.Scripts.CardSystem.Models
 {
     public class Card 
     {
@@ -19,6 +20,7 @@ namespace Assets.Scripts.CardSystem.Model
         public Action<Card, CardPlayReport, CardCommandReport> OnCommandRun { get; set; }
         public Action<Card, CardPlayReport> OnFinishPlay { get; set; }
         public Action OnUpdate { get; set; }
+        public string TextBlock => string.Join("\n", Commands.Select(command => command.Text));
 
 
         public static Card Make(string name = "")

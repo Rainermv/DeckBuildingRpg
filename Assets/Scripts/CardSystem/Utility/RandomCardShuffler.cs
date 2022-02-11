@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem;
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Models;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.CardSystem.Utility
 {
     internal class RandomCardShuffler : ICardShuffler
     {

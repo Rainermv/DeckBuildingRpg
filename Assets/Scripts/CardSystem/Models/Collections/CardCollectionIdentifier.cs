@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CardSystem.Model.Collection
+namespace Assets.Scripts.CardSystem.Models.Collections
 {
     public enum CardCollectionIdentifier
     {

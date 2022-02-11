@@ -1,7 +1,7 @@
-using Assets.Scripts.CardSystem.Model;
-using Assets.Scripts.CardSystem.Model.Collection;
+using Assets.Scripts.CardSystem.Models;
+using Assets.Scripts.CardSystem.Models.Collections;
 
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.Ruleset
 {
     public interface IGameRuleset
     {

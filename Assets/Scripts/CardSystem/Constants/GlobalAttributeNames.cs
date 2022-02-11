@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CardSystem
+namespace Assets.Scripts.CardSystem.Constants
 {
     internal class GlobalAttributeNames
     {
