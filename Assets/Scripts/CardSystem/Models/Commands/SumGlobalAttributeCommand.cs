@@ -1,3 +1,4 @@
+using System;
 using Assets.Scripts.Ruleset;
 
 namespace Assets.Scripts.CardSystem.Models.Commands
@@ -25,7 +26,7 @@ namespace Assets.Scripts.CardSystem.Models.Commands
             {
                 if (_sumValue >= 0)
                     return $"Add {_sumValue} to {_attributeKey}";
-                return $"Subtract {_sumValue - _sumValue} to {_attributeKey}";
+                return $"Subtract {Math.Abs(_sumValue)} to {_attributeKey}";
             }
         }
     }
