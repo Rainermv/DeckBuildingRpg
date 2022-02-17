@@ -7,7 +7,7 @@ namespace Assets.Scripts.Controller.Factories
 {
     internal class CardSystemModelFactory
     {
-        public static Dictionary<string, Player> Build()
+        public static Dictionary<string, Player> BuildPlayers()
         {
             var playerDictionary = new Dictionary<string, Player>();
             BuildPlayer(playerDictionary, PlayerNames.PLAYER_1)

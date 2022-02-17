@@ -20,19 +20,17 @@ namespace Assets.Scripts
         [SerializeField, SceneObjectsOnly] private Transform _charactersContainer;
         [SerializeField, SceneObjectsOnly] private ILevelInputListener _levelInputListener;
 
-        private Action<GridPosition> _onGridPositionInput;
+        private Action<GridPosition> _onGridInputTrigger;
 
 
         public void Initialize(LevelModel levelModel, Action<CardView> onCardClicked,
             Action<CardCollectionView> onCardCollectionClicked, Action<GridPosition> onGridInputTrigger)
         {
-            _onGridPositionInput = onGridInputTrigger;
+            _onGridInputTrigger = onGridInputTrigger;
+            
+            _levelInputListener.Initialize(OnWorldInputTrigger);
 
-            _levelInputListener.Initialize(
-                (worldPosition => onGridInputTrigger(
-                    _gridView.WorldToCell(new Vector3(worldPosition.x, worldPosition.y)))));
-
-            _gridView.Initialize(levelModel.GridTileModel, () => _levelInputListener.WorldInputPosition);
+            _gridView.Initialize(levelModel.GridMapModel, () => _levelInputListener.WorldInputPosition);
             _cardView.Initialize(levelModel.Players,
                 onCardClicked,
                 onCardCollectionClicked);
@@ -48,6 +46,17 @@ namespace Assets.Scripts
             //CameraController..position += GridView.GridCenter;
 
         }
+
+        void OnWorldInputTrigger(Vector3 worldPosition)
+        {
+            var cellPosition = _gridView.WorldToCell(new Vector3(worldPosition.x, worldPosition.y));
+
+            if (!_gridView.PointWithinBounds(cellPosition))
+                return;
+
+            _onGridInputTrigger(new GridPosition(cellPosition.x, cellPosition.y));
+        } 
+
 
 
         /// <summary>

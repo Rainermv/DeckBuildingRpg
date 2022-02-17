@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.CardSystem.Models.Attributes;
 using Assets.Scripts.Controller.Factories;
@@ -21,6 +22,8 @@ namespace Assets.Scripts.Controller
         private readonly ICardShuffler _cardShuffler;
 
         private LevelModel _levelModel;
+        private Character _controlledCharacter;
+        private Dictionary<GridPosition, GridTile> _tileDictionary;
 
         public LevelController(ICardShuffler cardShuffler)
         {
@@ -28,150 +31,50 @@ namespace Assets.Scripts.Controller
 
         }
 
-        
-
-        public LevelModel SetupWithSettings(GameControllerSettings gameControllerSettings)
+        public LevelModel Setup(LevelModel levelModel)
         {
-            _levelModel = new LevelModel()
+            _levelModel = levelModel;
+
+            foreach (var player in levelModel.Players.Values)
             {
-                Players = CardSystemModelFactory.Build(),
-                GridTileModel = GridSystemModelFactory.Build(gameControllerSettings.MapWidth, gameControllerSettings.MapHeight),
-                GlobalAttributeSet = new AttributeSet()
-            };
-
-            _levelModel.GlobalAttributeSet.Set(AttributeKey.Health, 100);
-
-            int pIndex = 0;
-            foreach (var player in _levelModel.Players.Values)
-            {
-                SetupPlayer(player);
-                AddCharacterTo(player, gameControllerSettings.CharacterPositions[pIndex++]);
-
-
-                foreach (var cardCollection in player.CardCollections.Values)
-                {
-                    SetupCollection(cardCollection);
-                }
-
-                // Add cards to Deck
-                foreach (var card in player.CardCollections[CardCollectionIdentifier.Deck].Cards)
-                {
-                    SetupCard(card, player);
-                }
-
-                // Draw initial hand
-                CardService.DrawCards(player.CardCollections[CardCollectionIdentifier.Deck],
-                    player.CardCollections[CardCollectionIdentifier.Hand],
-                    5);
+                var deck = player.CardCollections[CardCollectionIdentifier.Deck];
+                deck.Cards = _cardShuffler.Run(deck.Cards);
             }
 
-            return _levelModel;
+            _tileDictionary = _levelModel.GridMapModel.GridTiles.ToDictionary(tile => tile.GridPosition, tile => tile);
 
-        }
+            _controlledCharacter = _levelModel.Characters[0];
 
-        private void AddCharacterTo(Player player, GridPosition characterPosition)
-        {
-            var character = Character.Make(player.Name, characterPosition, player);
-
-            _levelModel.Characters.Add(character);
-        }
-
-
-        private void SetupPlayer(Player player)
-        {
-            player.AttributeSet.Set(AttributeKey.Power, 5);
-
-            
-        }
-
-        private void SetupCard(Card card, Player player)
-        {
-            var random = new Random();
-
-            var possibleCardTypes = new[] { CardTypes.DRAW, CardTypes.ATTACK, CardTypes.POWER };
-
-            var cardType = random.Next(0, possibleCardTypes.Length);
-            var powerCost = 0;
-            card.ImageIndex = cardType;
-
-            card.AttributeSet.Set(AttributeKey.CardType, cardType);
-
-            switch (cardType)
-            {
-                case CardTypes.DRAW:
-                    var cardsToDraw = random.Next(1, 4); //1 to 3
-                    powerCost = cardsToDraw * 2;
-
-                    card.Name = $"Insight";
-
-
-                    card.Commands.Add(
-                        new DrawCardsCommand(
-                            player.CardCollections[CardCollectionIdentifier.Deck],
-                            player.CardCollections[CardCollectionIdentifier.Hand],
-                            cardsToDraw));
-                    break;
-
-                case CardTypes.ATTACK: // Attack
-                    powerCost = random.Next(1, 6);
-
-                    card.Name = $"Sword Attack";
-
-                    card.Commands.Add(
-                        new SumGlobalAttributeCommand(AttributeKey.Health, -powerCost * 2));
-                    break;
-
-                case CardTypes.POWER: // Attack
-                    var powerGenerated = 3;
-                    card.Name = $"Empower";
-
-                    card.Commands.Add(
-                        new SumAttributeCommand(player, AttributeKey.Power, powerGenerated));
-                    break;
-
-            }
-
-            card.AttributeSet.Set(AttributeKey.PowerCost, powerCost);
-        }
-
-
-        public void SetupCollection(CardCollection cardCollection)
-        {
-            switch (cardCollection.CollectionIdentifier)
-            {
-                case CardCollectionIdentifier.Deck:
-
-                    cardCollection.Cards = _cardShuffler.Run(
-                        cardCollection.Cards);
-
-                    break;
-                case CardCollectionIdentifier.Hand:
-                    break;
-                case CardCollectionIdentifier.Discard:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-            
+            return levelModel;
         }
 
         public void OnGridPositionInput(GridPosition moveGridPosition)
         {
-            if (
-                !InsideBounds(_levelModel.GridTileModel, moveGridPosition) ||
-                _levelModel.Characters.Any(character => character.GridPosition == moveGridPosition))
+            if (!_tileDictionary.TryGetValue(moveGridPosition, out var tileAtPosition))
             {
-                Debug.Log($"Failed to move to {moveGridPosition}");
                 return;
             }
+
+            if (tileAtPosition.PositionedEntity != null)
+            {
+                return;
+            }
+
+
+
+            var characterPreviousTile = _tileDictionary[_controlledCharacter.GridPosition];
+
+            characterPreviousTile.PositionedEntity = null;
             
-            _levelModel.Characters[0].GridPosition = moveGridPosition;
+            _controlledCharacter.GridPosition = tileAtPosition.GridPosition;
+            tileAtPosition.PositionedEntity = _controlledCharacter;
+            
 
         }
 
-        private static bool InsideBounds(GridTileModel gridTileModel, GridPosition gridPosition)
+        private static bool InsideBounds(GridMapModel gridMapModel, GridPosition gridPosition)
         {
-            return new Rect(0, 0, gridTileModel.Width, gridTileModel.Height).Contains(new Vector2(gridPosition.X,
+            return new Rect(0, 0, gridMapModel.Width, gridMapModel.Height).Contains(new Vector2(gridPosition.X,
                 gridPosition.Y));
         }
 
@@ -200,6 +103,9 @@ namespace Assets.Scripts.Controller
                 CardService.DrawCards(cardCollection, cardCollection.PlayerParent.CardCollections[CardCollectionIdentifier.Hand], 1);
             }
         }
+
+
+        
     }
 
     public static class AttributeKey

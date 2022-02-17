@@ -18,7 +18,7 @@ namespace Assets.Scripts
 
         void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButton(0))
             {
                 _onInputTrigger(WorldInputPosition);
             }

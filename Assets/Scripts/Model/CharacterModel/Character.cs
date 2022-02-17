@@ -1,11 +1,12 @@
 using System;
 using Assets.Scripts.Controller;
 using Assets.Scripts.Model.CardModel;
+using Assets.Scripts.Model.GridModel;
 using UnityEngine;
 
 namespace Assets.Scripts.Model.CharacterModel
 {
-    public class Character
+    public class Character : IEntity
     {
         public static Character Make(string name, GridPosition gridPosition, Player owner)
         {
@@ -57,5 +58,6 @@ namespace Assets.Scripts.Model.CharacterModel
                 OnUpdate?.Invoke(this);
             }
         }
+
     }
 }

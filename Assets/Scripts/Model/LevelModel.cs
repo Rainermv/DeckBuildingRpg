@@ -11,6 +11,6 @@ namespace Assets.Scripts.Model
         public Dictionary<string, Player> Players { get; set; }  = new();
         public List<Character> Characters { get; set; } = new();
         public AttributeSet GlobalAttributeSet { get; set; }
-        public GridTileModel GridTileModel { get; set; }
+        public GridMapModel GridMapModel { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+using System;
 
 namespace Assets.Scripts.Controller
 {
@@ -11,12 +11,6 @@ namespace Assets.Scripts.Controller
         {
             X = x;
             Y = y;
-        }
-
-        public GridPosition(Vector3Int vector3Position)
-        {
-            X = vector3Position.x;
-            Y = vector3Position.y;
         }
 
         public override string ToString()

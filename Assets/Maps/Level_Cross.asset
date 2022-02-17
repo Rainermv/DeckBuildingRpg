@@ -1,0 +1,636 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 499e3234bb8889b4f98b3f113cda6652, type: 3}
+  m_Name: Level_Cross
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: GridMapModelSerializable
+      Entry: 7
+      Data: 0|Assets.Scripts.Systems.GridSystem.GridMapModelSerializable, Assembly-CSharp
+    - Name: _width
+      Entry: 3
+      Data: 8
+    - Name: _height
+      Entry: 3
+      Data: 8
+    - Name: _gridTiles
+      Entry: 7
+      Data: 1|System.Collections.Generic.List`1[[Assets.Scripts.Systems.GridSystem.GridTileSerializable,
+        Assembly-CSharp]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 28
+    - Name: 
+      Entry: 7
+      Data: 2|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 3|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 0
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 4|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 5|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 0
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 6|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 7|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 1
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 8|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 9|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 1
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 10|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 11|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 2
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 12|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 13|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 2
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 14|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 15|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 16|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 17|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 18|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 19|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 20|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 21|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 22|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 23|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 24|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 25|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 26|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 27|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 28|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 29|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 3
+    - Name: Y
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 30|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 31|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 32|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 33|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 34|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 35|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 36|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 37|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 38|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 39|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 40|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 41|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 42|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 43|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 6
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 44|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 45|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 4
+    - Name: Y
+      Entry: 3
+      Data: 7
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 46|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 47|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 5
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 48|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 49|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 5
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 50|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 51|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 6
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 52|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 53|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 6
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 54|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 55|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 7
+    - Name: Y
+      Entry: 3
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 56|Assets.Scripts.Systems.GridSystem.GridTileSerializable, Assembly-CSharp
+    - Name: TileType
+      Entry: 3
+      Data: 1
+    - Name: GridPositionSerializable
+      Entry: 7
+      Data: 57|Assets.Scripts.Systems.GridSystem.GridPositionSerializable, Assembly-CSharp
+    - Name: X
+      Entry: 3
+      Data: 7
+    - Name: Y
+      Entry: 3
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 

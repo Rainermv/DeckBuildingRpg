@@ -28,7 +28,7 @@ namespace Assets.Scripts.Systems.GridSystem
 
         private Func<Vector3> _onGetCursorWorldPosition;
         private Vector3Int? _mouseOverGridPosition;
-        private GridTileModel _gridTileModel;
+        private GridMapModel _gridMapModel;
 
         // Start is called before the first frame update
         void Start()
@@ -42,19 +42,17 @@ namespace Assets.Scripts.Systems.GridSystem
         
         }
 
-        public void Initialize(GridTileModel gridTileModel, Func<Vector3> onGetCursorWorldPosition)
+        public void Initialize(GridMapModel gridMapModel, Func<Vector3> onGetCursorWorldPosition)
         {
-            _gridTileModel = gridTileModel;
+            _gridMapModel = gridMapModel;
 
             _onGetCursorWorldPosition = onGetCursorWorldPosition;
 
-            foreach (var gridTile in _gridTileModel.GridTiles.Values)
+            foreach (var gridTile in _gridMapModel.GridTiles)
             {
-                var tilePosition = new Vector3Int(gridTile.X, gridTile.Y);
+                var tilePosition = new Vector3Int(gridTile.GridPosition.X, gridTile.GridPosition.Y);
 
                 UpdateTile(tilePosition, gridTile);
-
-                GridTilemapHighlight.SetTile(tilePosition, null);
             }
 
             GridTilemap.GetComponent<TilemapListener>().Initialize(OnTilemapMouseEnter, OnTilemapMouseExit, OnTilemapMouseOver);
@@ -92,8 +90,8 @@ namespace Assets.Scripts.Systems.GridSystem
         
             var gridPosition = Grid.WorldToCell(new Vector3(worldPosition.Value.x, worldPosition.Value.y));
 
-            if (gridPosition.x < 0 || gridPosition.y < 0 || gridPosition.x > _gridTileModel.Width ||
-                gridPosition.y > _gridTileModel.Height)
+            if (gridPosition.x < 0 || gridPosition.y < 0 || gridPosition.x > _gridMapModel.Width ||
+                gridPosition.y > _gridMapModel.Height)
             {
                 _mouseOverGridPosition = null;
                 return;
@@ -113,9 +111,15 @@ namespace Assets.Scripts.Systems.GridSystem
             return GridTilemap.CellToWorld(new Vector3Int(gridPosition.X, gridPosition.Y));
         }
 
-        public GridPosition WorldToCell(Vector3 worldPosition)
+        public Vector3Int WorldToCell(Vector3 worldPosition)
         {
-            return new GridPosition(GridTilemap.WorldToCell(worldPosition));
+            return GridTilemap.WorldToCell(worldPosition);
+        }
+
+
+        public bool PointWithinBounds(Vector3Int cellPosition)
+        {
+            return GridTilemap.cellBounds.Contains(cellPosition);
         }
     }
 }
