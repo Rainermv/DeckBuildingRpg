@@ -1,6 +1,6 @@
 using System;
 
-namespace Assets.Scripts.CardSystem.Views
+namespace Assets.Scripts.Systems.CardSystem.Views
 {
     [Serializable]
     public class CardCollectionViewOptions

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Assets.Scripts.GridSystem
+namespace Assets.Scripts.Systems.GridSystem
 {
     public class TileView : MonoBehaviour
     {

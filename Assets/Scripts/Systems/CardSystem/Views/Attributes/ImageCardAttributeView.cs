@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Ruleset;
+using Assets.Scripts.Controller;
 using UnityEngine;
 using Image = UnityEngine.UI.Image;
 
-namespace Assets.Scripts.CardSystem.Views
+namespace Assets.Scripts.Systems.CardSystem.Views.Attributes
 {
     class ImageCardAttributeView : MonoBehaviour, ICardAttributeView
     {
@@ -14,9 +14,9 @@ namespace Assets.Scripts.CardSystem.Views
         public Image _imageReference;
 
         [SerializeField]
-        private AttributeKey _attributeKey;
+        private int _attributeKey;
 
-        public AttributeKey AttributeKey
+        public int AttributeKey
         {
             get => _attributeKey;
             set => _attributeKey = value;

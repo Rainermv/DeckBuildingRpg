@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.CardSystem.Constants;
-using Assets.Scripts.CardSystem.Models;
-using Assets.Scripts.CardSystem.Models.Collections;
-using Assets.Scripts.Ruleset;
-using Sirenix.Serialization;
+using Assets.Scripts.Controller;
+using Assets.Scripts.Model;
+using Assets.Scripts.Model.CardModel;
+using Assets.Scripts.Model.CardModel.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.CardSystem.Views
+namespace Assets.Scripts.Systems.CardSystem.Views
 {
     public class CardSystemView : MonoBehaviour
     {
@@ -28,10 +27,10 @@ namespace Assets.Scripts.CardSystem.Views
         public CardView CardPrefab;
         private Action<CardView> _onCardViewClicked;
 
-        private CardPlayer _displayedPlayer;
-        private LinkedList<CardPlayer> _linkedPlayerList;
+        private Player _displayedPlayer;
+        private LinkedList<Player> _linkedPlayerList;
 
-        public void Initialize(CardSystemModel cardSystemModel,
+        public void Initialize(Dictionary<string, Player> players,
             Action<CardView> onCardViewClicked,
             Action<CardCollectionView> onCardCollectionViewClicked)
         {
@@ -42,24 +41,25 @@ namespace Assets.Scripts.CardSystem.Views
             PlayerHandCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
             PlayerDiscardCollectionView.Initialize(OnInstantiateCardViews, onCardCollectionViewClicked);
 
-            _linkedPlayerList = new LinkedList<CardPlayer>(cardSystemModel.CardPlayers.Values);
+            _linkedPlayerList = new LinkedList<Player>(players.Values);
 
             ChangePlayerButton.onClick.AddListener(() =>
             {
                 DisplayPlayer(GetNextPlayer());
             });
 
+            DisplayPlayer(players.Values.First());
         }
 
         
 
-        public CardPlayer GetNextPlayer()
+        public Player GetNextPlayer()
         {
             // Find the current node
             var curNode = _linkedPlayerList.Find(_displayedPlayer);
 
             // Point to the next
-            LinkedListNode<CardPlayer> nextNode = curNode.Next;
+            LinkedListNode<Player> nextNode = curNode.Next;
 
             // Check if at the end of the list
             nextNode = nextNode == null ? _linkedPlayerList.First : nextNode;
@@ -68,11 +68,11 @@ namespace Assets.Scripts.CardSystem.Views
             return _displayedPlayer;
         }
 
-        public void DisplayPlayer(CardPlayer cardPlayer)
+        public void DisplayPlayer(Player player)
         {
-            _displayedPlayer = cardPlayer;
+            _displayedPlayer = player;
 
-            foreach (var (cardCollectionIdentifier, cardCollection) in cardPlayer.CardCollections)
+            foreach (var (cardCollectionIdentifier, cardCollection) in player.CardCollections)
             {
                 var cardCollectionView = CollectionViewFromIdentifier(cardCollectionIdentifier);
                 if (cardCollectionView == null)
@@ -84,9 +84,9 @@ namespace Assets.Scripts.CardSystem.Views
                 cardCollectionView.Display(cardCollection);
             }
 
-            cardPlayer.AttributeSet.OnAttributeValueChange = (s, i) =>
+            player.AttributeSet.OnAttributeValueChange = (s, i) =>
             {
-                Debug.Log($"{cardPlayer.Name}: {s} is now {i}");
+                Debug.Log($"{player.Name}: {s} is now {i}");
                 switch (s)
                 {
                     case AttributeKey.Power:
@@ -96,7 +96,7 @@ namespace Assets.Scripts.CardSystem.Views
                 }
             };
 
-            PlayerPowerText.text = $"{cardPlayer.AttributeSet.GetValue(AttributeKey.Power)}";
+            PlayerPowerText.text = $"{player.AttributeSet.GetValue(AttributeKey.Power)}";
 
         }
 

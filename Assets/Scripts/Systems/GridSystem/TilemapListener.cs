@@ -1,31 +1,34 @@
 using System;
 using UnityEngine;
 
-public class TilemapListener : MonoBehaviour
+namespace Assets.Scripts.Systems.GridSystem
 {
-    private Action _onTilemapMouseEnter;
-    private Action _onTilemapMouseExit;
-    private Action _onTilemapMouseOver;
-
-    public void Initialize(Action onTilemapMouseEnter, Action onTilemapMouseExit, Action onTilemapMouseOver)
+    public class TilemapListener : MonoBehaviour
     {
-        _onTilemapMouseEnter = onTilemapMouseEnter;
-        _onTilemapMouseExit = onTilemapMouseExit;
-        _onTilemapMouseOver = onTilemapMouseOver;
-    }
+        private Action _onTilemapMouseEnter;
+        private Action _onTilemapMouseExit;
+        private Action _onTilemapMouseOver;
 
-    void OnMouseEnter()
-    {
-        _onTilemapMouseEnter?.Invoke();
-    }
+        public void Initialize(Action onTilemapMouseEnter, Action onTilemapMouseExit, Action onTilemapMouseOver)
+        {
+            _onTilemapMouseEnter = onTilemapMouseEnter;
+            _onTilemapMouseExit = onTilemapMouseExit;
+            _onTilemapMouseOver = onTilemapMouseOver;
+        }
 
-    void OnMouseExit()
-    {
-        _onTilemapMouseExit?.Invoke();
-    }
+        void OnMouseEnter()
+        {
+            _onTilemapMouseEnter?.Invoke();
+        }
 
-    void OnMouseOver()
-    {
-        _onTilemapMouseOver?.Invoke();
+        void OnMouseExit()
+        {
+            _onTilemapMouseExit?.Invoke();
+        }
+
+        void OnMouseOver()
+        {
+            _onTilemapMouseOver?.Invoke();
+        }
     }
 }

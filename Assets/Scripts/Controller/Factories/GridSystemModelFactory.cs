@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Assets.Scripts.Model.GridModel;
 
-namespace Assets.Scripts.Ruleset
+namespace Assets.Scripts.Controller.Factories
 {
     internal class GridSystemModelFactory
     {
-        public static GridSystemModel Build(uint width, uint height)
+        public static GridTileModel Build(uint width, uint height)
         {
-            var gridDictionary = new Dictionary<Vector2, GridTile>();
+            var gridTiles = new Dictionary<GridPosition, GridTile>();
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
-                    gridDictionary.Add(new Vector2(x,y), new GridTile()
+                    gridTiles.Add(new GridPosition(x,y), new GridTile()
                     {
                         Type = 0,
                         X = x,
@@ -21,11 +22,11 @@ namespace Assets.Scripts.Ruleset
                 }
             }
 
-            return new GridSystemModel()
+            return new GridTileModel()
             {
                 Width = width,
                 Height = height,
-                GridTiles = gridDictionary
+                GridTiles = gridTiles
             };
 
             

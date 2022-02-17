@@ -1,4 +1,4 @@
-namespace Assets.Scripts.CardSystem.Constants
+namespace Assets.Scripts.Systems.CardSystem.Constants
 {
     internal class CardAttributeNames
     {

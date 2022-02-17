@@ -1,6 +1,9 @@
-public enum TileViewType
+namespace Assets.Scripts.Systems.GridSystem
 {
-    Offset,
-    Normal,
-    Highlight
+    public enum TileViewType
+    {
+        Offset,
+        Normal,
+        Highlight
+    }
 }

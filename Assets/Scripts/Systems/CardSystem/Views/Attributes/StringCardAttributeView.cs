@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using Assets.Scripts.Ruleset;
+using Assets.Scripts.Controller;
 using TMPro;
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.Views
+namespace Assets.Scripts.Systems.CardSystem.Views.Attributes
 {
     public class StringCardAttributeView : MonoBehaviour, ICardAttributeView
     {
         public TextMeshProUGUI Text;
     
         [SerializeField]
-        private AttributeKey _attributeKey;
+        private int _attributeKey;
 
-        public AttributeKey AttributeKey
+        public int AttributeKey
         {
             get => _attributeKey;
             set => _attributeKey = value;

@@ -1,10 +1,10 @@
-using Assets.Scripts.Ruleset;
+using Assets.Scripts.Controller;
 
-namespace Assets.Scripts.CardSystem.Views
+namespace Assets.Scripts.Systems.CardSystem.Views.Attributes
 {
     public interface ICardAttributeView
     {
-        AttributeKey AttributeKey { get; set; }
+        int AttributeKey { get; set; }
         void Display(int value);
     }
 }

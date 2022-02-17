@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.CardSystem.Models;
-using Assets.Scripts.CardSystem.Models.Collections;
+using Assets.Scripts.Model.CardModel;
+using Assets.Scripts.Model.CardModel.Collections;
 using UnityEngine;
 
-namespace Assets.Scripts.CardSystem.Utility
+namespace Assets.Scripts.Systems.CardSystem.Utility
 {
     public static class CardService
     {

@@ -1,12 +1,12 @@
 using System;
-using Assets.Scripts.CardSystem.Constants;
-using Assets.Scripts.CardSystem.Models;
+using Assets.Scripts.Model.CardModel;
+using Assets.Scripts.Systems.CardSystem.Views.Attributes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.CardSystem.Views
+namespace Assets.Scripts.Systems.CardSystem.Views
 {
     public class CardView : MonoBehaviour, IPointerClickHandler
     {

@@ -1,36 +1,42 @@
 using System.Collections.Generic;
-using Assets.Scripts.CardSystem.Constants;
-using Assets.Scripts.CardSystem.Models.Collections;
+using Assets.Scripts.Model.CardModel;
+using Assets.Scripts.Model.CardModel.Collections;
+using Assets.Scripts.Systems.CardSystem.Constants;
 
-namespace Assets.Scripts.CardSystem.Models
+namespace Assets.Scripts.Controller.Factories
 {
     internal class CardSystemModelFactory
     {
-        public static CardSystemModel Build()
+        public static Dictionary<string, Player> Build()
         {
-            var cardSystemModel = new CardSystemModel();
-            BuildPlayer(cardSystemModel, PlayerNames.PLAYER_1)
+            var playerDictionary = new Dictionary<string, Player>();
+            BuildPlayer(playerDictionary, PlayerNames.PLAYER_1)
                 .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
             ;
-            BuildPlayer(cardSystemModel, PlayerNames.PLAYER_2)
+            BuildPlayer(playerDictionary, PlayerNames.PLAYER_2)
                 .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
 
-            BuildPlayer(cardSystemModel, PlayerNames.PLAYER_3)
+            BuildPlayer(playerDictionary, PlayerNames.PLAYER_3)
                 .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
 
-            return cardSystemModel;
+            BuildPlayer(playerDictionary, PlayerNames.PLAYER_4)
+                .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
+
+            return playerDictionary;
 
         }
 
-        private static CardPlayer BuildPlayer(CardSystemModel cardSystemModel, string playerName)
+        private static Player BuildPlayer(Dictionary<string, Player> playersDictionary, string playerName)
         {
-            var cardPlayer = cardSystemModel.AddNewPlayer(playerName);
+            var player = Player.Make(playerName);
 
-            cardPlayer.AddNewCardCollection(CardCollectionIdentifier.Deck);
-            cardPlayer.AddNewCardCollection(CardCollectionIdentifier.Hand);
-            cardPlayer.AddNewCardCollection(CardCollectionIdentifier.Discard);
+            playersDictionary.Add(playerName, player);
 
-            return cardPlayer;
+            player.AddNewCardCollection(CardCollectionIdentifier.Deck);
+            player.AddNewCardCollection(CardCollectionIdentifier.Hand);
+            player.AddNewCardCollection(CardCollectionIdentifier.Discard);
+
+            return player;
         }
 
         private static List<Card> BuildCards(int numOfCards)
