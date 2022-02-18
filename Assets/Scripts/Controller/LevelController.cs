@@ -1,34 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.CardSystem.Models.Attributes;
-using Assets.Scripts.Controller.Factories;
+using System.Threading.Tasks;
+using Assets.Scripts.Controller.CardShuffler;
+using Assets.Scripts.Controller.MovementResolver;
 using Assets.Scripts.Model;
-using Assets.Scripts.Model.CardModel;
-using Assets.Scripts.Model.CardModel.Collections;
-using Assets.Scripts.Model.CardModel.Commands;
-using Assets.Scripts.Model.CharacterModel;
-using Assets.Scripts.Model.GridModel;
-using Assets.Scripts.Systems.CardSystem.Constants;
-using Assets.Scripts.Systems.CardSystem.Utility;
-using Assets.Scripts.Systems.GridSystem;
+using Assets.Scripts.Model.Actor;
+using Assets.Scripts.Model.Card;
+using Assets.Scripts.Model.Card.Collections;
+using Assets.Scripts.Model.GridMap;
+using Assets.Scripts.Utility;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Assets.Scripts.Controller
 {
     internal class LevelController
     {
         private readonly ICardShuffler _cardShuffler;
+        private IGridmovementResolver _movementResolver;
 
-        private LevelModel _levelModel;
-        private Character _controlledCharacter;
+
+        private Entity _controlledEntity;
+
         private Dictionary<GridPosition, GridTile> _tileDictionary;
+        private List<Entity> _entities;
+        private LevelModel _levelModel;
+        private bool canIssueCommands = true;
 
-        public LevelController(ICardShuffler cardShuffler)
+        public LevelController(ICardShuffler cardShuffler, IGridmovementResolver movementResolver)
         {
             _cardShuffler = cardShuffler;
-
+            _movementResolver = movementResolver;
         }
 
         public LevelModel Setup(LevelModel levelModel)
@@ -41,34 +43,50 @@ namespace Assets.Scripts.Controller
                 deck.Cards = _cardShuffler.Run(deck.Cards);
             }
 
-            _tileDictionary = _levelModel.GridMapModel.GridTiles.ToDictionary(tile => tile.GridPosition, tile => tile);
+            _tileDictionary = levelModel.GridMapModel.GridTiles.ToDictionary(tile => tile.GridPosition, tile => tile);
+            //_entityDictionary = levelModel.Characters.ToDictionary(actor => actor.GridPosition, actor => actor);
+            _entities = levelModel.Entities;
 
-            _controlledCharacter = _levelModel.Characters[0];
+            _controlledEntity = levelModel.Entities[0];
 
             return levelModel;
         }
 
-        public void OnGridPositionInput(GridPosition moveGridPosition)
+        public async void OnGridPositionInput(GridPosition targetGridPosition)
         {
-            if (!_tileDictionary.TryGetValue(moveGridPosition, out var tileAtPosition))
+            if (!canIssueCommands)
+            {
+                Debug.LogWarning("Can't issue commands right now");
+                return;
+            }
+
+            // If there is NOT a valid tile at the position, return
+            if (!_tileDictionary.TryGetValue(targetGridPosition, out var targetGridTile))
             {
                 return;
             }
 
-            if (tileAtPosition.PositionedEntity != null)
+            // if there is already an entity at the position, return
+            if (_entities.Any(entity => entity.GridPosition == targetGridPosition))
             {
                 return;
             }
 
+            Debug.Log($"===============Starting position: {_controlledEntity.GridPosition}");
+            var moveSequence = _movementResolver.MakeMoveSequence(_controlledEntity, targetGridPosition);
+            Debug.Log(string.Join(" ", moveSequence.Select(position => position.ToString())));
 
+            canIssueCommands = false;
+            foreach (var moveGridPosition in moveSequence)
+            {
+                Debug.Log($"Moving to {moveGridPosition}");
+                await _controlledEntity.SetPositionAsync(moveGridPosition);
 
-            var characterPreviousTile = _tileDictionary[_controlledCharacter.GridPosition];
+                await Task.Delay(250);
 
-            characterPreviousTile.PositionedEntity = null;
-            
-            _controlledCharacter.GridPosition = tileAtPosition.GridPosition;
-            tileAtPosition.PositionedEntity = _controlledCharacter;
-            
+            }
+            canIssueCommands = true;
+            Debug.Log($"============Final position: {_controlledEntity.GridPosition}");
 
         }
 
@@ -79,28 +97,28 @@ namespace Assets.Scripts.Controller
         }
 
 
-        public async void OnCardClicked(Card card)
+        public async void OnCardClicked(CardModel cardModel)
         {
-            var player = card.CardCollectionParent.PlayerParent;
+            var player = cardModel.CardCollectionModelParent.PlayerParent;
 
-            switch (card.CardCollectionParent.CollectionIdentifier)
+            switch (cardModel.CardCollectionModelParent.CollectionIdentifier)
             {
                 case CardCollectionIdentifier.Hand:
 
                     //if (player.AttributeSet.GetValue(PlayerAttributeNames.Power))
 
-                    card.Play(_levelModel);
-                    CardService.MoveCardTo(card, player.CardCollections[CardCollectionIdentifier.Discard]);
+                    cardModel.Play(_levelModel);
+                    CardUtilities.MoveCardTo(cardModel, player.CardCollections[CardCollectionIdentifier.Discard]);
                     break;
 
             }
         }
 
-        public void OnCardCollectionClicked(CardCollection cardCollection)
+        public void OnCardCollectionClicked(CardCollectionModel cardCollectionModel)
         {
-            if (cardCollection.CollectionIdentifier == CardCollectionIdentifier.Deck)
+            if (cardCollectionModel.CollectionIdentifier == CardCollectionIdentifier.Deck)
             {
-                CardService.DrawCards(cardCollection, cardCollection.PlayerParent.CardCollections[CardCollectionIdentifier.Hand], 1);
+                CardUtilities.DrawCards(cardCollectionModel, cardCollectionModel.PlayerParent.CardCollections[CardCollectionIdentifier.Hand], 1);
             }
         }
 

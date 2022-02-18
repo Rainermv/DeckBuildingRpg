@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using Assets.Scripts.Controller;
+using Assets.Scripts.Controller.CardShuffler;
+using Assets.Scripts.Controller.MovementResolver;
+using Assets.Scripts.GridMapSerializer;
 using Assets.Scripts.Model;
-using Assets.Scripts.Model.CharacterModel;
-using Assets.Scripts.Systems.CardSystem.Utility;
-using Assets.Scripts.Systems.CardSystem.Views;
-using Assets.Scripts.Systems.GridSystem;
+using Assets.Scripts.View;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 using TMPro;
@@ -17,7 +17,7 @@ namespace Assets.Scripts
 {
     public class GameMain : SerializedMonoBehaviour
     {
-        [SerializeField, SceneObjectsOnly] private LevelView _levelView;
+        [SerializeField, SceneObjectsOnly] private LevelViewController _levelViewController;
         [SerializeField] private GridMapModelScriptableObject _gridMapModelScriptableObject;
 
         private LevelController _levelController;
@@ -28,13 +28,15 @@ namespace Assets.Scripts
             var levelModel = LevelModelFactory.Build(_gridMapModelScriptableObject.GridMapModel);
 
             _levelController = new LevelController(
-                new RandomCardShuffler());
+                new RandomCardShuffler(),
+                new ManhattanMovementResolver());
+                //new SingleMovementResolver());
 
             levelModel = _levelController.Setup(levelModel);
             
-            _levelView.Initialize(levelModel,
-                cardView => _levelController.OnCardClicked(cardView.Card),
-                cardCollectionView => _levelController.OnCardCollectionClicked(cardCollectionView.CardCollection),
+            _levelViewController.Initialize(levelModel,
+                cardView => _levelController.OnCardClicked(cardView.CardModel),
+                cardCollectionView => _levelController.OnCardCollectionClicked(cardCollectionView.CardCollectionModel),
                 _levelController.OnGridPositionInput);
 
 

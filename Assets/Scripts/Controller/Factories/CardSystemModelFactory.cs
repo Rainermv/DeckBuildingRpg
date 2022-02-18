@@ -1,26 +1,26 @@
 using System.Collections.Generic;
-using Assets.Scripts.Model.CardModel;
-using Assets.Scripts.Model.CardModel.Collections;
-using Assets.Scripts.Systems.CardSystem.Constants;
+using Assets.Scripts.Model.Card;
+using Assets.Scripts.Model.Card.Collections;
 
 namespace Assets.Scripts.Controller.Factories
 {
     internal class CardSystemModelFactory
     {
-        public static Dictionary<string, Player> BuildPlayers()
+        private static List<string> PLAYER_NAMES = new List<string>()
         {
+            "Player 1"
+        };
+
+        public static Dictionary<string, Player> BuildPlayers(int numOfPlayers)
+        {
+
             var playerDictionary = new Dictionary<string, Player>();
-            BuildPlayer(playerDictionary, PlayerNames.PLAYER_1)
-                .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
-            ;
-            BuildPlayer(playerDictionary, PlayerNames.PLAYER_2)
-                .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
 
-            BuildPlayer(playerDictionary, PlayerNames.PLAYER_3)
-                .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
-
-            BuildPlayer(playerDictionary, PlayerNames.PLAYER_4)
-                .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
+            for (int i = 0; i < numOfPlayers; i++)
+            {
+                BuildPlayer(playerDictionary, PLAYER_NAMES[i])
+                    .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
+            }
 
             return playerDictionary;
 
@@ -39,12 +39,12 @@ namespace Assets.Scripts.Controller.Factories
             return player;
         }
 
-        private static List<Card> BuildCards(int numOfCards)
+        private static List<CardModel> BuildCards(int numOfCards)
         {
-            var cards = new List<Card>();
+            var cards = new List<CardModel>();
             for (var i = 0; i < numOfCards; i++)
             {
-                var card = Card.Make();
+                var card = CardModel.Make();
 
                 cards.Add(card);
             }
