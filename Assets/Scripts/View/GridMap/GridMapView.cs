@@ -21,30 +21,14 @@ namespace Assets.Scripts.View.GridMap
         [SceneObjectsOnly, Required] public Tilemap GridTilemapHighlight;
         [SceneObjectsOnly, Required] public Grid Grid;
 
-
-        internal Vector3 GridCenter => GridTilemap.localBounds.center;
-
-        private Func<Vector3> _onGetCursorWorldPosition;
         private Vector3Int? _mouseOverGridPosition;
         private GridMapModel _gridMapModel;
 
-        // Start is called before the first frame update
-        void Start()
-        {
-        
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-        
-        }
-
-        public void Initialize(GridMapModel gridMapModel, Func<Vector3> onGetCursorWorldPosition)
+        public void Initialize(GridMapModel gridMapModel,
+            Action<GridPosition> onTilemapPointerMove,
+            Action<GridPosition> onTilemapPointerDown)
         {
             _gridMapModel = gridMapModel;
-
-            _onGetCursorWorldPosition = onGetCursorWorldPosition;
 
             foreach (var gridTile in _gridMapModel.GridTiles)
             {
@@ -53,7 +37,14 @@ namespace Assets.Scripts.View.GridMap
                 UpdateTile(tilePosition, gridTile);
             }
 
-            GridTilemap.GetComponent<TilemapListener>().Initialize(OnTilemapMouseEnter, OnTilemapMouseExit, OnTilemapMouseOver);
+            GridTilemap.GetComponent<TilemapListener>().Initialize(
+                // Tilemap World To GridPosition PointerMove
+                worldPosition => onTilemapPointerMove(
+                    GridUtilities.WorldToGrid(GridTilemap, worldPosition)),
+                // Tilemap World To GridPosition PointerDown
+                worldPosition => onTilemapPointerDown(
+                    GridUtilities.WorldToGrid(GridTilemap, worldPosition)));
+                
         }
 
         private void UpdateTile(Vector3Int tilePosition, GridTile gridTile)
@@ -66,27 +57,16 @@ namespace Assets.Scripts.View.GridMap
             GridTilemap.SetTile(tilePosition, tile);
         }
 
-        void OnTilemapMouseEnter()
+        void _OnTilemapMouseOver()
         {
-
-        }
-
-        void OnTilemapMouseExit()
-        {
-            if (_mouseOverGridPosition != null) 
-                GridTilemapHighlight.SetTile(_mouseOverGridPosition.Value, null);
-        }
-
-        void OnTilemapMouseOver()
-        {
-            var worldPosition = _onGetCursorWorldPosition?.Invoke();
+            var worldPosition = Vector3.zero;
 
             if (worldPosition == null)
             {
                 return;
             }
         
-            var gridPosition = Grid.WorldToCell(new Vector3(worldPosition.Value.x, worldPosition.Value.y));
+            var gridPosition = Grid.WorldToCell(new Vector3(worldPosition.x, worldPosition.y));
 
             if (gridPosition.x < 0 || gridPosition.y < 0 || gridPosition.x > _gridMapModel.Width ||
                 gridPosition.y > _gridMapModel.Height)
@@ -101,6 +81,17 @@ namespace Assets.Scripts.View.GridMap
             GridTilemapHighlight.SetTile(_mouseOverGridPosition.Value, null);
             GridTilemapHighlight.SetTile(gridPosition, TileDictionary[TileViewType.Highlight]);
             _mouseOverGridPosition = gridPosition;
+        }
+
+        public void DrawPath(List<GridPosition> gridPositions)
+        {
+            GridTilemapHighlight.ClearAllTiles();
+
+            foreach (var gridPosition in gridPositions)
+            {
+                GridTilemapHighlight.SetTile(GridUtilities.VectorFrom(gridPosition), TileDictionary[TileViewType.Highlight]);
+            }
+            
         }
 
 
@@ -119,5 +110,7 @@ namespace Assets.Scripts.View.GridMap
         {
             return GridTilemap.cellBounds.Contains(cellPosition);
         }
+
+       
     }
 }

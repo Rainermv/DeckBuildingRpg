@@ -18,7 +18,8 @@ namespace Assets.Scripts
     public class GameMain : SerializedMonoBehaviour
     {
         [SerializeField, SceneObjectsOnly] private LevelViewController _levelViewController;
-        [SerializeField] private GridMapModelScriptableObject _gridMapModelScriptableObject;
+
+        [SerializeField, AssetsOnly] private GridMapModelScriptableObject _gridMapModelScriptableObject;
 
         private LevelController _levelController;
 
@@ -33,11 +34,12 @@ namespace Assets.Scripts
                 //new SingleMovementResolver());
 
             levelModel = _levelController.Setup(levelModel);
-            
+
             _levelViewController.Initialize(levelModel,
                 cardView => _levelController.OnCardClicked(cardView.CardModel),
                 cardCollectionView => _levelController.OnCardCollectionClicked(cardCollectionView.CardCollectionModel),
-                _levelController.OnGridPositionInput);
+                _levelController.OnFindPathToTarget);
+
 
 
         }

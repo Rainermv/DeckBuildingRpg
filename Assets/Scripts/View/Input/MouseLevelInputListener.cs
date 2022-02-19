@@ -16,8 +16,7 @@ namespace Assets.Scripts.View.Input
             _onInputTrigger = onWorldInputTrigger;
         }
 
-        public Vector3 WorldInputPosition => CameraController.ScreenToWorldPoint(UnityEngine.Input.mousePosition)
-        ;
+        public Vector3 WorldInputPosition => CameraController.ScreenToWorldPoint(UnityEngine.Input.mousePosition);
 
         void Update()
         {

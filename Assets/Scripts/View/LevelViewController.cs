@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Assets.Scripts.Model;
 using Assets.Scripts.Model.GridMap;
 using Assets.Scripts.View.Card;
@@ -16,23 +17,37 @@ namespace Assets.Scripts.View
         [SerializeField, SceneObjectsOnly] private CardSystemView _cardView;
         [SerializeField, SceneObjectsOnly] private GridMapView _gridMapView;
         [SerializeField, SceneObjectsOnly] private Transform _charactersContainer;
-        [SerializeField, SceneObjectsOnly] private ILevelInputListener _levelInputListener;
 
-        private Action<GridPosition> _onGridInputTrigger;
+        private Func<GridPosition, FindPathResult> _onFindPathToTargetGrid;
 
-
-        public void Initialize(LevelModel levelModel, Action<CardView> onCardClicked,
-            Action<CardCollectionView> onCardCollectionClicked, Action<GridPosition> onGridInputTrigger)
+        private LevelViewModel _levelViewModel;
+        
+        public void Initialize(LevelModel levelModel,
+            Action<CardView> onCardClicked,
+            Action<CardCollectionView> onCardCollectionClicked,
+            Func<GridPosition, FindPathResult> onFindPathToTargetGrid)
         {
-            _onGridInputTrigger = onGridInputTrigger;
-            
-            _levelInputListener.Initialize(OnWorldInputTrigger);
+            _levelViewModel = new LevelViewModel()
+            {
+                MovePredictionModel = new MovePredictionModel()
+                {
+                    MovementPathPositions = new List<GridPosition>(), 
+                    TargetPosition = new GridPosition(-1000,-1000) //todo: target position to be last on the path
+                }
+            };
 
-            _gridMapView.Initialize(levelModel.GridMapModel, () => _levelInputListener.WorldInputPosition);
+
+            _onFindPathToTargetGrid = onFindPathToTargetGrid;
+            
+            _gridMapView.Initialize(levelModel.GridMapModel, 
+                OnTilemapPointerMove, 
+                OnTilemapPointerDown);
+
             _cardView.Initialize(levelModel.Players,
                 onCardClicked,
                 onCardCollectionClicked);
 
+            //todo: move characters code to a lower level
             foreach (var character in levelModel.Entities)
             {
                 var characterView = Instantiate(_characterViewPrefab, _charactersContainer);
@@ -40,22 +55,33 @@ namespace Assets.Scripts.View
                 characterView.Initialize(character, _gridMapView.CellToWorld);
             }
 
+        }
 
-            //CameraController..position += GridView.GridCenter;
+        private void OnTilemapPointerDown(GridPosition gridPosition)
+        {
+            
+            
 
         }
 
-        void OnWorldInputTrigger(Vector3 worldPosition)
+        private void OnTilemapPointerMove(GridPosition gridPosition)
         {
-            var cellPosition = _gridMapView.WorldToCell(new Vector3(worldPosition.x, worldPosition.y));
-
-            if (!_gridMapView.PointWithinBounds(cellPosition))
+            if (_levelViewModel.MovePredictionModel.TargetPosition == gridPosition)
+            {
                 return;
+            }
 
-            _onGridInputTrigger(new GridPosition(cellPosition.x, cellPosition.y));
-        } 
+            var pathfindingResult = _onFindPathToTargetGrid(gridPosition);
 
+            if (!pathfindingResult.PathFound)
+            {
+                _gridMapView.DrawPath(new List<GridPosition>());
+                return;
+            }
 
+            _levelViewModel.MovePredictionModel.MovementPathPositions = pathfindingResult.MovementPathPositions;
+            _gridMapView.DrawPath(pathfindingResult.MovementPathPositions);
+        }
 
         /// <summary>
         /// ///////////////////////////////////////////////////////////

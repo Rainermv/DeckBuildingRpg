@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Assets.Scripts.Controller.CardShuffler;
 using Assets.Scripts.Controller.MovementResolver;
 using Assets.Scripts.Model;
@@ -10,6 +6,11 @@ using Assets.Scripts.Model.Card;
 using Assets.Scripts.Model.Card.Collections;
 using Assets.Scripts.Model.GridMap;
 using Assets.Scripts.Utility;
+using Assets.Scripts.View;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Scripts.Controller
@@ -18,7 +19,6 @@ namespace Assets.Scripts.Controller
     {
         private readonly ICardShuffler _cardShuffler;
         private IGridmovementResolver _movementResolver;
-
 
         private Entity _controlledEntity;
 
@@ -52,31 +52,17 @@ namespace Assets.Scripts.Controller
             return levelModel;
         }
 
-        public async void OnGridPositionInput(GridPosition targetGridPosition)
+        public FindPathResult OnFindPathToTarget(GridPosition targetGridPosition)
         {
-            if (!canIssueCommands)
-            {
-                Debug.LogWarning("Can't issue commands right now");
-                return;
-            }
+           return _movementResolver.FindPathToTarget(_controlledEntity, targetGridPosition, 
+               (position) => _tileDictionary.ContainsKey(position) && 
+                             _entities.All(entity => entity.GridPosition != position));
 
-            // If there is NOT a valid tile at the position, return
-            if (!_tileDictionary.TryGetValue(targetGridPosition, out var targetGridTile))
-            {
-                return;
-            }
+        }
 
-            // if there is already an entity at the position, return
-            if (_entities.Any(entity => entity.GridPosition == targetGridPosition))
-            {
-                return;
-            }
-
-            Debug.Log($"===============Starting position: {_controlledEntity.GridPosition}");
-            var moveSequence = _movementResolver.MakeMoveSequence(_controlledEntity, targetGridPosition);
-            Debug.Log(string.Join(" ", moveSequence.Select(position => position.ToString())));
-
-            canIssueCommands = false;
+        public async void OnExecuteMovement(IEnumerable<GridPosition> moveSequence)
+        {
+            
             foreach (var moveGridPosition in moveSequence)
             {
                 Debug.Log($"Moving to {moveGridPosition}");
@@ -85,8 +71,6 @@ namespace Assets.Scripts.Controller
                 await Task.Delay(250);
 
             }
-            canIssueCommands = true;
-            Debug.Log($"============Final position: {_controlledEntity.GridPosition}");
 
         }
 
@@ -96,8 +80,16 @@ namespace Assets.Scripts.Controller
                 gridPosition.Y));
         }
 
+        public void OnGridmapPointerMove(GridPosition gridPosition)
+        {
 
-        public async void OnCardClicked(CardModel cardModel)
+        }
+
+        public void OnGridmapPointerDown(GridPosition gridPosition)
+        {
+            throw new NotImplementedException();
+        }
+        public void OnCardClicked(CardModel cardModel)
         {
             var player = cardModel.CardCollectionModelParent.PlayerParent;
 
