@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Model;
 using Assets.Scripts.Model.GridMap;
 using Assets.Scripts.View.Card;
@@ -7,6 +8,7 @@ using Assets.Scripts.View.GridMap;
 using Assets.Scripts.View.Input;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.View
 {
@@ -19,29 +21,27 @@ namespace Assets.Scripts.View
         [SerializeField, SceneObjectsOnly] private Transform _charactersContainer;
 
         private Func<GridPosition, FindPathResult> _onFindPathToTargetGrid;
+        private Action<List<GridPosition>> _onConfirmPath;
 
         private LevelViewModel _levelViewModel;
         
         public void Initialize(LevelModel levelModel,
             Action<CardView> onCardClicked,
             Action<CardCollectionView> onCardCollectionClicked,
-            Func<GridPosition, FindPathResult> onFindPathToTargetGrid)
+            Func<GridPosition, FindPathResult> onFindPathToTargetGrid,
+            Action<List<GridPosition>> onConfirmPath)
         {
             _levelViewModel = new LevelViewModel()
             {
-                MovePredictionModel = new MovePredictionModel()
-                {
-                    MovementPathPositions = new List<GridPosition>(), 
-                    TargetPosition = new GridPosition(-1000,-1000) //todo: target position to be last on the path
-                }
+                PathfindingModel = MovePredictionModel.Make(
+                    (model) => _gridMapView.DrawHighlight(model.GridPositions)
+                )
             };
 
-
+            _onConfirmPath = onConfirmPath;
             _onFindPathToTargetGrid = onFindPathToTargetGrid;
             
-            _gridMapView.Initialize(levelModel.GridMapModel, 
-                OnTilemapPointerMove, 
-                OnTilemapPointerDown);
+            _gridMapView.Initialize(levelModel.GridMapModel, OnTilemapPointerEvent);
 
             _cardView.Initialize(levelModel.Players,
                 onCardClicked,
@@ -57,30 +57,50 @@ namespace Assets.Scripts.View
 
         }
 
-        private void OnTilemapPointerDown(GridPosition gridPosition)
+        private void OnTilemapPointerEvent(PointerEventData pointerEventData, int pointerEventTrigger)
         {
-            
-            
-
-        }
-
-        private void OnTilemapPointerMove(GridPosition gridPosition)
-        {
-            if (_levelViewModel.MovePredictionModel.TargetPosition == gridPosition)
+            if (!pointerEventData.pointerCurrentRaycast.isValid)
             {
                 return;
             }
+
+
+            var gridPosition = _gridMapView.WorldToTilemapGrid(pointerEventData.pointerCurrentRaycast.worldPosition);
+
+            switch (pointerEventTrigger)
+            {
+                case PointerEventTrigger.MOVE:
+                    PathfindingHighlight(gridPosition);
+                    break;
+
+                case PointerEventTrigger.EXIT:
+                    _levelViewModel.PathfindingModel.Reset();
+                    break;
+
+                case PointerEventTrigger.DOWN when _levelViewModel.PathfindingModel.GridPositions.Any():
+                    _onConfirmPath(_levelViewModel.PathfindingModel.GridPositions);
+                    break;
+
+            }
+        }
+
+        private void PathfindingHighlight(GridPosition gridPosition)
+        {
+            if (_levelViewModel.PathfindingModel.LastPosition == gridPosition)
+            {
+                return;
+            }
+
+            _levelViewModel.PathfindingModel.Reset();
 
             var pathfindingResult = _onFindPathToTargetGrid(gridPosition);
 
             if (!pathfindingResult.PathFound)
             {
-                _gridMapView.DrawPath(new List<GridPosition>());
                 return;
             }
 
-            _levelViewModel.MovePredictionModel.MovementPathPositions = pathfindingResult.MovementPathPositions;
-            _gridMapView.DrawPath(pathfindingResult.MovementPathPositions);
+            _levelViewModel.PathfindingModel.Set(pathfindingResult.MovementPathPositions);
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using Assets.Scripts.Model.GridMap;
 using Assets.Scripts.Utility;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Tilemaps;
 
 namespace Assets.Scripts.View.GridMap
@@ -15,7 +16,6 @@ namespace Assets.Scripts.View.GridMap
         [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.OneLine)]
         [AssetsOnly] public Dictionary<TileViewType, Tile> TileDictionary;
     
-
         [Title("Scene")]
         [SceneObjectsOnly, Required] public Tilemap GridTilemap;
         [SceneObjectsOnly, Required] public Tilemap GridTilemapHighlight;
@@ -25,8 +25,7 @@ namespace Assets.Scripts.View.GridMap
         private GridMapModel _gridMapModel;
 
         public void Initialize(GridMapModel gridMapModel,
-            Action<GridPosition> onTilemapPointerMove,
-            Action<GridPosition> onTilemapPointerDown)
+            Action<PointerEventData, int> onTilemapPointerEvent)
         {
             _gridMapModel = gridMapModel;
 
@@ -37,14 +36,14 @@ namespace Assets.Scripts.View.GridMap
                 UpdateTile(tilePosition, gridTile);
             }
 
-            GridTilemap.GetComponent<TilemapListener>().Initialize(
-                // Tilemap World To GridPosition PointerMove
-                worldPosition => onTilemapPointerMove(
-                    GridUtilities.WorldToGrid(GridTilemap, worldPosition)),
-                // Tilemap World To GridPosition PointerDown
-                worldPosition => onTilemapPointerDown(
-                    GridUtilities.WorldToGrid(GridTilemap, worldPosition)));
-                
+            GridTilemap.GetComponent<TilemapListener>().OnTilemapPointerEvent += onTilemapPointerEvent;
+
+        }
+
+        public GridPosition WorldToTilemapGrid(Vector3 worldPosition)
+        {
+            var vector3IntPosition = GridTilemap.WorldToCell(worldPosition);
+            return new GridPosition(vector3IntPosition.x, vector3IntPosition.y);
         }
 
         private void UpdateTile(Vector3Int tilePosition, GridTile gridTile)
@@ -83,15 +82,13 @@ namespace Assets.Scripts.View.GridMap
             _mouseOverGridPosition = gridPosition;
         }
 
-        public void DrawPath(List<GridPosition> gridPositions)
+        public void DrawHighlight(List<GridPosition> gridPositions)
         {
             GridTilemapHighlight.ClearAllTiles();
-
             foreach (var gridPosition in gridPositions)
             {
                 GridTilemapHighlight.SetTile(GridUtilities.VectorFrom(gridPosition), TileDictionary[TileViewType.Highlight]);
             }
-            
         }
 
 
@@ -110,7 +107,5 @@ namespace Assets.Scripts.View.GridMap
         {
             return GridTilemap.cellBounds.Contains(cellPosition);
         }
-
-       
     }
 }

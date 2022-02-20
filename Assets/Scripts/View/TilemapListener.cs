@@ -5,34 +5,28 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.View
 {
-    public class TilemapListener : MonoBehaviour, IPointerDownHandler, IPointerMoveHandler
+    public class TilemapListener : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler, IPointerExitHandler
     {
-        private Action<Vector3> _onTilemapPointerMoveWorldPosition;
-        private Action<Vector3> _onTilemapPointerDownWorldPosition;
-
-        public void Initialize(Action<Vector3> onTilemapPointerMove, Action<Vector3> onTilemapPointerDown)
-        {
-            _onTilemapPointerDownWorldPosition = onTilemapPointerDown;
-            _onTilemapPointerMoveWorldPosition = onTilemapPointerMove;
-        }
-
+        public Action<PointerEventData, int> OnTilemapPointerEvent;
+        
         public void OnPointerDown(PointerEventData eventData)
         {
-            _onTilemapPointerDownWorldPosition(eventData.pointerCurrentRaycast.worldPosition);
+            OnTilemapPointerEvent?.Invoke(eventData, PointerEventTrigger.DOWN);
+        }
+
+        public void OnPointerUp(PointerEventData eventData)
+        {
+            OnTilemapPointerEvent?.Invoke(eventData, PointerEventTrigger.UP);
         }
 
         public void OnPointerMove(PointerEventData eventData)
         {
-            var hovered = eventData.hovered;
-            if (!hovered.Any())
-            {
-                return;
-            }
-
-            //_onTilemapPointerMoveWorldPosition(hovered.FirstOrDefault().transform.position);
-            _onTilemapPointerMoveWorldPosition(eventData.pointerCurrentRaycast.worldPosition);
+            OnTilemapPointerEvent?.Invoke(eventData, PointerEventTrigger.MOVE);
         }
 
-        
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            OnTilemapPointerEvent?.Invoke(eventData, PointerEventTrigger.EXIT);
+        }
     }
 }

@@ -2,6 +2,6 @@ namespace Assets.Scripts.View
 {
     internal class LevelViewModel
     {
-        public MovePredictionModel MovePredictionModel { get; set; }
+        public MovePredictionModel PathfindingModel { get; set; }
     }
 }

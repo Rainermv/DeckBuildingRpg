@@ -38,7 +38,8 @@ namespace Assets.Scripts
             _levelViewController.Initialize(levelModel,
                 cardView => _levelController.OnCardClicked(cardView.CardModel),
                 cardCollectionView => _levelController.OnCardCollectionClicked(cardCollectionView.CardCollectionModel),
-                _levelController.OnFindPathToTarget);
+                _levelController.OnFindPathToTarget,
+                _levelController.OnExecuteMovement);
 
 
 
