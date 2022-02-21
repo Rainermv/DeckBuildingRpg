@@ -30,7 +30,7 @@ namespace Assets.Scripts
 
             _levelController = new LevelController(
                 new RandomCardShuffler(),
-                new ManhattanMovementResolver());
+                new AStarPathFindResolver());
                 //new SingleMovementResolver());
 
             levelModel = _levelController.Setup(levelModel);

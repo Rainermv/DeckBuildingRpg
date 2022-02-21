@@ -18,20 +18,27 @@ namespace Assets.Scripts.Controller
     internal class LevelController
     {
         private readonly ICardShuffler _cardShuffler;
-        private IGridmovementResolver _movementResolver;
+        private IPathFindResolver _pathFindResolver;
 
         private Entity _controlledEntity;
 
         private Dictionary<GridPosition, GridTile> _tileDictionary;
         private List<Entity> _entities;
         private LevelModel _levelModel;
-        private bool canIssueCommands = true;
 
-        public LevelController(ICardShuffler cardShuffler, IGridmovementResolver movementResolver)
+        private CharacterPathfindingModel _characterPathfindingModel;
+
+        public LevelController(ICardShuffler cardShuffler, IPathFindResolver pathFindResolver)
         {
+            _characterPathfindingModel = new CharacterPathfindingModel();
             _cardShuffler = cardShuffler;
-            _movementResolver = movementResolver;
+            _pathFindResolver = pathFindResolver;
+
+            _pathFindResolver.OnIsPositionValid = position => GridUtilities.IsPositionValid(position, _tileDictionary, _entities);
+            _pathFindResolver.OnGetCostToCrossAtoB =
+                (position, gridPosition) => GridUtilities.GetCostToPosition(position, gridPosition, _tileDictionary, _entities);
         }
+
 
         public LevelModel Setup(LevelModel levelModel)
         {
@@ -52,43 +59,40 @@ namespace Assets.Scripts.Controller
             return levelModel;
         }
 
-        public FindPathResult OnFindPathToTarget(GridPosition targetGridPosition)
+        public CharacterPathfindingModel OnFindPathToTarget(GridPosition targetGridPosition)
         {
-           return _movementResolver.FindPathToTarget(_controlledEntity, targetGridPosition, 
-               (position) => _tileDictionary.ContainsKey(position) && 
-                             _entities.All(entity => entity.GridPosition != position));
+            if (_characterPathfindingModel.GridPositions.Any() &&
+                _characterPathfindingModel.GridPositions.Last() == targetGridPosition)
+            {
+                return _characterPathfindingModel;
+            }
+
+            var result = _pathFindResolver.FindPathToTarget(_controlledEntity.GridPosition, targetGridPosition);
+            _characterPathfindingModel = new CharacterPathfindingModel()
+            {
+                MoveRange = 4,
+                GridPositions = result.MovementPathPositions,
+            };
+            return _characterPathfindingModel;
 
         }
 
-        public async void OnExecuteMovement(IEnumerable<GridPosition> moveSequence)
+        public async void OnExecuteMovement()
         {
             
-            foreach (var moveGridPosition in moveSequence)
+            foreach (var moveGridPosition in _characterPathfindingModel.GridPositions.GetRange(0, 
+                Math.Min(_characterPathfindingModel.MoveRange+1, _characterPathfindingModel.GridPositions.Count)))
             {
                 Debug.Log($"Moving to {moveGridPosition}");
                 await _controlledEntity.SetPositionAsync(moveGridPosition);
 
                 await Task.Delay(250);
-
             }
 
+            _characterPathfindingModel.GridPositions.Clear();
         }
 
-        private static bool InsideBounds(GridMapModel gridMapModel, GridPosition gridPosition)
-        {
-            return new Rect(0, 0, gridMapModel.Width, gridMapModel.Height).Contains(new Vector2(gridPosition.X,
-                gridPosition.Y));
-        }
 
-        public void OnGridmapPointerMove(GridPosition gridPosition)
-        {
-
-        }
-
-        public void OnGridmapPointerDown(GridPosition gridPosition)
-        {
-            throw new NotImplementedException();
-        }
         public void OnCardClicked(CardModel cardModel)
         {
             var player = cardModel.CardCollectionModelParent.PlayerParent;

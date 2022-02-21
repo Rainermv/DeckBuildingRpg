@@ -4,10 +4,13 @@ namespace Assets.Scripts.Model.GridMap
     {
         public uint TileType { get; }
         public GridPosition GridPosition { get; }
-        public GridTile(GridPosition gridPosition, uint tileType)
+        public int MoveCostToEnter { get; set; }
+
+        public GridTile(GridPosition gridPosition, uint tileType, int moveCostToEnter = 1)
         {
             GridPosition = gridPosition;
             TileType = tileType;
+            MoveCostToEnter = moveCostToEnter;
         }
     }
 }

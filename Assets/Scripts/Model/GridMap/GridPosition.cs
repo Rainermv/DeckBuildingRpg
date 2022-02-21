@@ -1,7 +1,10 @@
+using System;
+
 namespace Assets.Scripts.Model.GridMap
 {
     public record GridPosition
     {
+        private static GridPosition p2;
         public int X { get; }
         public int Y { get; }
 

@@ -82,13 +82,23 @@ namespace Assets.Scripts.View.GridMap
             _mouseOverGridPosition = gridPosition;
         }
 
-        public void DrawHighlight(List<GridPosition> gridPositions)
+        public void DrawHighlight(List<GridPosition> gridPositions, int moveLimit)
         {
             GridTilemapHighlight.ClearAllTiles();
-            foreach (var gridPosition in gridPositions)
+            for (var i = 0; i < gridPositions.Count; i++)
             {
-                GridTilemapHighlight.SetTile(GridUtilities.VectorFrom(gridPosition), TileDictionary[TileViewType.Highlight]);
+                var vectorPosition = GridUtilities.VectorFrom(gridPositions[i]);
+
+                var color = i <= moveLimit ? Color.white : Color.red;
+                GridTilemapHighlight.SetTile((vectorPosition), TileDictionary[TileViewType.Highlight]);
+                GridTilemapHighlight.SetTileFlags(vectorPosition, TileFlags.None);
+                GridTilemapHighlight.SetColor(vectorPosition, color);
             }
+        }
+
+        public void ClearHighlight()
+        {
+            GridTilemapHighlight.ClearAllTiles();
         }
 
 
@@ -107,5 +117,7 @@ namespace Assets.Scripts.View.GridMap
         {
             return GridTilemap.cellBounds.Contains(cellPosition);
         }
+
+        
     }
 }

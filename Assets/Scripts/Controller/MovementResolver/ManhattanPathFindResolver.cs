@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Model.Actor;
 using Assets.Scripts.Model.GridMap;
 using Assets.Scripts.View;
 
 namespace Assets.Scripts.Controller.MovementResolver
 {
-    internal class ManhattanMovementResolver : IGridmovementResolver
+    internal class ManhattanPathFindResolver : IPathFindResolver
     {
 
-        public FindPathResult FindPathToTarget(Entity movableEntity, GridPosition targetGridPosition,
-            Func<GridPosition, bool> onGetPositionIsValid)
-        {
-            var initialPosition = movableEntity.GridPosition;
+        public Func<GridPosition, bool> OnIsPositionValid { get; set; }
+        public Func<GridPosition, GridPosition, double> OnGetCostToCrossAtoB { get; set; }
 
+
+        public PathFindResult FindPathToTarget(GridPosition initialPosition, GridPosition targetGridPosition)
+        {
             var movementPathPositions = new List<GridPosition>();
             for (var i = 1; i <= Math.Abs(targetGridPosition.X - initialPosition.X); i++)
             {
@@ -42,7 +42,7 @@ namespace Assets.Scripts.Controller.MovementResolver
                 movementPathPositions.Add(new GridPosition(initialPosition.X, initialPosition.Y - i));
             }
 
-            return new FindPathResult()
+            return new PathFindResult()
             {
                 PathFound = true,
                 MovementPathPositions = movementPathPositions

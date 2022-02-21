@@ -20,25 +20,20 @@ namespace Assets.Scripts.View
         [SerializeField, SceneObjectsOnly] private GridMapView _gridMapView;
         [SerializeField, SceneObjectsOnly] private Transform _charactersContainer;
 
-        private Func<GridPosition, FindPathResult> _onFindPathToTargetGrid;
-        private Action<List<GridPosition>> _onConfirmPath;
+        private Func<GridPosition, CharacterPathfindingModel> _onFindPathToTargetGrid;
+        private Action _onExecuteMovement;
 
         private LevelViewModel _levelViewModel;
         
         public void Initialize(LevelModel levelModel,
             Action<CardView> onCardClicked,
             Action<CardCollectionView> onCardCollectionClicked,
-            Func<GridPosition, FindPathResult> onFindPathToTargetGrid,
-            Action<List<GridPosition>> onConfirmPath)
+            Func<GridPosition, CharacterPathfindingModel> onFindPathToTargetGrid,
+            Action onExecuteMovement)
         {
-            _levelViewModel = new LevelViewModel()
-            {
-                PathfindingModel = MovePredictionModel.Make(
-                    (model) => _gridMapView.DrawHighlight(model.GridPositions)
-                )
-            };
-
-            _onConfirmPath = onConfirmPath;
+            _levelViewModel = new LevelViewModel();
+     
+            _onExecuteMovement = onExecuteMovement;
             _onFindPathToTargetGrid = onFindPathToTargetGrid;
             
             _gridMapView.Initialize(levelModel.GridMapModel, OnTilemapPointerEvent);
@@ -70,37 +65,20 @@ namespace Assets.Scripts.View
             switch (pointerEventTrigger)
             {
                 case PointerEventTrigger.MOVE:
-                    PathfindingHighlight(gridPosition);
+                    var pathfindModel = _onFindPathToTargetGrid(gridPosition);
+                    _gridMapView.DrawHighlight(pathfindModel.GridPositions, pathfindModel.MoveRange);
                     break;
 
                 case PointerEventTrigger.EXIT:
-                    _levelViewModel.PathfindingModel.Reset();
+                    _gridMapView.ClearHighlight();
                     break;
 
-                case PointerEventTrigger.DOWN when _levelViewModel.PathfindingModel.GridPositions.Any():
-                    _onConfirmPath(_levelViewModel.PathfindingModel.GridPositions);
+                case PointerEventTrigger.DOWN:
+                    _gridMapView.ClearHighlight();
+                    _onExecuteMovement();
                     break;
 
             }
-        }
-
-        private void PathfindingHighlight(GridPosition gridPosition)
-        {
-            if (_levelViewModel.PathfindingModel.LastPosition == gridPosition)
-            {
-                return;
-            }
-
-            _levelViewModel.PathfindingModel.Reset();
-
-            var pathfindingResult = _onFindPathToTargetGrid(gridPosition);
-
-            if (!pathfindingResult.PathFound)
-            {
-                return;
-            }
-
-            _levelViewModel.PathfindingModel.Set(pathfindingResult.MovementPathPositions);
         }
 
         /// <summary>

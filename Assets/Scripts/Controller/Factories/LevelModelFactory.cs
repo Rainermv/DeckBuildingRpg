@@ -27,12 +27,16 @@ namespace Assets.Scripts.Model
 
             levelModel.GlobalAttributeSet.Set(AttributeKey.Health, 100);
 
-            int i = 0;
+            //int i = 0;
             foreach (var player in levelModel.Players.Values)
             {
                 SetupPlayer(player);
-                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[i++].GridPosition);
-                
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[0].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[5].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[15].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[20].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[25].GridPosition);
+
                 // Add cards to Deck
                 foreach (var card in player.CardCollections[CardCollectionIdentifier.Deck].Cards)
                 {

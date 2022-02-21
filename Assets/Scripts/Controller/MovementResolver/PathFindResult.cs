@@ -3,7 +3,7 @@ using Assets.Scripts.Model.GridMap;
 
 namespace Assets.Scripts.View
 {
-    public class FindPathResult
+    public class PathFindResult
     {
         public bool PathFound { get; set; }
         public List<GridPosition> MovementPathPositions { get; set; }
