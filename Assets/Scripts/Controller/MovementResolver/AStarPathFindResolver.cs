@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Model.GridMap;
-using Assets.Scripts.Utility;
-using Assets.Scripts.View;
+using Assets.Scripts.Core.Model.GridMap;
+using Assets.Scripts.Core.Utility;
 
 namespace Assets.Scripts.Controller.MovementResolver
 {

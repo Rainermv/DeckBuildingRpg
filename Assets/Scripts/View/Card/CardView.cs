@@ -1,6 +1,8 @@
 using System;
-using Assets.Scripts.Model.Card;
+using Assets.Scripts.Controller;
+using Assets.Scripts.Core.Model.Card;
 using Assets.Scripts.View.Attribute;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,7 +10,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.View.Card
 {
-    public class CardView : MonoBehaviour, IPointerClickHandler
+    public class CardView : SerializedMonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {
         public RectTransform RectTransform;
 
@@ -16,30 +18,28 @@ namespace Assets.Scripts.View.Card
         [SerializeField] private TextMeshProUGUI _textBlock;
         [SerializeField] private Image _cardImage;
 
-        private Action<CardView> _onCardViewClicked;
-        private Func<int, Sprite> _onGetSpriteFromIndex;
+        private Action<CardModel, PointerEventData, int> _onCardPointerEvent;
+        private CardImageLibrary _cardImageLibrary;
+
         public CardModel CardModel { get; private set; }
 
-        void Awake()
-        {
-        }
-
         // Start is called before the first frame update
-        public void Initialize(Action<CardView> onCardViewClicked, Func<int, Sprite> onGetSpriteFromIndex)
+        public void Initialize(Action<CardModel, PointerEventData, int> onCardPointerEvent, CardImageLibrary cardImageLibrary)
         {
-            _onGetSpriteFromIndex = onGetSpriteFromIndex;
-            _onCardViewClicked = onCardViewClicked;
+            _onCardPointerEvent = onCardPointerEvent;
+            _cardImageLibrary = cardImageLibrary;
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void Initialize(CardImageLibrary cardImageLibrary)
         {
-            _onCardViewClicked(this);
+            _cardImageLibrary = cardImageLibrary;
         }
+
+        
 
         public void Reset(bool isActive)
         {
             gameObject.SetActive(isActive);
-
         }
 
         public void Display(CardModel cardModel)
@@ -56,7 +56,7 @@ namespace Assets.Scripts.View.Card
             gameObject.name = CardModel.Name;
             _textName.text = CardModel.Name;
             _textBlock.text = CardModel.TextBlock;
-            _cardImage.sprite = _onGetSpriteFromIndex(CardModel.ImageIndex);
+            _cardImage.sprite = _cardImageLibrary.Get(CardModel.ImageIndex);
 
             foreach (var attributeView in GetComponentsInChildren<ICardAttributeView>())
             {
@@ -68,7 +68,18 @@ namespace Assets.Scripts.View.Card
             }
         }
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            _onCardPointerEvent?.Invoke(CardModel, eventData, PointerEventTrigger.DOWN);
+        }
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            _onCardPointerEvent?.Invoke(CardModel, eventData, PointerEventTrigger.ENTER);
+        }
 
-        
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            _onCardPointerEvent?.Invoke(CardModel, eventData, PointerEventTrigger.EXIT);
+        }
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Assets.Scripts.Model.Actor;
-using Assets.Scripts.Model.GridMap;
+using Assets.Scripts.Core.Model.Entity;
+using Assets.Scripts.Core.Model.GridMap;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -14,22 +14,21 @@ namespace Assets.Scripts.View
         private Func<GridPosition, Vector3> _onGetWorldPosition;
         //private GridPosition _gridPosition;
 
-        public void Initialize(Entity entity, Func<GridPosition, Vector3> onGetWorldPosition)
+        public void Initialize(BattleEntity battleEntity, Func<GridPosition, Vector3> onGetWorldPosition)
         {
             _onGetWorldPosition = onGetWorldPosition;
 
-            OnEntityUpdate(entity);
+            OnEntityUpdate(battleEntity);
         }
 
-        private void OnEntityUpdate(Entity entity)
+        private void OnEntityUpdate(BattleEntity battleEntity)
         {
-            entity.OnUpdate = OnEntityUpdate;
-            entity.OnSetPositionAsync = OnSetPositionMoveAsync;
-            entity.OnSetPosition = OnSetPositionInstant;
+            battleEntity.OnUpdate += OnEntityUpdate;
+            battleEntity.OnSetPosition += OnSetPositionMoveAsync;
 
-            name = entity.Name;
+            name = battleEntity.Name;
 
-            transform.position = _onGetWorldPosition(entity.GridPosition);
+            transform.position = _onGetWorldPosition(battleEntity.GridPosition);
         }
 
         private void OnSetPositionInstant(GridPosition gridPosition)
@@ -37,7 +36,7 @@ namespace Assets.Scripts.View
             transform.position = _onGetWorldPosition(gridPosition);
         }
 
-        private async Task OnSetPositionMoveAsync(GridPosition gridPosition)
+        private async void OnSetPositionMoveAsync(GridPosition gridPosition)
         {
             var initialPosition = transform.position;
             var targetPosition = _onGetWorldPosition(gridPosition);

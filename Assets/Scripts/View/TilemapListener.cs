@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.View
 {
-    public class TilemapListener : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler, IPointerExitHandler
+    public class TilemapListener : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler, IPointerExitHandler, IPointerEnterHandler
     {
         public Action<PointerEventData, int> OnTilemapPointerEvent;
         
@@ -27,6 +27,11 @@ namespace Assets.Scripts.View
         public void OnPointerExit(PointerEventData eventData)
         {
             OnTilemapPointerEvent?.Invoke(eventData, PointerEventTrigger.EXIT);
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            OnTilemapPointerEvent?.Invoke(eventData, PointerEventTrigger.ENTER);
         }
     }
 }

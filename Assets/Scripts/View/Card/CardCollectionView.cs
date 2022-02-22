@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Model.Card;
-using Assets.Scripts.Model.Card.Collections;
+using Assets.Scripts.Core.Model.Card;
+using Assets.Scripts.Core.Model.Card.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.View.Card
 {
-    public class CardCollectionView : MonoBehaviour, IPointerClickHandler
+    public class CardCollectionView : MonoBehaviour
     {
 
 
@@ -22,15 +22,12 @@ namespace Assets.Scripts.View.Card
 
         private List<CardView> _cardViews = new();
         private Func<int, RectTransform, List<CardView>> _onInstantiateCardViews;
-        private Action<CardCollectionView> _onCardCollectionViewClicked;
 
         public CardCollectionModel CardCollectionModel { get; private set; }
 
-        public void Initialize(Func<int, RectTransform, List<CardView>> onInstantiateCardViews,
-            Action<CardCollectionView> onCardCollectionViewClicked)
+        public void Initialize(Func<int, RectTransform, List<CardView>> onInstantiateCardViews)
         {
             _onInstantiateCardViews = onInstantiateCardViews;
-            _onCardCollectionViewClicked = onCardCollectionViewClicked;
 
             CardsContainer.gameObject.SetActive(viewOptions.CardsVisible);
 
@@ -73,13 +70,6 @@ namespace Assets.Scripts.View.Card
             CardCounterText.text = cards.Count.ToString();
 
         }
-
-        
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            _onCardCollectionViewClicked(this);
-        }
-
 
         
     }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Assets.Scripts.Model.GridMap;
+using Assets.Scripts.Core.Model.GridMap;
 
-namespace Assets.Scripts.View
+namespace Assets.Scripts.Controller.MovementResolver
 {
     public class PathFindResult
     {

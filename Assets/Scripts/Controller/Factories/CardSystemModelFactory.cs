@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Assets.Scripts.Model.Card;
-using Assets.Scripts.Model.Card.Collections;
+using Assets.Scripts.Core.Model.Card;
+using Assets.Scripts.Core.Model.Card.Collections;
 
 namespace Assets.Scripts.Controller.Factories
 {

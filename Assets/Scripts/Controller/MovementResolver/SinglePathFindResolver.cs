@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Model.GridMap;
-using Assets.Scripts.View;
+using Assets.Scripts.Core.Model.GridMap;
 
 namespace Assets.Scripts.Controller.MovementResolver
 {

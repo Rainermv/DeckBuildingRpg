@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Model.GridMap;
-using Assets.Scripts.Utility;
+using System.Linq;
+using Assets.Scripts.Core.Model.GridMap;
+using Assets.Scripts.Core.Utility;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -29,12 +30,15 @@ namespace Assets.Scripts.View.GridMap
         {
             _gridMapModel = gridMapModel;
 
+
             foreach (var gridTile in _gridMapModel.GridTiles)
             {
                 var tilePosition = new Vector3Int(gridTile.GridPosition.X, gridTile.GridPosition.Y);
 
                 UpdateTile(tilePosition, gridTile);
             }
+            //Debug.Log($"WRITE: {string.Join(",", _gridMapModel.GridTiles.Select(tile => $"[{ tile.GridPosition.X},{ tile.GridPosition.Y}]"))}");
+
 
             GridTilemap.GetComponent<TilemapListener>().OnTilemapPointerEvent += onTilemapPointerEvent;
 
@@ -53,7 +57,10 @@ namespace Assets.Scripts.View.GridMap
                 ? TileDictionary[TileViewType.Offset]
                 : TileDictionary[TileViewType.Normal];
 
+            var tileColor = Color.Lerp(Color.white, Color.black, gridTile.MoveCostToEnter - 1);
+
             GridTilemap.SetTile(tilePosition, tile);
+            GridTilemap.SetColor(tilePosition, tileColor);
         }
 
         void _OnTilemapMouseOver()
@@ -102,7 +109,7 @@ namespace Assets.Scripts.View.GridMap
         }
 
 
-        public Vector3 CellToWorld(GridPosition gridPosition)
+        public Vector3 GridToWorld(GridPosition gridPosition)
         {
             return GridTilemap.CellToWorld(new Vector3Int(gridPosition.X, gridPosition.Y));
         }

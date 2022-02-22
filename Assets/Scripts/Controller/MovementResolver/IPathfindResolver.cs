@@ -1,11 +1,9 @@
 using System;
-using System.Collections.Generic;
-using Assets.Scripts.Model.GridMap;
-using Assets.Scripts.View;
+using Assets.Scripts.Core.Model.GridMap;
 
 namespace Assets.Scripts.Controller.MovementResolver
 {
-    internal interface IPathFindResolver
+    public interface IPathFindResolver
     {
         Func<GridPosition, bool> OnIsPositionValid { get; set; }
         Func<GridPosition, GridPosition, double> OnGetCostToCrossAtoB { get; set; }
