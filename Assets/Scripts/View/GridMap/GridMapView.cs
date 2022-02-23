@@ -52,7 +52,7 @@ namespace Assets.Scripts.View.GridMap
 
         private void UpdateTile(Vector3Int tilePosition, GridTile gridTile)
         {
-            var isOffset = GridUtilities.IsTileOffset(tilePosition);
+            var isOffset = TilemapUtilities.IsTileOffset(tilePosition);
             var tile = isOffset
                 ? TileDictionary[TileViewType.Offset]
                 : TileDictionary[TileViewType.Normal];
@@ -94,7 +94,7 @@ namespace Assets.Scripts.View.GridMap
             GridTilemapHighlight.ClearAllTiles();
             for (var i = 0; i < gridPositions.Count; i++)
             {
-                var vectorPosition = GridUtilities.VectorFrom(gridPositions[i]);
+                var vectorPosition = TilemapUtilities.VectorFrom(gridPositions[i]);
 
                 var color = i <= moveLimit ? Color.white : Color.red;
                 GridTilemapHighlight.SetTile((vectorPosition), TileDictionary[TileViewType.Highlight]);

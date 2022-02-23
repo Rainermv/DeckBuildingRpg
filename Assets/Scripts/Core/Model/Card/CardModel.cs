@@ -1,24 +1,27 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Assets.Scripts.Core.Commands;
 using Assets.Scripts.Core.Model.AttributeModel;
 using Assets.Scripts.Core.Model.Card.Collections;
+using Assets.Scripts.Core.Model.Command;
 
 namespace Assets.Scripts.Core.Model.Card
 {
     public class CardModel 
     {
-        public int ImageIndex { get; set; }
-
         public string Name { get; set; }
-        //public List<ICardCommand> Commands { get; set; } = new();
+        public int CardDataIndex { get; set; }
+        public string Text { get; set; }
+        
+        public List<ICardCommand> Commands { get; set; } = new();
         public CardCollectionModel CardCollectionModelParent { get; set; }
         public AttributeSet AttributeSet { get; set; }
-
-
-        public Action<CardModel, CardPlayReport> OnStartPlay { get; set; }
-        //public Action<CardModel, CardPlayReport, CardCommandReport> OnCommandRun { get; set; }
-        public Action<CardModel, CardPlayReport> OnFinishPlay { get; set; }
+        
         public Action OnUpdate { get; set; }
-        public string TextBlock => "Foo";
+        public Action<CardModel, CardPlayReport> OnStartPlay { get; set; }
+        public Action<CardModel, CardPlayReport, CardCommandReport> OnCommandRun { get; set; }
+        public Action<CardModel, CardPlayReport> OnFinishPlay { get; set; }
 
 
         public static CardModel Make(string name = "")
@@ -30,8 +33,19 @@ namespace Assets.Scripts.Core.Model.Card
             };
         }
 
+        public static CardModel MakeFromCardData(CardDataModel cardDataModel)
+        {
+            return new CardModel()
+            {
+                Name = cardDataModel.Name,
+                Text = cardDataModel.Text,
+                CardDataIndex = cardDataModel.Index,
+                AttributeSet = new AttributeSet()
+            };
+        }
+
         public CardPlayReport Play(BattleModel battleModel)
-        {/*
+        {
             // Initialize reports
             var cardPlayReport = new CardPlayReport()
             {
@@ -39,8 +53,6 @@ namespace Assets.Scripts.Core.Model.Card
             };
 
             OnStartPlay?.Invoke(this, cardPlayReport);
-
-            Debug.Log($"{Name} was played with {Commands.Count} commands");
 
             // Run commands in sequence
             for (var index = 0; index < Commands.Count; index++)
@@ -56,8 +68,6 @@ namespace Assets.Scripts.Core.Model.Card
             OnUpdate?.Invoke();
 
             return cardPlayReport;
-            */
-            return new CardPlayReport();
         }
 
 

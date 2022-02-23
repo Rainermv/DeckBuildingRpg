@@ -1,19 +1,19 @@
+using Assets.Scripts.Controller;
 using Assets.Scripts.Controller.CardShuffler;
 using Assets.Scripts.Controller.Factories;
 using Assets.Scripts.Controller.MovementResolver;
 using Assets.Scripts.Core.Utility;
-using Assets.Scripts.View;
+using Assets.Scripts.View.CardTemplate;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-namespace Assets.Scripts.Controller
+namespace Assets.Scripts.View
 {
     public class GameMain : SerializedMonoBehaviour
     {
+        [SerializeField, AssetsOnly] private CardDataLibraryScriptableObject _cardDataLibrary;
         [SerializeField, SceneObjectsOnly] private BattleViewController _battleViewController;
-
-        //[SerializeField, AssetsOnly] private GridMapModelScriptableObject _gridMapModelScriptableObject;
 
         public Tilemap GridTilemap; 
 
@@ -22,9 +22,9 @@ namespace Assets.Scripts.Controller
         // Start is called before the first frame update
         void Start()
         {
-            var gridMapModel = GridUtilities.GridMapModelFrom(GridTilemap);
-
-            var battleModel = BattleModelFactory.Build(gridMapModel);
+            var gridMapModel = TilemapUtilities.GridMapModelFrom(GridTilemap);
+            var cardDataModel = _cardDataLibrary.ToCardDataModelList();
+            var battleModel = BattleModelFactory.Build(gridMapModel, cardDataModel);
 
             _battleController = new BattleController(
                 new RandomCardShuffler(),
@@ -35,9 +35,8 @@ namespace Assets.Scripts.Controller
             _battleViewController.Initialize(battleModel,
                 _battleController.OnCardActivate,
                 _battleController.OnGridFindPathToTarget,
-                _battleController.OnGridMovePath);
-
-
+                _battleController.OnGridMovePath, 
+                _cardDataLibrary.ToSpriteLibrary());
 
         }
 

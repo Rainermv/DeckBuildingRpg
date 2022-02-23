@@ -10,9 +10,9 @@ namespace Assets.Scripts.View.Card
         [SerializeField] private CardView _cardView;
 
 
-        public void Initialize(CardImageLibrary cardImageLibrary)
+        public void Initialize(CardSpriteLibrary cardSpriteLibrary)
         {
-            _cardView.Initialize(cardImageLibrary);
+            _cardView.Initialize(cardSpriteLibrary);
             Hide();
         }
 

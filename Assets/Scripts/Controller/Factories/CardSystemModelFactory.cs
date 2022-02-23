@@ -18,8 +18,7 @@ namespace Assets.Scripts.Controller.Factories
 
             for (int i = 0; i < numOfPlayers; i++)
             {
-                BuildPlayer(playerDictionary, PLAYER_NAMES[i])
-                    .CardCollections[CardCollectionIdentifier.Deck].InsertCards(BuildCards(20));
+                BuildPlayer(playerDictionary, PLAYER_NAMES[i]);
             }
 
             return playerDictionary;
@@ -39,17 +38,6 @@ namespace Assets.Scripts.Controller.Factories
             return player;
         }
 
-        private static List<CardModel> BuildCards(int numOfCards)
-        {
-            var cards = new List<CardModel>();
-            for (var i = 0; i < numOfCards; i++)
-            {
-                var card = CardModel.Make();
-
-                cards.Add(card);
-            }
-
-            return cards;
-        }
+        
     }
 }

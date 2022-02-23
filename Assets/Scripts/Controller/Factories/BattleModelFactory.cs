@@ -13,7 +13,7 @@ namespace Assets.Scripts.Controller.Factories
 {
     public class BattleModelFactory
     {
-        public static BattleModel Build(GridMapModel gridMapModel)
+        public static BattleModel Build(GridMapModel gridMapModel, List<CardDataModel> cardDataModels)
         {
             var levelModel = new BattleModel()
             {
@@ -23,7 +23,13 @@ namespace Assets.Scripts.Controller.Factories
                 Entities = new List<BattleEntity>()
             };
 
-            levelModel.GlobalAttributeSet.Set(AttributeKey.Health, 100);
+            foreach (var player in levelModel.Players.Values)
+            {
+                player.CardCollections[CardCollectionIdentifier.Deck].InsertCards(
+                    BuildRandomCards(20, cardDataModels));
+            }
+
+            
 
             //int i = 0;
             foreach (var player in levelModel.Players.Values)
@@ -35,12 +41,7 @@ namespace Assets.Scripts.Controller.Factories
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[20].GridPosition);
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[25].GridPosition);
 
-                // Add cards to Deck
-                foreach (var card in player.CardCollections[CardCollectionIdentifier.Deck].Cards)
-                {
-                    SetupCard(card, player);
-                }
-
+             
                 // Draw initial hand
                 CardUtilities.DrawCards(player.CardCollections[CardCollectionIdentifier.Deck],
                     player.CardCollections[CardCollectionIdentifier.Hand],
@@ -49,8 +50,21 @@ namespace Assets.Scripts.Controller.Factories
 
             return levelModel;
         }
-        
-        
+
+        private static List<CardModel> BuildRandomCards(int numOfCards, List<CardDataModel> cardDataModels)
+        {
+            var random = new Random();
+            
+            var cards = new List<CardModel>();
+            for (var i = 0; i < numOfCards; i++)
+            {
+                var card = CardModel.MakeFromCardData(cardDataModels[random.Next(0, cardDataModels.Count)]);
+
+                cards.Add(card);
+            }
+
+            return cards;
+        }
 
         private static void AddCharacterTo(Player player, BattleModel battleModel,
             GridPosition gridPosition)
@@ -76,7 +90,7 @@ namespace Assets.Scripts.Controller.Factories
 
             var cardType = random.Next(0, possibleCardTypes.Length);
             var powerCost = 0;
-            cardModel.ImageIndex = cardType;
+            //cardModel.CardSourceReferenceIndex = 
 
             cardModel.AttributeSet.Set(AttributeKey.CardType, cardType);
 

@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using Sirenix.OdinInspector;
-using UnityEditor;
-using UnityEngine.Tilemaps;
+﻿using Sirenix.OdinInspector;
 
-namespace Assets.Scripts.Core.Utility.GridMapSerializer
+namespace Assets.Scripts.View.GridMapSerializer
 {
     public class GridMapSerializer : SerializedMonoBehaviour
     {/*

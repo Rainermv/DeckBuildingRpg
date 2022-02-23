@@ -10,7 +10,6 @@ using Assets.Scripts.Core.Model.Card.Collections;
 using Assets.Scripts.Core.Model.Entity;
 using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
-using UnityEngine;
 
 namespace Assets.Scripts.Controller
 {
@@ -34,7 +33,9 @@ namespace Assets.Scripts.Controller
             _cardShuffler = cardShuffler;
             _pathFindResolver = pathFindResolver;
 
-            _pathFindResolver.OnIsPositionValid = position => GridUtilities.IsPositionValid(position, _tileDictionary, _battleEntities);
+            _pathFindResolver.OnIsPositionValid = 
+                position => GridUtilities.IsPositionValid(position, _tileDictionary, _battleEntities);
+
             _pathFindResolver.OnGetCostToCrossAtoB =
                 (position, gridPosition) => GridUtilities.GetCostToPosition(position, gridPosition, _tileDictionary, _battleEntities);
         }

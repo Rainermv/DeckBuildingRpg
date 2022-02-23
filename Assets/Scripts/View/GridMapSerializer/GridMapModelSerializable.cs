@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Assets.Scripts.Core.Model.GridMap;
 using Sirenix.Serialization;
 
-namespace Assets.Scripts.Core.Utility.GridMapSerializer
+namespace Assets.Scripts.View.GridMapSerializer
 {
 
     //[Serializable]

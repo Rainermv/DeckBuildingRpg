@@ -17,7 +17,6 @@ namespace Assets.Scripts.View
     public class BattleViewController : SerializedMonoBehaviour
     {
         [SerializeField, AssetsOnly] private CharacterView _characterViewPrefab;
-        [SerializeField, AssetsOnly] private CardImageLibrary _cardImageLibrary;
 
         [SerializeField, SceneObjectsOnly] private CameraController _cameraController;
         [SerializeField, SceneObjectsOnly] private CardSystemView _cardSystemView;
@@ -35,7 +34,8 @@ namespace Assets.Scripts.View
         public void Initialize(BattleModel battleModel,
             Func<CardModel, CardPlayModel> onCardClickedGetCardPlayModel,
             Func<GridPosition, GridMapPathfindingModel> onFindPathToTargetGrid,
-            Func<Task<MovePathResult>> onExecuteMovement)
+            Func<Task<MovePathResult>> onExecuteMovement,
+            CardSpriteLibrary cardSpriteLibrary)
         {
             _battleViewModel = new BattleViewModel();
      
@@ -43,9 +43,9 @@ namespace Assets.Scripts.View
             _onFindPathToTargetGrid = onFindPathToTargetGrid;
             
             _gridMapView.Initialize(battleModel.GridMapModel, OnTilemapPointerEvent);
-            _cardSystemView.Initialize(battleModel.Players, OnCardPointerEvent, _cardImageLibrary);
+            _cardSystemView.Initialize(battleModel.Players, OnCardPointerEvent, cardSpriteLibrary);
 
-            CardPlayView.Initialize(_cardImageLibrary);
+            CardPlayView.Initialize(cardSpriteLibrary);
 
             //todo: move characters code to a lower level
             foreach (var entity in battleModel.Entities)

@@ -19,20 +19,20 @@ namespace Assets.Scripts.View.Card
         [SerializeField] private Image _cardImage;
 
         private Action<CardModel, PointerEventData, int> _onCardPointerEvent;
-        private CardImageLibrary _cardImageLibrary;
+        private CardSpriteLibrary _cardSpriteLibrary;
 
         public CardModel CardModel { get; private set; }
 
         // Start is called before the first frame update
-        public void Initialize(Action<CardModel, PointerEventData, int> onCardPointerEvent, CardImageLibrary cardImageLibrary)
+        public void Initialize(Action<CardModel, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
         {
             _onCardPointerEvent = onCardPointerEvent;
-            _cardImageLibrary = cardImageLibrary;
+            _cardSpriteLibrary = cardSpriteLibrary;
         }
 
-        public void Initialize(CardImageLibrary cardImageLibrary)
+        public void Initialize(CardSpriteLibrary cardSpriteLibrary)
         {
-            _cardImageLibrary = cardImageLibrary;
+            _cardSpriteLibrary = cardSpriteLibrary;
         }
 
         
@@ -55,8 +55,8 @@ namespace Assets.Scripts.View.Card
         {
             gameObject.name = CardModel.Name;
             _textName.text = CardModel.Name;
-            _textBlock.text = CardModel.TextBlock;
-            _cardImage.sprite = _cardImageLibrary.Get(CardModel.ImageIndex);
+            _textBlock.text = CardModel.Text;
+            _cardImage.sprite = _cardSpriteLibrary.Get(CardModel.CardDataIndex);
 
             foreach (var attributeView in GetComponentsInChildren<ICardAttributeView>())
             {

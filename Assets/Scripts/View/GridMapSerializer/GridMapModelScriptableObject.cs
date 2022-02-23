@@ -1,8 +1,7 @@
 ﻿using Assets.Scripts.Core.Model.GridMap;
-using Sirenix.OdinInspector;
 using Sirenix.Serialization;
 
-namespace Assets.Scripts.Core.Utility.GridMapSerializer
+namespace Assets.Scripts.View.GridMapSerializer
 {
     internal class GridMapModelScriptableObject
     {

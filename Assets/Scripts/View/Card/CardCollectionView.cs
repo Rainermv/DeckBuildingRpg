@@ -11,8 +11,6 @@ namespace Assets.Scripts.View.Card
 {
     public class CardCollectionView : MonoBehaviour
     {
-
-
         public Image Image;
         public RectTransform CardsContainer;
         public TextMeshProUGUI TitleText;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Core.Model.Card;
 using Assets.Scripts.Core.Model.Card.Collections;
+using Assets.Scripts.View.CardTemplate;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -13,27 +14,24 @@ namespace Assets.Scripts.View.Card
 {
     public class CardSystemView : SerializedMonoBehaviour
     {
-        [AssetsOnly] public CardView CardPrefab;
-        [AssetsOnly] public Sprite[] SpriteLibrary;
+        [SerializeField, AssetsOnly] private CardView CardPrefab;
 
         //public Dictionary<CardCollectionIdentifier, CardCollectionView> SceneCardCollectionViews;
         [SceneObjectsOnly] public CardCollectionView PlayerDeckCollectionView;
         [SceneObjectsOnly] public CardCollectionView PlayerHandCollectionView;
         [SceneObjectsOnly] public CardCollectionView PlayerDiscardCollectionView;
 
-        private List<Sprite> _spriteLibraryList;
         private LinkedList<Player> _linkedPlayerList;
 
         private Action<CardModel, PointerEventData, int> _onCardPointerEvent;
-        private CardImageLibrary _cardImageLibrary;
+        private CardSpriteLibrary _cardSpriteLibrary;
 
         public void Initialize(Dictionary<string, Player> players,
-            Action<CardModel, PointerEventData, int> onCardPointerEvent, CardImageLibrary cardImageLibrary)
+            Action<CardModel, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
         {
-            _cardImageLibrary = cardImageLibrary;
+            _cardSpriteLibrary = cardSpriteLibrary;
 
             _onCardPointerEvent = onCardPointerEvent;
-            _spriteLibraryList = SpriteLibrary.ToList();
 
             PlayerDeckCollectionView.Initialize(OnInstantiateCardViews);
             PlayerHandCollectionView.Initialize(OnInstantiateCardViews);
@@ -113,7 +111,7 @@ namespace Assets.Scripts.View.Card
                 cardView.RectTransform.SetParent(parent, false);
                 cardViews.Add(cardView);
 
-                cardView.Initialize(_onCardPointerEvent, _cardImageLibrary);
+                cardView.Initialize(_onCardPointerEvent, _cardSpriteLibrary);
                 // VIEW -> CONTROLLER
                 //cardView.CardButton.onClick.AddListener(() => _onCardClicked(card, cardView));
 
@@ -124,14 +122,5 @@ namespace Assets.Scripts.View.Card
 
         }
 
-        private Sprite OnGetSpriteFromIndex(int index)
-        {
-            if (index <= _spriteLibraryList.Count)
-            {
-                return _spriteLibraryList[index];
-            }
-
-            return Sprite.Create(Texture2D.blackTexture, new Rect(this.GetComponent<RectTransform>().rect), Vector2.zero);
-        }
     }
 }
