@@ -11,25 +11,25 @@ namespace Assets.Scripts.Controller.Factories
             "Player 1"
         };
 
-        public static Dictionary<string, Player> BuildPlayers(int numOfPlayers)
+        public static List<Player> BuildPlayers(int numOfPlayers)
         {
 
-            var playerDictionary = new Dictionary<string, Player>();
+            var players = new List<Player>();
 
             for (int i = 0; i < numOfPlayers; i++)
             {
-                BuildPlayer(playerDictionary, PLAYER_NAMES[i]);
+                BuildPlayer(players, PLAYER_NAMES[i]);
             }
 
-            return playerDictionary;
+            return players;
 
         }
 
-        private static Player BuildPlayer(Dictionary<string, Player> playersDictionary, string playerName)
+        private static Player BuildPlayer(List<Player> players, string playerName)
         {
             var player = Player.Make(playerName);
 
-            playersDictionary.Add(playerName, player);
+            players.Add(player);
 
             player.AddNewCardCollection(CardCollectionIdentifier.Deck);
             player.AddNewCardCollection(CardCollectionIdentifier.Hand);

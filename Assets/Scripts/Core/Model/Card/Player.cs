@@ -24,12 +24,14 @@ namespace Assets.Scripts.Core.Model.Card
 
         private Player(){}
 
-        public void AddNewCardCollection(CardCollectionIdentifier identifier)
+        public CardCollectionModel AddNewCardCollection(CardCollectionIdentifier identifier)
         {
             var cardCollection = CardCollectionModel.Make();
             cardCollection.CollectionIdentifier = identifier;
             cardCollection.PlayerParent = this;
             CardCollections.Add(identifier, cardCollection);
+
+            return cardCollection;
         }
     }
 }

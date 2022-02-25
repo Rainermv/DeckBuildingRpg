@@ -36,7 +36,7 @@ namespace Assets.Scripts.Core.Model.AttributeModel
             return Add(attributeKey, value);
         }
 
-        public Attribute Sum(int attributeKey, int sumValue)
+        public Attribute Modify(int attributeKey, int sumValue)
         {
             if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {

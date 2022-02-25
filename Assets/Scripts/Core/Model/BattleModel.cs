@@ -8,7 +8,7 @@ namespace Assets.Scripts.Core.Model
 {
     public class BattleModel
     {
-        public Dictionary<string, Player> Players { get; set; }  = new();
+        public List<Player> Players { get; set; }  = new();
         public List<BattleEntity> Entities { get; set; } = new();
         public AttributeSet GlobalAttributeSet { get; set; }
         public GridMapModel GridMapModel { get; set; }

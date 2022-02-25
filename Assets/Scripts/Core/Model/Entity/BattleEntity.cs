@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Assets.Scripts.Core.Model.AttributeModel;
 using Assets.Scripts.Core.Model.Card;
 using Assets.Scripts.Core.Model.GridMap;
 
@@ -9,10 +10,16 @@ namespace Assets.Scripts.Core.Model.Entity
 {
     public class BattleEntity 
     {
+        private string _name;
+        private Player _owner;
+
+        public AttributeSet AttributeSet { get; set; } = new();
+        public GridPosition GridPosition { get; private set; }
+
         public Action<BattleEntity> OnUpdate { get; set; }
         public Action<GridPosition> OnSetPosition { get; set; }
         public Action<GridPosition> OnFinishedMovePath { get; set; }
-
+        
 
         public static BattleEntity Make(string name, GridPosition gridPosition, Player owner)
         {
@@ -24,15 +31,11 @@ namespace Assets.Scripts.Core.Model.Entity
             };
         }
 
-        private string _name;
-        private Player _owner;
-
         private BattleEntity()
         {
             
         }
 
-        public GridPosition GridPosition { get; private set; }
 
 
         public string Name

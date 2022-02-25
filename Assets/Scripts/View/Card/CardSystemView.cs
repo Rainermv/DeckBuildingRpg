@@ -26,7 +26,7 @@ namespace Assets.Scripts.View.Card
         private Action<CardModel, PointerEventData, int> _onCardPointerEvent;
         private CardSpriteLibrary _cardSpriteLibrary;
 
-        public void Initialize(Dictionary<string, Player> players,
+        public void Initialize(List<Player> players,
             Action<CardModel, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
         {
             _cardSpriteLibrary = cardSpriteLibrary;
@@ -37,12 +37,9 @@ namespace Assets.Scripts.View.Card
             PlayerHandCollectionView.Initialize(OnInstantiateCardViews);
             PlayerDiscardCollectionView.Initialize(OnInstantiateCardViews);
 
-            _linkedPlayerList = new LinkedList<Player>(players.Values);
-
+            _linkedPlayerList = new LinkedList<Player>(players);
             
-
-
-            DisplayPlayer(players.Values.First());
+            DisplayPlayer(players.First());
         }
 
         

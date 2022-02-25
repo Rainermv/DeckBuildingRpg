@@ -31,6 +31,7 @@ namespace Assets.Scripts.Core.Model.Card
                 AttributeSet = new AttributeSet(),
                 Name = name,
             };
+
         }
 
         public static CardModel MakeFromCardData(CardDataModel cardDataModel)

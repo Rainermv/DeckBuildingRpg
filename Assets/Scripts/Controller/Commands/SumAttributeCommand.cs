@@ -20,7 +20,7 @@ namespace Assets.Scripts.Core.Commands
 
         public CardCommandReport Run(CardModel sourceCardModel, BattleModel battleModel)
         {
-            _affectedTargetable.AttributeSet.Sum(_attributeKey, _sumValue);
+            _affectedTargetable.AttributeSet.Modify(_attributeKey, _sumValue);
             return new CardCommandReport(CardCommandStatus.Success);
         }
 

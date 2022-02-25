@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Core.Model.Card;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Core.Model.Card;
 using UnityEngine;
 
 namespace Assets.Scripts.View.CardTemplate
@@ -9,6 +11,8 @@ namespace Assets.Scripts.View.CardTemplate
         public string Name;
         public string Text;
         public Sprite Image;
+
+        public string EffectScriptText;
 
         private void OnValidate()
         {
@@ -28,4 +32,5 @@ namespace Assets.Scripts.View.CardTemplate
             };
         }
     }
+
 }

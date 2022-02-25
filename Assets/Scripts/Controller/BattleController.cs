@@ -45,7 +45,7 @@ namespace Assets.Scripts.Controller
         {
             _battleModel = battleModel;
 
-            foreach (var player in battleModel.Players.Values)
+            foreach (var player in battleModel.Players)
             {
                 var deck = player.CardCollections[CardCollectionIdentifier.Deck];
                 deck.Cards = _cardShuffler.Run(deck.Cards);

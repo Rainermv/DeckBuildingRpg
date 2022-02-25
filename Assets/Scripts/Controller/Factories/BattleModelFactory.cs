@@ -23,7 +23,7 @@ namespace Assets.Scripts.Controller.Factories
                 Entities = new List<BattleEntity>()
             };
 
-            foreach (var player in levelModel.Players.Values)
+            foreach (var player in levelModel.Players)
             {
                 player.CardCollections[CardCollectionIdentifier.Deck].InsertCards(
                     BuildRandomCards(20, cardDataModels));
@@ -32,16 +32,24 @@ namespace Assets.Scripts.Controller.Factories
             
 
             //int i = 0;
-            foreach (var player in levelModel.Players.Values)
+            foreach (var player in levelModel.Players)
             {
                 SetupPlayer(player);
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[0].GridPosition);
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[5].GridPosition);
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[15].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[16].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[17].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[18].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[19].GridPosition);
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[20].GridPosition);
                 AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[25].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[35].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[45].GridPosition);
+                AddCharacterTo(player, levelModel, levelModel.GridMapModel.GridTiles[55].GridPosition);
 
-             
+
+
                 // Draw initial hand
                 CardUtilities.DrawCards(player.CardCollections[CardCollectionIdentifier.Deck],
                     player.CardCollections[CardCollectionIdentifier.Hand],
