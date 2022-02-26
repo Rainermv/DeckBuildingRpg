@@ -40,7 +40,7 @@ public class PathfinderTest
                 for (int y = 0; y < HEIGHT+1; y++)
                 {
                     var end = G(x, y);
-                    var distance = GridUtilities.Distance(start, end);
+                    var distance = GridUtilities.DistancePrecise(start, end);
 
                     yield return new TestCaseData(gridMap,
                         start, end, (x< WIDTH && y< HEIGHT), (int)distance +1, distance);

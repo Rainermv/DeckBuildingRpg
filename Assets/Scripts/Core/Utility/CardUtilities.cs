@@ -23,13 +23,13 @@ namespace Assets.Scripts.Core.Utility
             // Do card animation here
         }
 
-        public static void MoveCardTo(CardModel cardModel, CardCollectionModel to)
+        public static void MoveCardTo(Card card, CardCollectionModel to)
         {
-            var from = cardModel.CardCollectionModelParent;
+            var from = card.CardCollectionModelParent;
 
-            if (cardModel.CardCollectionModelParent.RemoveCard(cardModel))
+            if (card.CardCollectionModelParent.RemoveCard(card))
             {
-                to.InsertCards(new List<CardModel>(){cardModel}, 0);
+                to.InsertCards(new List<Card>(){card}, 0);
             }
 
 

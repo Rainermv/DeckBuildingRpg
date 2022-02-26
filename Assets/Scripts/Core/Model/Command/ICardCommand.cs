@@ -6,7 +6,7 @@ namespace Assets.Scripts.Core.Commands
 {
     public interface ICardCommand
     {
-        CardCommandReport  Run(CardModel sourceCardModel, BattleModel battleModel);
+        CardCommandReport  Run(Card sourceCard, CombatModel combatModel);
         string Text { get; }
     }
 }

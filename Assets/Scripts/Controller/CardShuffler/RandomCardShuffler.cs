@@ -6,7 +6,7 @@ namespace Assets.Scripts.Controller.CardShuffler
 {
     public class RandomCardShuffler : ICardShuffler
     {
-        public List<CardModel> Run(List<CardModel> cards)
+        public List<Card> Run(List<Card> cards)
         {
             var random = new Random();
 

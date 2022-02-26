@@ -14,21 +14,21 @@ namespace Assets.Scripts.View
         private Func<GridPosition, Vector3> _onGetWorldPosition;
         //private GridPosition _gridPosition;
 
-        public void Initialize(BattleEntity battleEntity, Func<GridPosition, Vector3> onGetWorldPosition)
+        public void Initialize(Entity entity, Func<GridPosition, Vector3> onGetWorldPosition)
         {
             _onGetWorldPosition = onGetWorldPosition;
 
-            OnEntityUpdate(battleEntity);
+            OnEntityUpdate(entity);
         }
 
-        private void OnEntityUpdate(BattleEntity battleEntity)
+        private void OnEntityUpdate(Entity entity)
         {
-            battleEntity.OnUpdate += OnEntityUpdate;
-            battleEntity.OnSetPosition += OnSetPositionMoveAsync;
+            entity.OnUpdate += OnEntityUpdate;
+            entity.OnSetPosition += OnSetPositionMoveAsync;
 
-            name = battleEntity.Name;
+            name = entity.Name;
 
-            transform.position = _onGetWorldPosition(battleEntity.GridPosition);
+            transform.position = _onGetWorldPosition(entity.GridPosition);
         }
 
         private void OnSetPositionInstant(GridPosition gridPosition)

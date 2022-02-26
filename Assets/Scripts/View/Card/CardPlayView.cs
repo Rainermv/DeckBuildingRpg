@@ -16,10 +16,10 @@ namespace Assets.Scripts.View.Card
             Hide();
         }
 
-        public void Set(CardModel cardModel)
+        public void Set(Core.Model.Card.Card card)
         {
             _cardView.gameObject.SetActive(true);
-            _cardView.Display(cardModel);
+            _cardView.Display(card);
         }
 
         public void Hide()

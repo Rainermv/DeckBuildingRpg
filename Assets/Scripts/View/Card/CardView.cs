@@ -18,13 +18,13 @@ namespace Assets.Scripts.View.Card
         [SerializeField] private TextMeshProUGUI _textBlock;
         [SerializeField] private Image _cardImage;
 
-        private Action<CardModel, PointerEventData, int> _onCardPointerEvent;
+        private Action<Core.Model.Card.Card, PointerEventData, int> _onCardPointerEvent;
         private CardSpriteLibrary _cardSpriteLibrary;
 
-        public CardModel CardModel { get; private set; }
+        public Core.Model.Card.Card Card { get; private set; }
 
         // Start is called before the first frame update
-        public void Initialize(Action<CardModel, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
+        public void Initialize(Action<Core.Model.Card.Card, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
         {
             _onCardPointerEvent = onCardPointerEvent;
             _cardSpriteLibrary = cardSpriteLibrary;
@@ -42,10 +42,10 @@ namespace Assets.Scripts.View.Card
             gameObject.SetActive(isActive);
         }
 
-        public void Display(CardModel cardModel)
+        public void Display(Core.Model.Card.Card card)
         {
-            CardModel = cardModel;
-            cardModel.OnUpdate = OnCardUpdate;
+            Card = card;
+            card.OnUpdate = OnCardUpdate;
 
             // Trigger update to display data
             OnCardUpdate();
@@ -53,16 +53,16 @@ namespace Assets.Scripts.View.Card
 
         public void OnCardUpdate()
         {
-            gameObject.name = CardModel.Name;
-            _textName.text = CardModel.Name;
-            _textBlock.text = CardModel.Text;
-            _cardImage.sprite = _cardSpriteLibrary.Get(CardModel.CardDataIndex);
+            gameObject.name = Card.Name;
+            _textName.text = Card.Name;
+            _textBlock.text = Card.Text;
+            _cardImage.sprite = _cardSpriteLibrary.Get(Card.CardDataIndex);
 
             foreach (var attributeView in GetComponentsInChildren<ICardAttributeView>())
             {
-                if (CardModel.AttributeSet.Contains(attributeView.AttributeKey))
+                if (Card.AttributeSet.Contains(attributeView.AttributeKey))
                 {
-                    attributeView.Display(CardModel.AttributeSet.GetValue(attributeView.AttributeKey));
+                    attributeView.Display(Card.AttributeSet.GetValue(attributeView.AttributeKey));
                 }
                 
             }
@@ -70,16 +70,16 @@ namespace Assets.Scripts.View.Card
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            _onCardPointerEvent?.Invoke(CardModel, eventData, PointerEventTrigger.DOWN);
+            _onCardPointerEvent?.Invoke(Card, eventData, PointerEventTrigger.DOWN);
         }
         public void OnPointerEnter(PointerEventData eventData)
         {
-            _onCardPointerEvent?.Invoke(CardModel, eventData, PointerEventTrigger.ENTER);
+            _onCardPointerEvent?.Invoke(Card, eventData, PointerEventTrigger.ENTER);
         }
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            _onCardPointerEvent?.Invoke(CardModel, eventData, PointerEventTrigger.EXIT);
+            _onCardPointerEvent?.Invoke(Card, eventData, PointerEventTrigger.EXIT);
         }
     }
 }

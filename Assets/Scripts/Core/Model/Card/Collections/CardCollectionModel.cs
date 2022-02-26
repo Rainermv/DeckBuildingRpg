@@ -5,10 +5,10 @@ namespace Assets.Scripts.Core.Model.Card.Collections
 {
     public class CardCollectionModel
     {
-        public List<CardModel> Cards = new();
+        public List<Card> Cards = new();
         public CardCollectionIdentifier CollectionIdentifier { get; set; }
 
-        public Action<List<CardModel>> OnCardListUpdate { get; set; }
+        public Action<List<Card>> OnCardListUpdate { get; set; }
         public int CardsCount => Cards.Count;
         public Player PlayerParent { get; set; }
 
@@ -17,7 +17,7 @@ namespace Assets.Scripts.Core.Model.Card.Collections
         {
             return new CardCollectionModel()
             {
-                Cards = new List<CardModel>(),
+                Cards = new List<Card>(),
             };
         }
 
@@ -31,7 +31,7 @@ namespace Assets.Scripts.Core.Model.Card.Collections
             OnCardListUpdate?.Invoke(Cards);
         }
 
-        public void InsertCards(List<CardModel> cards, int index = 0)
+        public void InsertCards(List<Card> cards, int index = 0)
         {
             Cards.InsertRange(index, cards);
             foreach (var card in cards)
@@ -43,7 +43,7 @@ namespace Assets.Scripts.Core.Model.Card.Collections
         }
 
 
-        public IEnumerable<CardModel> Pop(int quantity)
+        public IEnumerable<Card> Pop(int quantity)
         {
             var cards = Cards.GetRange(0, quantity);
             Cards.RemoveRange(0, quantity);
@@ -54,9 +54,9 @@ namespace Assets.Scripts.Core.Model.Card.Collections
         }
 
 
-        public bool RemoveCard(CardModel cardModel)
+        public bool RemoveCard(Card card)
         {
-            var remove = Cards.Remove(cardModel);
+            var remove = Cards.Remove(card);
 
             OnUpdate();
             

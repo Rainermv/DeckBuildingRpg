@@ -23,11 +23,11 @@ namespace Assets.Scripts.View.Card
 
         private LinkedList<Player> _linkedPlayerList;
 
-        private Action<CardModel, PointerEventData, int> _onCardPointerEvent;
+        private Action<Core.Model.Card.Card, PointerEventData, int> _onCardPointerEvent;
         private CardSpriteLibrary _cardSpriteLibrary;
 
         public void Initialize(List<Player> players,
-            Action<CardModel, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
+            Action<Core.Model.Card.Card, PointerEventData, int> onCardPointerEvent, CardSpriteLibrary cardSpriteLibrary)
         {
             _cardSpriteLibrary = cardSpriteLibrary;
 

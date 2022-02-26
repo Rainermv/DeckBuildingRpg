@@ -19,9 +19,9 @@ namespace Assets.Scripts.Core.Commands
             _cardsToDraw = cardsToDraw;
         }
 
-        public CardCommandReport Run(CardModel sourceCardModel, BattleModel battleModel)
+        public CardCommandReport Run(Card sourceCard, CombatModel combatModel)
         {
-            if (sourceCardModel.CardCollectionModelParent.PlayerParent.CardCollections == null)
+            if (sourceCard.CardCollectionModelParent.PlayerParent.CardCollections == null)
             {
                 return new CardCommandReport(CardCommandStatus.Failed);
 

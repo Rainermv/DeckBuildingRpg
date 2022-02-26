@@ -18,14 +18,14 @@ namespace Assets.Scripts.Controller
         private readonly ICardShuffler _cardShuffler;
         private IPathFindResolver _pathFindResolver;
 
-        private BattleEntity _controlledBattleEntity;
+        private Entity _controlledEntity;
 
         private Dictionary<GridPosition, GridTile> _tileDictionary;
-        private List<BattleEntity> _battleEntities;
-        private BattleModel _battleModel;
+        private List<Entity> _battleEntities;
+        private CombatModel _combatModel;
 
         private GridMapPathfindingModel _gridMapPathfindingModel;
-        private CardPlayModel _cardPlayModel;
+        private CardPlay _CardPlay;
 
         public BattleController(ICardShuffler cardShuffler, IPathFindResolver pathFindResolver)
         {
@@ -41,27 +41,27 @@ namespace Assets.Scripts.Controller
         }
 
 
-        public BattleModel Setup(BattleModel battleModel)
+        public CombatModel Setup(CombatModel combatModel)
         {
-            _battleModel = battleModel;
+            _combatModel = combatModel;
 
-            foreach (var player in battleModel.Players)
+            foreach (var player in combatModel.Players)
             {
                 var deck = player.CardCollections[CardCollectionIdentifier.Deck];
                 deck.Cards = _cardShuffler.Run(deck.Cards);
             }
 
-            _tileDictionary = battleModel.GridMapModel.GridTiles.ToDictionary(tile => tile.GridPosition, tile => tile);
-            _battleEntities = battleModel.Entities;
+            _tileDictionary = combatModel.GridMapModel.GridTiles.ToDictionary(tile => tile.GridPosition, tile => tile);
+            _battleEntities = combatModel.Entities;
 
-            _controlledBattleEntity = battleModel.Entities[0];
+            _controlledEntity = combatModel.Entities[0];
 
-            return battleModel;
+            return combatModel;
         }
 
         public GridMapPathfindingModel OnGridFindPathToTarget(GridPosition targetGridPosition)
         {
-            var initialGridPosition = _controlledBattleEntity.GridPosition;
+            var initialGridPosition = _controlledEntity.GridPosition;
 
             if (_gridMapPathfindingModel.GridPositions.Any() &&
                 _gridMapPathfindingModel.GridPositions.First() == initialGridPosition &&
@@ -73,7 +73,7 @@ namespace Assets.Scripts.Controller
             var result = _pathFindResolver.FindPathToTarget(initialGridPosition, targetGridPosition);
             _gridMapPathfindingModel = new GridMapPathfindingModel()
             {
-                MovementRange = _controlledBattleEntity.MovementRange,
+                MovementRange = _controlledEntity.MovementRange,
                 GridPositions = result.MovementPathPositions,
             };
             return _gridMapPathfindingModel;
@@ -85,42 +85,42 @@ namespace Assets.Scripts.Controller
             var pathSequence = _gridMapPathfindingModel.GridPositions.GetRange(0,
                 Math.Min(_gridMapPathfindingModel.MovementRange + 1, _gridMapPathfindingModel.GridPositions.Count));
 
-            await _controlledBattleEntity.MovePathAsync(pathSequence, 250);
+            await _controlledEntity.MovePathAsync(pathSequence, 250);
 
             _gridMapPathfindingModel.GridPositions.Clear();
 
             return new MovePathResult()
             {
-                MovedEntity = _controlledBattleEntity,
+                MovedEntity = _controlledEntity,
                 PathSequence = pathSequence
             };
         }
 
 
-        public CardPlayModel OnCardActivate(CardModel cardModel)
+        public CardPlay OnCardActivate(Card card)
         {
-            var player = cardModel.CardCollectionModelParent.PlayerParent;
+            var player = card.CardCollectionModelParent.PlayerParent;
 
-            switch (cardModel.CardCollectionModelParent.CollectionIdentifier)
+            switch (card.CardCollectionModelParent.CollectionIdentifier)
             {
                 case CardCollectionIdentifier.Hand:
 
                     //todo: decide if the card play is valid
 
-                    _cardPlayModel = new CardPlayModel()
+                    _CardPlay = new CardPlay()
                     {
                         Player = player,
-                        CardModel = cardModel,
+                        Card = card,
                         IsPlayValid = true
                     };
-                    return _cardPlayModel;
+                    return _CardPlay;
 
             }
 
-            return new CardPlayModel()
+            return new CardPlay()
             {
                 Player = player, 
-                CardModel = cardModel,
+                Card = card,
                 IsPlayValid = false
             };
         }
@@ -130,7 +130,7 @@ namespace Assets.Scripts.Controller
 
     public class MovePathResult
     {
-        public BattleEntity MovedEntity { get; set; }
+        public Entity MovedEntity { get; set; }
         public List<GridPosition> PathSequence { get; set; }
     }
 

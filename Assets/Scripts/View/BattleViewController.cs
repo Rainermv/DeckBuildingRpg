@@ -27,17 +27,17 @@ namespace Assets.Scripts.View
         private Func<GridPosition, GridMapPathfindingModel> _onFindPathToTargetGrid;
         private Func<Task<MovePathResult>> _onExecuteMovement;
 
-        private BattleViewModel _battleViewModel;
+        private CombatViewModel _combatViewModel;
 
         private List<CharacterView> _entityViews = new();
 
-        public void Initialize(BattleModel battleModel,
-            Func<CardModel, CardPlayModel> onCardClickedGetCardPlayModel,
+        public void Initialize(CombatModel battleModel,
+            Func<Core.Model.Card.Card, CardPlay> onCardClickedGetCardPlay,
             Func<GridPosition, GridMapPathfindingModel> onFindPathToTargetGrid,
             Func<Task<MovePathResult>> onExecuteMovement,
             CardSpriteLibrary cardSpriteLibrary)
         {
-            _battleViewModel = new BattleViewModel();
+            _combatViewModel = new CombatViewModel();
      
             _onExecuteMovement = onExecuteMovement;
             _onFindPathToTargetGrid = onFindPathToTargetGrid;
@@ -93,12 +93,12 @@ namespace Assets.Scripts.View
             }
         }
 
-        private void OnCardPointerEvent(CardModel cardModel, PointerEventData pointerEventData, int pointerTrigger)
+        private void OnCardPointerEvent(Core.Model.Card.Card card, PointerEventData pointerEventData, int pointerTrigger)
         {
             switch (pointerTrigger)
             {
                 case PointerEventTrigger.ENTER:
-                    CardPlayView.Set(cardModel);
+                    CardPlayView.Set(card);
                     return;
 
                 case PointerEventTrigger.UP:
@@ -106,7 +106,7 @@ namespace Assets.Scripts.View
                     return;
 
                 case PointerEventTrigger.DOWN:
-                    //var cardPlayModel = _onActivateCard(CardModel, poin);
+                    //var CardPlay = _onActivateCard(CardModel, poin);
                     return;
             }
 

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Assets.Scripts.Core.Model.AttributeModel;
 using Assets.Scripts.Core.Model.Card;
+using Assets.Scripts.Core.Model.Command;
 using Assets.Scripts.Core.Model.GridMap;
 
 namespace Assets.Scripts.Core.Model.Entity
 {
-    public class BattleEntity 
+    public class Entity : ITargetable
     {
         private string _name;
         private Player _owner;
@@ -16,14 +17,14 @@ namespace Assets.Scripts.Core.Model.Entity
         public AttributeSet AttributeSet { get; set; } = new();
         public GridPosition GridPosition { get; private set; }
 
-        public Action<BattleEntity> OnUpdate { get; set; }
+        public Action<Entity> OnUpdate { get; set; }
         public Action<GridPosition> OnSetPosition { get; set; }
         public Action<GridPosition> OnFinishedMovePath { get; set; }
         
 
-        public static BattleEntity Make(string name, GridPosition gridPosition, Player owner)
+        public static Entity Make(string name, GridPosition gridPosition, Player owner)
         {
-            return new BattleEntity()
+            return new Entity()
             {
                 _name = name,
                 GridPosition = gridPosition,
@@ -31,7 +32,7 @@ namespace Assets.Scripts.Core.Model.Entity
             };
         }
 
-        private BattleEntity()
+        private Entity()
         {
             
         }

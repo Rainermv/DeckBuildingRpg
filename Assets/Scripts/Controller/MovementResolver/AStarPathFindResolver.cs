@@ -210,7 +210,7 @@ namespace Assets.Scripts.Controller.MovementResolver
 
         private double Distance(GridPosition position, GridPosition targetPosition)
         {
-            return GridUtilities.Distance(position, targetPosition);
+            return GridUtilities.DistancePrecise(position, targetPosition);
         }
 
         private List<GridPosition> reconstructPath(LinkedPositionSet cameFrom, GridPosition current)

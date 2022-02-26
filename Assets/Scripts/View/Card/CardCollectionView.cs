@@ -45,7 +45,7 @@ namespace Assets.Scripts.View.Card
 
         }
 
-        public void UpdateCardList(List<CardModel> cards)
+        public void UpdateCardList(List<Core.Model.Card.Card> cards)
         {
 
             foreach (var cardView in _cardViews)

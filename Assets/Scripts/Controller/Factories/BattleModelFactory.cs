@@ -13,14 +13,14 @@ namespace Assets.Scripts.Controller.Factories
 {
     public class BattleModelFactory
     {
-        public static BattleModel Build(GridMapModel gridMapModel, List<CardDataModel> cardDataModels)
+        public static CombatModel Build(GridMapModel gridMapModel, List<CardData> cardDataModels)
         {
-            var levelModel = new BattleModel()
+            var levelModel = new CombatModel()
             {
                 GridMapModel = gridMapModel,
                 GlobalAttributeSet = new AttributeSet(),
                 Players = CardSystemModelFactory.BuildPlayers(1),
-                Entities = new List<BattleEntity>()
+                Entities = new List<Entity>()
             };
 
             foreach (var player in levelModel.Players)
@@ -59,14 +59,14 @@ namespace Assets.Scripts.Controller.Factories
             return levelModel;
         }
 
-        private static List<CardModel> BuildRandomCards(int numOfCards, List<CardDataModel> cardDataModels)
+        private static List<Card> BuildRandomCards(int numOfCards, List<CardData> cardDataModels)
         {
             var random = new Random();
             
-            var cards = new List<CardModel>();
+            var cards = new List<Card>();
             for (var i = 0; i < numOfCards; i++)
             {
-                var card = CardModel.MakeFromCardData(cardDataModels[random.Next(0, cardDataModels.Count)]);
+                var card = Card.MakeFromCardData(cardDataModels[random.Next(0, cardDataModels.Count)]);
 
                 cards.Add(card);
             }
@@ -74,12 +74,12 @@ namespace Assets.Scripts.Controller.Factories
             return cards;
         }
 
-        private static void AddCharacterTo(Player player, BattleModel battleModel,
+        private static void AddCharacterTo(Player player, CombatModel combatModel,
             GridPosition gridPosition)
         {
-            var character = BattleEntity.Make(player.Name, gridPosition, player);
+            var character = Entity.Make(player.Name, gridPosition, player);
             character.MovementRange = 10;
-            battleModel.Entities.Add(character);
+            combatModel.Entities.Add(character);
         }
 
 
@@ -90,7 +90,7 @@ namespace Assets.Scripts.Controller.Factories
 
         }
 
-        private static void SetupCard(CardModel cardModel, Player player)
+        private static void SetupCard(Card card, Player player)
         {
             var random = new Random();
 
@@ -100,7 +100,7 @@ namespace Assets.Scripts.Controller.Factories
             var powerCost = 0;
             //cardModel.CardSourceReferenceIndex = 
 
-            cardModel.AttributeSet.Set(AttributeKey.CardType, cardType);
+            card.AttributeSet.Set(AttributeKey.CardType, cardType);
 
             switch (cardType)
             {
@@ -108,7 +108,7 @@ namespace Assets.Scripts.Controller.Factories
                     var cardsToDraw = random.Next(1, 4); //1 to 3
                     powerCost = cardsToDraw * 2;
 
-                    cardModel.Name = $"Insight";
+                    card.Name = $"Insight";
 
                     /*
                     cardModel.Commands.Add(
@@ -122,7 +122,7 @@ namespace Assets.Scripts.Controller.Factories
                 case CardTypes.ATTACK: // Attack
                     powerCost = random.Next(1, 6);
 
-                    cardModel.Name = $"Sword Attack";
+                    card.Name = $"Sword Attack";
                     /*
                     cardModel.Commands.Add(
                         new SumGlobalAttributeCommand(AttributeKey.Health, -powerCost * 2));
@@ -131,7 +131,7 @@ namespace Assets.Scripts.Controller.Factories
 
                 case CardTypes.POWER: // Attack
                     var powerGenerated = 3;
-                    cardModel.Name = $"Empower";
+                    card.Name = $"Empower";
 
                     /*
                     cardModel.Commands.Add(
@@ -141,7 +141,7 @@ namespace Assets.Scripts.Controller.Factories
 
             }
 
-            cardModel.AttributeSet.Set(AttributeKey.PowerCost, powerCost);
+            card.AttributeSet.Set(AttributeKey.PowerCost, powerCost);
         }
 
     }

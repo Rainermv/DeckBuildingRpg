@@ -22,9 +22,9 @@ namespace Assets.Scripts.View.CardTemplate
         }
 
         //public Dictionary<string, int> Attributes = new();
-        public CardDataModel ToCardDataModel(int index)
+        public CardData ToCardDataModel(int index)
         {
-            return new CardDataModel()
+            return new CardData()
             {
                 Name = this.Name,
                 Text = this.Text,

@@ -16,9 +16,9 @@ namespace Assets.Scripts.Core.Commands
             _sumValue = sumValue;
         }
 
-        public CardCommandReport Run(CardModel sourceCardModel, BattleModel battleModel)
+        public CardCommandReport Run(Card sourceCard, CombatModel combatModel)
         {
-            battleModel.GlobalAttributeSet.Modify(_attributeKey, _sumValue);
+            combatModel.GlobalAttributeSet.Modify(_attributeKey, _sumValue);
             return new CardCommandReport(CardCommandStatus.Success);
         }
 

@@ -6,7 +6,7 @@ namespace Assets.Scripts.Core.Commands
 {
     public class EmptyCardCommand : ICardCommand
     {
-        public CardCommandReport Run(CardModel sourceCardModel, BattleModel battleModel)
+        public CardCommandReport Run(Card sourceCard, CombatModel combatModel)
         {
             return new CardCommandReport(CardCommandStatus.Success);
         }

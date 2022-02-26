@@ -8,7 +8,7 @@ using Assets.Scripts.Core.Model.Command;
 
 namespace Assets.Scripts.Core.Model.Card
 {
-    public class CardModel 
+    public class Card 
     {
         public string Name { get; set; }
         public int CardDataIndex { get; set; }
@@ -19,14 +19,14 @@ namespace Assets.Scripts.Core.Model.Card
         public AttributeSet AttributeSet { get; set; }
         
         public Action OnUpdate { get; set; }
-        public Action<CardModel, CardPlayReport> OnStartPlay { get; set; }
-        public Action<CardModel, CardPlayReport, CardCommandReport> OnCommandRun { get; set; }
-        public Action<CardModel, CardPlayReport> OnFinishPlay { get; set; }
+        public Action<Card, CardPlayReport> OnStartPlay { get; set; }
+        public Action<Card, CardPlayReport, CardCommandReport> OnCommandRun { get; set; }
+        public Action<Card, CardPlayReport> OnFinishPlay { get; set; }
 
 
-        public static CardModel Make(string name = "")
+        public static Card Make(string name = "")
         {
-            return new CardModel()
+            return new Card()
             {
                 AttributeSet = new AttributeSet(),
                 Name = name,
@@ -34,18 +34,18 @@ namespace Assets.Scripts.Core.Model.Card
 
         }
 
-        public static CardModel MakeFromCardData(CardDataModel cardDataModel)
+        public static Card MakeFromCardData(CardData cardData)
         {
-            return new CardModel()
+            return new Card()
             {
-                Name = cardDataModel.Name,
-                Text = cardDataModel.Text,
-                CardDataIndex = cardDataModel.Index,
+                Name = cardData.Name,
+                Text = cardData.Text,
+                CardDataIndex = cardData.Index,
                 AttributeSet = new AttributeSet()
             };
         }
 
-        public CardPlayReport Play(BattleModel battleModel)
+        public CardPlayReport Play(CombatModel combatModel)
         {
             // Initialize reports
             var cardPlayReport = new CardPlayReport()
@@ -58,7 +58,7 @@ namespace Assets.Scripts.Core.Model.Card
             // Run commands in sequence
             for (var index = 0; index < Commands.Count; index++)
             {
-                var commandReport = Commands[index].Run(this, battleModel);
+                var commandReport = Commands[index].Run(this, combatModel);
 
                 cardPlayReport.CardCommandReports[index] = commandReport;
                 OnCommandRun?.Invoke(this, cardPlayReport, commandReport);

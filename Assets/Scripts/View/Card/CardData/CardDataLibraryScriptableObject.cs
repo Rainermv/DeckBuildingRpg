@@ -11,7 +11,7 @@ namespace Assets.Scripts.View.CardTemplate
     {
         [AssetsOnly] public List<CardDataScriptableObject> CardDataList;
 
-        public List<CardDataModel> ToCardDataModelList()
+        public List<CardData> ToCardDataModelList()
         {
             var index = 0;
             return CardDataList.Select(dataScriptable =>

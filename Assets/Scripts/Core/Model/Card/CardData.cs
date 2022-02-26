@@ -1,6 +1,6 @@
 ﻿namespace Assets.Scripts.Core.Model.Card
 {
-    public class CardDataModel
+    public class CardData
     {
         public string Name { get; set; }
         public string Text { get; set; }

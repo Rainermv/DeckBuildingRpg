@@ -5,6 +5,6 @@ namespace Assets.Scripts.Controller.CardShuffler
 {
     public interface ICardShuffler
     {
-        List<CardModel> Run(List<CardModel> cards);
+        List<Card> Run(List<Card> cards);
     }
 }
