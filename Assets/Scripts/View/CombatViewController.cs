@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 
 namespace Assets.Scripts.View
 {
-    public class BattleViewController : SerializedMonoBehaviour
+    public class CombatViewController : SerializedMonoBehaviour
     {
         [SerializeField, AssetsOnly] private CharacterView _characterViewPrefab;
 
@@ -30,13 +30,16 @@ namespace Assets.Scripts.View
         private CombatViewModel _combatViewModel;
 
         private List<CharacterView> _entityViews = new();
+        private Func<Core.Model.Card.Card, CardPlayData> _onCardActivate;
 
         public void Initialize(CombatModel battleModel,
-            Func<Core.Model.Card.Card, CardPlay> onCardClickedGetCardPlay,
+            Func<Core.Model.Card.Card, CardPlayData> onCardActivate,
             Func<GridPosition, GridMapPathfindingModel> onFindPathToTargetGrid,
             Func<Task<MovePathResult>> onExecuteMovement,
             CardSpriteLibrary cardSpriteLibrary)
         {
+            _onCardActivate = onCardActivate;
+
             _combatViewModel = new CombatViewModel();
      
             _onExecuteMovement = onExecuteMovement;
@@ -62,6 +65,8 @@ namespace Assets.Scripts.View
             _cameraController.SmoothJumpTo(_entityViews[0].transform.position);
 
         }
+
+
         
         private async void OnTilemapPointerEvent(PointerEventData pointerEventData, int pointerEventTrigger)
         {
@@ -101,12 +106,12 @@ namespace Assets.Scripts.View
                     CardPlayView.Set(card);
                     return;
 
-                case PointerEventTrigger.UP:
+                case PointerEventTrigger.EXIT:
                     CardPlayView.Hide();
                     return;
 
                 case PointerEventTrigger.DOWN:
-                    //var CardPlay = _onActivateCard(CardModel, poin);
+                    var CardPlay = _onCardActivate(card);
                     return;
             }
 

@@ -9,10 +9,14 @@ namespace Assets.Scripts.View.CardTemplate
     public class CardDataScriptableObject : ScriptableObject
     {
         public string Name;
-        public string Text;
         public Sprite Image;
 
-        public string EffectScriptText;
+        [TextArea(15, 20)]
+        public string CardScript;
+
+        [TextArea(15, 20)]
+        public string Text;
+
 
         private void OnValidate()
         {
@@ -28,7 +32,8 @@ namespace Assets.Scripts.View.CardTemplate
             {
                 Name = this.Name,
                 Text = this.Text,
-                Index = index
+                Index = index,
+                CardScript = CardScript
             };
         }
     }

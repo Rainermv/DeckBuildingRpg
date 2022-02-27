@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
+using Assets.Scripts.Controller;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Model.Card;
 using Assets.Scripts.Core.Model.Card.Collections;
 using Assets.Scripts.Core.Model.Command;
-using Assets.Scripts.Core.Model.Entity;
+using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
 using NUnit.Framework;
@@ -40,17 +42,16 @@ namespace Assets.TestsEditor
             var entity = testModel.Entities[0];
             entity.AttributeSet.Set(0, 0);
 
-            var scriptParser = new CardScriptParser(testModel.AttributeMap, (source, model, data) =>
-                new List<ITargetable> { source });
+            var scriptParser = new CardScriptParser(testModel.AttributeMap);
             
             // run script
-            var runScriptParseResult = scriptParser.ParseScript(script);
+            var runScriptParseResult = scriptParser.ParseScript(script, FindTargetsResolver.OnCardScriptFindTarget);
 
             // Assert Parse
             Debug.Log(runScriptParseResult.ErrorReason);
             Assert.IsTrue(runScriptParseResult.Success);
 
-            var runResult = RunScriptCommands(runScriptParseResult.CardScriptCommands, testModel, entity);
+            var runResult = RunScriptCommands(runScriptParseResult.ParsedCardScript.CardScriptCommands, testModel, entity);
             
             Assert.IsTrue(runResult);
             Assert.AreEqual(expectedResult, entity.AttributeSet.GetValue(0));
@@ -59,7 +60,7 @@ namespace Assets.TestsEditor
 
         private bool RunScriptCommands(List<CardScriptCommand> cardScriptCommands, CombatModel combatModel, Entity source)
         {
-            var commandPlayData = new CommandPlayData();
+            var commandPlayData = new CardScriptCommandPlayData();
 
             foreach (var cardScriptCommand in cardScriptCommands)
             {
@@ -112,16 +113,7 @@ namespace Assets.TestsEditor
         public void CardScriptWithTarget(string script, int totalEntities, int expectedEntities)
         {
             var testModel = TestBattleModel(totalEntities);
-            var scriptParser = new CardScriptParser(testModel.AttributeMap, (source, model, data) =>
-            {
-                var targets = new List<ITargetable>();
-
-                //todo: this takes 
-                return new List<ITargetable>(
-                    model.Entities.Where(entity => GridUtilities.DistanceGrid(source, entity) <= data.Range )
-                        .OrderBy(entity => GridUtilities.DistanceGrid(source, entity)).Take(data.Quantity).ToList());
-
-            });
+            var scriptParser = new CardScriptParser(testModel.AttributeMap);
 
             for (int i = 0; i < totalEntities; i++)
             {
@@ -131,14 +123,14 @@ namespace Assets.TestsEditor
             }
             // Test source
 
-            var runScriptParseResult = scriptParser.ParseScript(script);
+            var runScriptParseResult = scriptParser.ParseScript(script, FindTargetsResolver.OnCardScriptFindTarget);
 
             // Assert Parse
             Debug.Log(runScriptParseResult.ErrorReason);
             Debug.Log(runScriptParseResult.LastCommandParseResult?.Exception);
             Assert.IsTrue(runScriptParseResult.Success);
 
-            var runResult = RunScriptCommands(runScriptParseResult.CardScriptCommands, testModel, testModel.Entities[0]);
+            var runResult = RunScriptCommands(runScriptParseResult.ParsedCardScript.CardScriptCommands, testModel, testModel.Entities[0]);
 
             Assert.IsTrue(runResult);
 
@@ -146,7 +138,7 @@ namespace Assets.TestsEditor
             Assert.AreEqual(expectedEntities, modifiedEntities);
 
         }
-
+        
         private CombatModel TestBattleModel(int players)
         {
             var combatModel = new CombatModel()
@@ -165,7 +157,7 @@ namespace Assets.TestsEditor
             for (int i = 0; i < players; i++)
             {
                 var player = Player.Make($"Player{i}");
-                player.AddNewCardCollection(CardCollectionIdentifier.Deck).InsertCards(new List<Card> { Card.Make($"Card{i}") });
+                player.AddNewCardCollection(CardCollectionIdentifier.Deck).InsertCards(new List<Card> { Card.Make(new CardData()) });
                 var entity = Entity.Make($"Entity{i}", new GridPosition(i, 0), player);
 
                 foreach (var attributeKey in combatModel.AttributeMap.Values)

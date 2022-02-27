@@ -2816,7 +2816,7 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   _cardDataLibrary: {fileID: 11400000, guid: 826aeeb8083720741b8dc08a09726aeb, type: 2}
-  _battleViewController: {fileID: 1803696828}
+  _combatViewController: {fileID: 1803696828}
   GridTilemap: {fileID: 1060632887}
 --- !u!4 &726312107
 Transform:
@@ -5534,7 +5534,7 @@ GameObject:
   - component: {fileID: 1803696827}
   - component: {fileID: 1803696828}
   m_Layer: 0
-  m_Name: BattleView
+  m_Name: CombatView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

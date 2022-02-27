@@ -19,40 +19,47 @@ namespace Assets.Scripts.Core.Model.AttributeModel
             if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {
                 return attribute.Value;
+                
             };
 
-            return Add(attributeKey).Value;
+            MDebug.Log(this, $"Failed to Get value from {attributeKey}. Attribute not on Dictionary (returning 0)");
+
+            return 0;
         }
 
        
-        public Attribute Set(int attributeKey, int value)
+        public void Set(int attributeKey, int value)
         {
             if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {
                 attribute.Value = value;
-                return attribute;
+                return;
             };
 
-            return Add(attributeKey, value);
+            MDebug.Log(this, $"Failed to Set value {value} on {attributeKey}. Attribute not on Dictionary");
+
         }
 
-        public Attribute Modify(int attributeKey, int sumValue)
+        public void Modify(int attributeKey, int sumValue)
         {
             if (_attributeDictionary.TryGetValue(attributeKey, out var attribute))
             {
                 attribute.Value += sumValue;
-                return attribute;
+                return;
             };
 
-            return Add(attributeKey, sumValue);
+            MDebug.Log(this, $"Failed to Modify value {sumValue} on {attributeKey}. Attribute not on Dictionary");
+
         }
 
-        private Attribute Add(int attributeKey, int value = 0)
+        public void Add(int attributeKey, int value = 0)
         {
             var attribute = new Attribute(attributeKey, value, 
                 (key, value) => OnAttributeValueChange?.Invoke(key,value));
+
             _attributeDictionary.Add(attributeKey, attribute);
-            return attribute;
+            MDebug.Log(this, $"Added {attributeKey} to Dictionary");
+
         }
 
 

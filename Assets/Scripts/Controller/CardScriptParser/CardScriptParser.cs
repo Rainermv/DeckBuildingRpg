@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Globalization;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Model.Command;
-using Assets.Scripts.Core.Model.Entity;
+using Assets.Scripts.Core.Model.EntityModel;
 
 namespace Assets.TestsEditor
 {
     public class CardScriptParser
     {
-        private Func<Entity, CombatModel, FindTargetData, List<ITargetable>> _onFindTarget;
+        //private Func<Entity, CombatModel, FindTargetData, List<ITargetable>> _onFindTarget;
         private Dictionary<string, int> _attributeMap;
         private IFormatProvider _provider;
 
-        public CardScriptParser(Dictionary<string, int> attributeMap, 
-            Func<Entity, CombatModel, FindTargetData, List<ITargetable>> onFindTarget)
+        public CardScriptParser(Dictionary<string, int> attributeMap)
         {
             _attributeMap = attributeMap;
-            _onFindTarget = onFindTarget;
+            //_onFindTarget = onFindTarget;
             _provider = CultureInfo.CurrentCulture;
         }
 
-        public CardScriptParseResult ParseScript(string script)
+        public CardScriptParseResult ParseScript(string script,
+            Func<Entity, CombatModel, FindTargetData, List<ITargetable>> _onFindTarget)
         {
             var cardScriptCommands = new List<CardScriptCommand>();
 
@@ -48,11 +48,12 @@ namespace Assets.TestsEditor
                     {
                         Success = false,
                         ErrorReason = $"Error parsing Command. {commandParseResult.ErrorReason}",
-                        CardScriptCommands = cardScriptCommands,
+                        ParsedCardScript = new CardScript(cardScriptCommands),
                         LastCommandParseResult = commandParseResult
                     };
                 }
 
+                commandParseResult.CardScriptCommand.ScriptCommandText = scriptCommand;
                 cardScriptCommands.Add(commandParseResult.CardScriptCommand);
 
             }
@@ -61,7 +62,7 @@ namespace Assets.TestsEditor
             return new CardScriptParseResult()
             {
                 Success = true,
-                CardScriptCommands = cardScriptCommands
+                ParsedCardScript = new CardScript(cardScriptCommands)
             };
         }
 

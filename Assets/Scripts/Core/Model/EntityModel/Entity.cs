@@ -7,7 +7,7 @@ using Assets.Scripts.Core.Model.Card;
 using Assets.Scripts.Core.Model.Command;
 using Assets.Scripts.Core.Model.GridMap;
 
-namespace Assets.Scripts.Core.Model.Entity
+namespace Assets.Scripts.Core.Model.EntityModel
 {
     public class Entity : ITargetable
     {

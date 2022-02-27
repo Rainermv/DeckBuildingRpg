@@ -3,9 +3,9 @@
 namespace Assets.TestsEditor
 {
     public class FindTargetData
-    {
-        public int Quantity { get; set; }
-        public int Range { get; set; }
+    { 
         public List<string> Tags { get; set; }
+        public Dictionary<string, string> Parameters { get; set; }
+        public string Mode { get; set; }
     }
 }

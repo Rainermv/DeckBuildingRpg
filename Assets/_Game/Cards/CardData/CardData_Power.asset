@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: CardData_Power
   m_EditorClassIdentifier: 
   Name: Power
-  Text: Power up
   Image: {fileID: 21300000, guid: 3feb0cb21ec193c48a66a8e19ae6a4f1, type: 3}
+  CardScript: "#mode:radius, magnitude:1; \n@health:+1"
+  Text: Heal 1 health

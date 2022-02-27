@@ -4,7 +4,7 @@ using Assets.Scripts.Core.Model.Command;
 
 namespace Assets.TestsEditor
 {
-    public class CommandPlayData
+    public class CardScriptCommandPlayData
     {
         public List<ITargetable> targetables { get; set; } = new();
     }
