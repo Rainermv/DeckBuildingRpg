@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Assets.Scripts.Core.Model.Command;
+using Assets.Scripts.Core.Model;
 
 namespace Assets.TestsEditor
 {

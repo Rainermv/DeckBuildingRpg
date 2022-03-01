@@ -3,9 +3,10 @@ using Assets.Scripts.Controller;
 using Assets.Scripts.Controller.CardShuffler;
 using Assets.Scripts.Controller.Factories;
 using Assets.Scripts.Controller.MovementResolver;
+using Assets.Scripts.Core.Events;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Utility;
-using Assets.Scripts.View.CardTemplate;
+using Assets.Scripts.View.Cards.CardDataView;
 using Assets.TestsEditor;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -30,7 +31,9 @@ namespace Assets.Scripts.View
             // todo: move this to a scriptable object or something
             var attributeMap = new Dictionary<string, int>()
             {
-                { "health", 0 }
+                { "power", 0 },
+                { "health", 1 },
+                
             };
 
 
@@ -42,11 +45,10 @@ namespace Assets.Scripts.View
                 new RandomCardShuffler(),
                 new AStarPathFindResolver(),
                 new CardScriptParser(attributeMap));
-
+            
             combatModel = _combatController.Setup(combatModel);
 
             _combatViewController.Initialize(combatModel,
-                _combatController.OnCardActivate,
                 _combatController.OnGridFindPathToPosition,
                 _combatController.OnGridMovePath, 
                 _cardDataLibrary.ToSpriteLibrary());
@@ -57,14 +59,11 @@ namespace Assets.Scripts.View
 
         private void InitializeDebugEvents()
         {
-            CDebug.OnLogFromController += OnLog;
-            CDebug.OnLogErrorFromController += OnLogErrorFromController;
-
-            MDebug.OnLogFromController += OnLog;
-            MDebug.OnLogErrorFromController += OnLogErrorFromController;
+            DebugEvents.OnLog += OnLog;
+            DebugEvents.OnLogError+= OnLogError;
         }
 
-        private void OnLogErrorFromController(object sourceObject, string error)
+        private void OnLogError(object sourceObject, string error)
         {
             Debug.LogError($"[{sourceObject.GetType().Name}] {error}");
         }

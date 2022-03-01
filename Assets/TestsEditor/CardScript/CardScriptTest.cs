@@ -5,9 +5,8 @@ using System.Runtime.Remoting.Messaging;
 using System.Text.RegularExpressions;
 using Assets.Scripts.Controller;
 using Assets.Scripts.Core.Model;
-using Assets.Scripts.Core.Model.Card;
-using Assets.Scripts.Core.Model.Card.Collections;
-using Assets.Scripts.Core.Model.Command;
+using Assets.Scripts.Core.Model.Cards;
+using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
@@ -40,7 +39,7 @@ namespace Assets.TestsEditor
             var testModel = TestBattleModel(1);
             // Test target with initial value
             var entity = testModel.Entities[0];
-            entity.AttributeSet.Set(0, 0);
+            entity.Attributes.SetValue(0, 0);
 
             var scriptParser = new CardScriptParser(testModel.AttributeMap);
             
@@ -54,7 +53,7 @@ namespace Assets.TestsEditor
             var runResult = RunScriptCommands(runScriptParseResult.ParsedCardScript.CardScriptCommands, testModel, entity);
             
             Assert.IsTrue(runResult);
-            Assert.AreEqual(expectedResult, entity.AttributeSet.GetValue(0));
+            Assert.AreEqual(expectedResult, entity.Attributes.GetValue(0));
 
         }
 
@@ -118,7 +117,7 @@ namespace Assets.TestsEditor
             for (int i = 0; i < totalEntities; i++)
             {
                 var entity1 = testModel.Entities[0];
-                entity1.AttributeSet.Set(1, 0);
+                entity1.Attributes.SetValue(1, 0);
 
             }
             // Test source
@@ -134,7 +133,7 @@ namespace Assets.TestsEditor
 
             Assert.IsTrue(runResult);
 
-            var modifiedEntities = testModel.Entities.Count(entity => entity.AttributeSet.GetValue(1) == 1);
+            var modifiedEntities = testModel.Entities.Count(entity => entity.Attributes.GetValue(1) == 1);
             Assert.AreEqual(expectedEntities, modifiedEntities);
 
         }
@@ -149,7 +148,7 @@ namespace Assets.TestsEditor
                     { "health", 1 }
                 },
                 Entities = new(),
-                GlobalAttributeSet = new(),
+                GlobalAttributes = new(),
                 Players = new()
             };
             
@@ -162,7 +161,7 @@ namespace Assets.TestsEditor
 
                 foreach (var attributeKey in combatModel.AttributeMap.Values)
                 {
-                    entity.AttributeSet.Set(attributeKey, 0);
+                    entity.Attributes.SetValue(attributeKey, 0);
                 }
 
                 combatModel.Players.Add(player);

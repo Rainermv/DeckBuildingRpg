@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.Scripts.Controller;
+using Assets.Scripts.Core.Events;
 using Assets.Scripts.Core.Model;
-using Assets.Scripts.Core.Model.Command;
 using Assets.Scripts.Core.Model.EntityModel;
 
 namespace Assets.TestsEditor
@@ -50,7 +50,7 @@ namespace Assets.TestsEditor
 
                 if (string.IsNullOrEmpty(findTargetsData.Mode))
                 {
-                    CDebug.LogError(findTargetsData, $"No {FindTargetsParameters.MODE} found in FindTargetCommand");
+                    DebugEvents.OnLogError(findTargetsData, $"No {FindTargetsParameters.MODE} found in FindTargetCommand");
                     return commandParseResult;
                 }
 

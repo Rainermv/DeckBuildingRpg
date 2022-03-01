@@ -34,7 +34,7 @@ namespace Assets.TestsEditor
                 {
                     OnValidatePlay = (source, commandPlayData, combatModel) =>
                     {
-                        return commandPlayData.targetables.All(target => target.AttributeSet.Contains(attributeKey));
+                        return commandPlayData.targetables.All(target => target.Attributes.Contains(attributeKey));
                     }
                 };
 
@@ -47,7 +47,7 @@ namespace Assets.TestsEditor
                     {
                         foreach (var targetable in commandPlayData.targetables)
                         {
-                            targetable.AttributeSet.Set(attributeKey, setIntValue);
+                            targetable.Attributes.SetValue(attributeKey, setIntValue);
                         };
 
                         return commandPlayData;
@@ -63,7 +63,7 @@ namespace Assets.TestsEditor
                 {
                     foreach (var targetable in commandPlayData.targetables)
                     {
-                        targetable.AttributeSet.Modify(attributeKey, modifyIntValue);
+                        targetable.Attributes.ModifyValue(attributeKey, modifyIntValue);
                     };
 
                     return commandPlayData;

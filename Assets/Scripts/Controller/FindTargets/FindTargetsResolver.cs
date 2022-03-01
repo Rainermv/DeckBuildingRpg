@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Core.Events;
 using Assets.Scripts.Core.Model;
-using Assets.Scripts.Core.Model.Command;
 using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Utility;
 using Assets.TestsEditor;
@@ -10,9 +10,6 @@ namespace Assets.Scripts.Controller
 {
     public class FindTargetsResolver
     {
-        
-
-
         public static List<ITargetable> OnCardScriptFindTarget(Entity source, CombatModel combatModel, FindTargetData findTargetData)
         {
             var parameters = findTargetData.Parameters;
@@ -23,7 +20,11 @@ namespace Assets.Scripts.Controller
                     return new List<ITargetable>() { source };
                 case FindTargetModes.RADIUS:
                     return new List<ITargetable>(
-                        EntitiesOnRadius(source, combatModel.Entities, findTargetData, GetValueInt(parameters, FindTargetsParameters.MAGNITUDE)));
+                        EntitiesOnRadius(source,
+                            combatModel.Entities,
+                            findTargetData,
+                            GetValueInt(parameters,
+                                FindTargetsParameters.MAGNITUDE)));
 
 
             }
@@ -37,7 +38,7 @@ namespace Assets.Scripts.Controller
             if (parameters.TryGetValue(key, out var value))
                 return value;
 
-            CDebug.LogError(parameters, $"(GetValue) Could not get value of parameter {key}. Returning empty");
+            DebugEvents.OnLogError(parameters, $"(GetValue) Could not get value of parameter {key}. Returning empty");
             return string.Empty;
 
         }
@@ -46,14 +47,14 @@ namespace Assets.Scripts.Controller
         {
             if (!parameters.TryGetValue(key, out var value))
             {
-                CDebug.LogError(parameters, $"(GetValueInt) Could not get value of parameter {key}. Returning 0");
+                DebugEvents.OnLogError(parameters, $"(GetValueInt) Could not get value of parameter {key}. Returning 0");
                 return 0;
             }
 
             if (int.TryParse(value, out var result)) 
                 return result;
 
-            CDebug.LogError(parameters, $"Could not parse {value} of parameter {key} of key  to int. Returning 0");
+            DebugEvents.OnLogError(parameters, $"Could not parse {value} of parameter {key} of key  to int. Returning 0");
             return 0;
 
         }

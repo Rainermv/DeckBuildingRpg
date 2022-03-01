@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Model.AttributeModel;
-using Assets.Scripts.Core.Model.Card;
-using Assets.Scripts.Core.Model.Card.Collections;
+using Assets.Scripts.Core.Model.Cards;
+using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
@@ -18,7 +18,7 @@ namespace Assets.Scripts.Controller.Factories
             var levelModel = new CombatModel()
             {
                 GridMapModel = gridMapModel,
-                GlobalAttributeSet = new AttributeSet(),
+                GlobalAttributes = new Attributes(),
                 Players = CardSystemModelFactory.BuildPlayers(1),
                 CardDataList = cardDataList,
                 Entities = new List<Entity>(),
@@ -81,8 +81,8 @@ namespace Assets.Scripts.Controller.Factories
         {
             var entity = Entity.Make(player.Name, gridPosition, player);
 
-            entity.AttributeSet.Add(0, 0);
-            entity.AttributeSet.Add(1, 0);
+            entity.Attributes.Add(0, 0);
+            entity.Attributes.Add(1, 0);
 
             entity.MovementRange = 10;
             combatModel.Entities.Add(entity);
@@ -91,7 +91,7 @@ namespace Assets.Scripts.Controller.Factories
 
         private static void SetupPlayer(Player player)
         {
-            player.AttributeSet.Set(AttributeKey.Power, 5);
+            player.Attributes.SetValue(AttributeKey.Power, 5);
 
 
         }

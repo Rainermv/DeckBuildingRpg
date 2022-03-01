@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Assets.Scripts.Controller.CardShuffler;
 using Assets.Scripts.Controller.MovementResolver;
 using Assets.Scripts.Core.Model;
-using Assets.Scripts.Core.Model.Card;
-using Assets.Scripts.Core.Model.Card.Collections;
-using Assets.Scripts.Core.Model.Command;
+using Assets.Scripts.Core.Model.Cards;
+using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
+using Assets.Scripts.View.Cards;
 using Assets.TestsEditor;
 
 namespace Assets.Scripts.Controller
@@ -49,6 +49,13 @@ namespace Assets.Scripts.Controller
 
             _pathFindResolver.OnGetCostToCrossAtoB =
                 (position, gridPosition) => GridUtilities.GetCostToPosition(position, gridPosition, _tileDictionary, _battleEntities);
+
+
+            GameplayEvents.OnCardEvent += (card, cardEvent) =>
+            {
+                if (cardEvent == CardEventIdentifiers.Activate)
+                    _cardPlayController.OnCardActivate(card, _controlledEntity, _combatModel);
+            };
         }
 
 
@@ -73,9 +80,6 @@ namespace Assets.Scripts.Controller
         }
 
         
-
-
-
         public GridMapPathfindingModel OnGridFindPathToPosition(GridPosition finalGridPosition)
         {
             var initialGridPosition = _controlledEntity.GridPosition;
@@ -112,17 +116,13 @@ namespace Assets.Scripts.Controller
                 PathSequence = pathSequence
             };
         }
-
-
-        public Func<Card, CardPlayData> OnCardActivate => 
-            (card) => _cardPlayController.OnCardActivate(card, _controlledEntity, _combatModel);
-
+        
         public void OnCombatStart()
         {
             foreach (var battleEntity in _battleEntities)
             {
-                battleEntity.AttributeSet.Set(0, 0);
-                battleEntity.AttributeSet.Set(1, 0);
+                battleEntity.Attributes.SetValue(0, 0);
+                battleEntity.Attributes.SetValue(1, 0);
             }
         }
     }

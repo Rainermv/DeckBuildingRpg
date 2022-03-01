@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Assets.Scripts.Core.Model.AttributeModel;
 using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Model.GridMap;
 using Sirenix.OdinInspector;
@@ -17,30 +18,14 @@ namespace Assets.Scripts.View
         
         private Func<GridPosition, Vector3> _onGetWorldPosition;
 
-        private Entity _lastEntity;
-        //private GridPosition _gridPosition;
-
         public void Initialize(Entity entity, Func<GridPosition, Vector3> onGetWorldPosition)
         {
             _onGetWorldPosition = onGetWorldPosition;
 
-            OnEntityUpdate(entity);
-        }
+            entity.OnEntityUpdate += OnEntityUpdate;
+            entity.OnEntitySetPosition += OnSetPositionMoveAsync;
 
-        private void OnEntityUpdate(Entity entity)
-        {
-            if ( _lastEntity != null)
-            {
-                _lastEntity.OnUpdate -= OnEntityUpdate;
-                _lastEntity.OnSetPosition -= OnSetPositionMoveAsync;
-            }
-            _lastEntity = entity;
-
-
-            entity.OnUpdate += OnEntityUpdate;
-            entity.OnSetPosition += OnSetPositionMoveAsync;
-
-            entity.AttributeSet.OnAttributeValueChange = (index, value) =>
+            entity.Attributes.OnAttributeValueChange = (index, value) =>
             {
                 if (attributeContainers.TryGetValue(index, out var container))
                 {
@@ -48,10 +33,13 @@ namespace Assets.Scripts.View
                 }
             };
 
+            OnEntityUpdate(entity);
+            
+        }
 
-
+        private void OnEntityUpdate(Entity entity)
+        {
             name = entity.Name;
-
             transform.position = _onGetWorldPosition(entity.GridPosition);
         }
 
@@ -60,10 +48,10 @@ namespace Assets.Scripts.View
             transform.position = _onGetWorldPosition(gridPosition);
         }
 
-        private async void OnSetPositionMoveAsync(GridPosition gridPosition)
+        private async void OnSetPositionMoveAsync(Entity entity)
         {
             var initialPosition = transform.position;
-            var targetPosition = _onGetWorldPosition(gridPosition);
+            var targetPosition = _onGetWorldPosition(entity.GridPosition);
             float t = 0;
 
             while (t < 1)

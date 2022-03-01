@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Core.Model.Card;
+using Assets.Scripts.Core.Model.Cards;
 
 namespace Assets.Scripts.Controller.CardShuffler
 {

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Assets.Scripts.Core.Model.AttributeModel;
-using Assets.Scripts.Core.Model.Card;
-using Assets.Scripts.Core.Model.Command;
+using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.Core.Model.GridMap;
 
 namespace Assets.Scripts.Core.Model.EntityModel
@@ -14,13 +13,12 @@ namespace Assets.Scripts.Core.Model.EntityModel
         private string _name;
         private Player _owner;
 
-        public AttributeSet AttributeSet { get; set; } = new();
+        public Attributes Attributes { get; set; } = new();
         public GridPosition GridPosition { get; private set; }
 
-        public Action<Entity> OnUpdate { get; set; }
-        public Action<GridPosition> OnSetPosition { get; set; }
-        public Action<GridPosition> OnFinishedMovePath { get; set; }
-        
+        public Action<Entity> OnEntityUpdate { get; set; }
+        public Action<Entity> OnEntitySetPosition { get; set; }
+        public  Action<Entity> OnEntityFinishedMovePath { get; set; }
 
         public static Entity Make(string name, GridPosition gridPosition, Player owner)
         {
@@ -45,7 +43,7 @@ namespace Assets.Scripts.Core.Model.EntityModel
             set
             {
                 _name = value;
-                OnUpdate?.Invoke(this);
+                OnEntityUpdate?.Invoke(this);
             }
         }
 
@@ -55,7 +53,7 @@ namespace Assets.Scripts.Core.Model.EntityModel
             set
             {
                 _owner = value;
-                OnUpdate?.Invoke(this);
+                OnEntityUpdate?.Invoke(this);
             }
         }
 
@@ -64,13 +62,13 @@ namespace Assets.Scripts.Core.Model.EntityModel
         public void SetPosition(GridPosition gridPosition)
         {
             GridPosition = gridPosition;
-            OnSetPosition?.Invoke(gridPosition);
+            OnEntitySetPosition?.Invoke(this);
         }
 
         public async Task SetPositionAsync(GridPosition gridPosition)
         {
             GridPosition = gridPosition;
-            OnSetPosition(gridPosition);
+            OnEntitySetPosition(this);
         }
 
         public async Task MovePathAsync(List<GridPosition> movePositions, int delayTime)
@@ -81,7 +79,7 @@ namespace Assets.Scripts.Core.Model.EntityModel
                 await Task.Delay(delayTime);
             }
 
-            OnFinishedMovePath?.Invoke(movePositions.LastOrDefault());
+            OnEntityFinishedMovePath?.Invoke(this);
 
         }
     }

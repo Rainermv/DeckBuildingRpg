@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Assets.Scripts.Controller;
 using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
+using Assets.Scripts.View.Cards;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -15,7 +18,7 @@ namespace Assets.Scripts.View.GridMap
     
         [Title("Assets")]
         [DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.OneLine)]
-        [AssetsOnly] public Dictionary<TileViewType, Tile> TileDictionary;
+        [AssetsOnly, Required] public Dictionary<TileViewType, Tile> TileDictionary;
     
         [Title("Scene")]
         [SceneObjectsOnly, Required] public Tilemap GridTilemap;
@@ -24,11 +27,16 @@ namespace Assets.Scripts.View.GridMap
 
         private Vector3Int? _mouseOverGridPosition;
         private GridMapModel _gridMapModel;
+        private Func<GridPosition, GridMapPathfindingModel> _onFindPathToTargetGrid;
+        private Func<Task<MovePathResult>> _onExecuteMovement;
 
         public void Initialize(GridMapModel gridMapModel,
-            Action<PointerEventData, int> onTilemapPointerEvent)
+            Func<GridPosition, GridMapPathfindingModel> onFindPathToTargetGrid,
+            Func<Task<MovePathResult>> onExecuteMovement)
         {
             _gridMapModel = gridMapModel;
+            _onFindPathToTargetGrid = onFindPathToTargetGrid;
+            _onExecuteMovement = onExecuteMovement;
 
 
             foreach (var gridTile in _gridMapModel.GridTiles)
@@ -37,10 +45,8 @@ namespace Assets.Scripts.View.GridMap
 
                 UpdateTile(tilePosition, gridTile);
             }
-            //Debug.Log($"WRITE: {string.Join(",", _gridMapModel.GridTiles.Select(tile => $"[{ tile.GridPosition.X},{ tile.GridPosition.Y}]"))}");
 
-
-            GridTilemap.GetComponent<TilemapListener>().OnTilemapPointerEvent += onTilemapPointerEvent;
+            UIEvents.OnTilemapPointerEvent += OnTilemapPointerEvent;
 
         }
 
@@ -61,32 +67,6 @@ namespace Assets.Scripts.View.GridMap
 
             GridTilemap.SetTile(tilePosition, tile);
             GridTilemap.SetColor(tilePosition, tileColor);
-        }
-
-        void _OnTilemapMouseOver()
-        {
-            var worldPosition = Vector3.zero;
-
-            if (worldPosition == null)
-            {
-                return;
-            }
-        
-            var gridPosition = Grid.WorldToCell(new Vector3(worldPosition.x, worldPosition.y));
-
-            if (gridPosition.x < 0 || gridPosition.y < 0 || gridPosition.x > _gridMapModel.Width ||
-                gridPosition.y > _gridMapModel.Height)
-            {
-                _mouseOverGridPosition = null;
-                return;
-            }
-
-            if (_mouseOverGridPosition == null || gridPosition == _mouseOverGridPosition) 
-                return;
-
-            GridTilemapHighlight.SetTile(_mouseOverGridPosition.Value, null);
-            GridTilemapHighlight.SetTile(gridPosition, TileDictionary[TileViewType.Highlight]);
-            _mouseOverGridPosition = gridPosition;
         }
 
         public void DrawHighlight(List<GridPosition> gridPositions, int moveLimit)
@@ -119,12 +99,36 @@ namespace Assets.Scripts.View.GridMap
             return GridTilemap.WorldToCell(worldPosition);
         }
 
-
-        public bool PointWithinBounds(Vector3Int cellPosition)
+        private async void OnTilemapPointerEvent(PointerEventData pointerEventData, int pointerEventTrigger)
         {
-            return GridTilemap.cellBounds.Contains(cellPosition);
+            if (!pointerEventData.pointerCurrentRaycast.isValid)
+            {
+                return;
+            }
+
+            var worldPosition = pointerEventData.pointerCurrentRaycast.worldPosition;
+
+            var gridPosition = WorldToTilemapGrid(worldPosition);
+
+            switch (pointerEventTrigger)
+            {
+                case PointerEventTrigger.MOVE:
+                    var pathfindModel = _onFindPathToTargetGrid(gridPosition);
+                    DrawHighlight(pathfindModel.GridPositions, pathfindModel.MovementRange);
+                    break;
+
+                case PointerEventTrigger.EXIT:
+                    ClearHighlight();
+                    break;
+
+                case PointerEventTrigger.DOWN:
+                    ClearHighlight();
+                    await _onExecuteMovement();
+                    break;
+
+            }
         }
 
-        
+
     }
 }

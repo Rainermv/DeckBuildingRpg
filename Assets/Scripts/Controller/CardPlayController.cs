@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Core.Events;
 using Assets.Scripts.Core.Model;
-using Assets.Scripts.Core.Model.Card;
-using Assets.Scripts.Core.Model.Card.Collections;
-using Assets.Scripts.Core.Model.Command;
+using Assets.Scripts.Core.Model.Cards;
+using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
 using Assets.Scripts.Core.Utility;
 using Assets.TestsEditor;
@@ -13,6 +13,8 @@ namespace Assets.Scripts.Controller
 {
     public class CardPlayController
     {
+
+
         private readonly CardScriptParser _cardScriptParser;
         private readonly Func<Entity, CombatModel, FindTargetData, List<ITargetable>> _onCardScriptFindTarget;
 
@@ -36,7 +38,7 @@ namespace Assets.Scripts.Controller
 
                 if (!cardScriptParseResult.Success)
                 {
-                    CDebug.LogError(this, $"Error parsing CardScript on CardData {cardData.Index}: {cardData.Name}\n " + cardScriptParseResult.ErrorReason);
+                    DebugEvents.OnLogError(this, $"Error parsing CardScript on CardData {cardData.Index}: {cardData.Name}\n " + cardScriptParseResult.ErrorReason);
                     continue;
                 }
 
@@ -82,13 +84,13 @@ namespace Assets.Scripts.Controller
                 if (cardScriptCommand.OnValidatePlay != null &&
                     !cardScriptCommand.OnValidatePlay(sourceEntity, commandPlayData, combatModel))
                 {
-                    CDebug.Log(this,$"Failed to Validate: {cardScriptCommand.ScriptCommandText}\n" +
+                    DebugEvents.OnLog(this,$"Failed to Validate: {cardScriptCommand.ScriptCommandText}\n" +
                                     $"on Targets: {string.Join(", ", commandPlayData.targetables.Select(t => t.Name))}");
                     return;
                 }
 
-                CDebug.Log(this, $"Activating: {cardScriptCommand.ScriptCommandText}\n" +
-                                 $"on Targets: {string.Join(", ", commandPlayData.targetables.Select(t => t.Name))}");
+                DebugEvents.OnLog(this, $"Activating: {cardScriptCommand.ScriptCommandText}\n" +
+                                        $"on Targets: {string.Join(", ", commandPlayData.targetables.Select(t => t.Name))}");
                 commandPlayData = cardScriptCommand.OnPlay(sourceEntity, commandPlayData, combatModel);
 
             }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
-using Assets.Scripts.Core.Model.Card;
-using Assets.Scripts.Core.Model.Card.Collections;
+using Assets.Scripts.Core.Model.Cards;
+using Assets.Scripts.Core.Model.Cards.Collections;
 
 namespace Assets.Scripts.Core.Utility
 {
@@ -16,7 +16,7 @@ namespace Assets.Scripts.Core.Utility
                 return;
             }
 
-            var cards = from.Pop(quantity).ToList();
+            var cards = from.Draw(quantity).ToList();
             to.InsertCards(cards); // insert to top
 
 
