@@ -14,8 +14,6 @@ namespace Assets.Scripts.Core.Model.EntityModel
 
         public Attributes Attributes { get; set; } = new();
         public Action<Entity> OnEntityUpdate { get; set; }
-        public Action<Entity> OnEntitySetPosition { get; set; }
-        public  Action<Entity> OnEntityFinishedMovePath { get; set; }
 
         public static Entity Make(string name, Player owner)
         {
@@ -52,8 +50,6 @@ namespace Assets.Scripts.Core.Model.EntityModel
                 OnEntityUpdate?.Invoke(this);
             }
         }
-
-        public int MovementRange { get; set; }
 
     }
 }

@@ -81,7 +81,6 @@ namespace Assets.Scripts.Controller.Factories
             entity.Attributes.Add(0, 0);
             entity.Attributes.Add(1, 0);
 
-            entity.MovementRange = 10;
             combatModel.Entities.Add(entity);
         }
 
