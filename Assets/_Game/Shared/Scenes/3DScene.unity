@@ -465,6 +465,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4378592316721850231, guid: 38f98fa7d54dfcd46a3cd48b2c623770, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 4378592316721850231, guid: 38f98fa7d54dfcd46a3cd48b2c623770, type: 3}
+    - target: {fileID: 4378592316721850231, guid: 38f98fa7d54dfcd46a3cd48b2c623770, type: 3}
       propertyPath: viewOptions.CardsVisible
       value: 1
       objectReference: {fileID: 0}
@@ -2418,10 +2422,11 @@ MonoBehaviour:
     PrefabModificationsReferencedUnityObjects: []
     PrefabModifications: []
     SerializationNodes: []
-  CardPrefab: {fileID: 3298201922081313881, guid: ff668ce641af1c7488fff65fb15ae762, type: 3}
   PlayerDeckCollectionView: {fileID: 975819263}
   PlayerHandCollectionView: {fileID: 932599938}
   PlayerDiscardCollectionView: {fileID: 918295918}
+  CardPlayView: {fileID: 1815973793}
+  CardPrefab: {fileID: 3298201922081313881, guid: ff668ce641af1c7488fff65fb15ae762, type: 3}
 --- !u!1001 &556037048
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2429,6 +2434,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1939917523}
     m_Modifications:
+    - target: {fileID: 2451764252376510847, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2451764252376510847, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
     - target: {fileID: 2451764252376510847, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
       propertyPath: viewOptions.DisplayCards
       value: 0
@@ -2568,6 +2577,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1939917523}
     m_Modifications:
+    - target: {fileID: 2451764252376510847, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
+      propertyPath: serializationData.Prefab
+      value: 
+      objectReference: {fileID: 2451764252376510847, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
     - target: {fileID: 2451764252376510847, guid: 24f3cd7f10530a64eb4a6d592adc6a9f, type: 3}
       propertyPath: viewOptions.CardsVisible
       value: 0
@@ -5585,7 +5598,6 @@ MonoBehaviour:
   _cardSystemView: {fileID: 524249636}
   _gridMapView: {fileID: 106533965}
   _charactersContainer: {fileID: 93547590}
-  CardPlayView: {fileID: 1815973793}
 --- !u!1 &1815973791
 GameObject:
   m_ObjectHideFlags: 0
