@@ -23,10 +23,7 @@ namespace Assets.Scripts.View
         public void Initialize(CombatModel battleModel,
             CardSpriteLibrary cardSpriteLibrary)
         {
-            //_onExecuteMovement = onExecuteMovement;
-            //_onFindPathToTargetGrid = onFindPathToTargetGrid;
-            
-            //_gridMapView.Initialize(battleModel.GridMapModel, onFindPathToTargetGrid, onExecuteMovement);
+          
             _cardSystemView.Initialize(battleModel.Players, cardSpriteLibrary);
 
 
@@ -34,9 +31,6 @@ namespace Assets.Scripts.View
             foreach (var entity in battleModel.Entities)
             {
                 var characterView = Instantiate(_characterViewPrefab, _charactersContainer);
-
-                //entity.OnEntitySetPosition +=
-                //   eventEntity => _cameraController.SmoothJumpTo(_gridMapView.GridToWorld(eventEntity.GridPosition));
 
                 characterView.Initialize(entity);
                 _entityViews.Add(characterView);

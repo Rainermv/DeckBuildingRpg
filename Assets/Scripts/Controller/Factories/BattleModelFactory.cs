@@ -36,20 +36,7 @@ namespace Assets.Scripts.Controller.Factories
             {
                 SetupPlayer(player);
                 AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-                AddEntityTo(player, levelModel);
-
-
-
+                
                 // Draw initial hand
                 CardUtilities.DrawCards(player.CardCollections[CardCollectionIdentifier.Deck],
                     player.CardCollections[CardCollectionIdentifier.Hand],
