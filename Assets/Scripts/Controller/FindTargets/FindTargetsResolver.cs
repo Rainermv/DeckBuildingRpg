@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Core.Events;
@@ -18,7 +19,7 @@ namespace Assets.Scripts.Controller
             {
                 case FindTargetModes.SELF:
                     return new List<ITargetable>() { source };
-                case FindTargetModes.RADIUS:
+                case FindTargetModes.RADIUS: //todo probably not requried anymore
                     return new List<ITargetable>(
                         EntitiesOnRadius(source,
                             combatModel.Entities,
@@ -62,7 +63,8 @@ namespace Assets.Scripts.Controller
         private static List<Entity> EntitiesOnRadius(Entity source, List<Entity> entities,
             FindTargetData findTargetData, int magnitude)
         {
-            return entities.Where(entity => GridUtilities.DistancePrecise(source.GridPosition, entity.GridPosition) <= magnitude).ToList();
+            throw new NotImplementedException();
+            //return entities.Where(entity => GridUtilities.DistancePrecise(source.GridPosition, entity.GridPosition) <= magnitude).ToList();
         }
     }
 }

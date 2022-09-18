@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
-using Assets.Scripts.Core.Model.GridMap;
 
 namespace Assets.Scripts.Core.Model.AttributeModel
 {

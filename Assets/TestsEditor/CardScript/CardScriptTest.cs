@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text.RegularExpressions;
 using Assets.Scripts.Controller;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
-using Assets.Scripts.Core.Model.GridMap;
-using Assets.Scripts.Core.Utility;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -157,7 +152,7 @@ namespace Assets.TestsEditor
             {
                 var player = Player.Make($"Player{i}");
                 player.AddNewCardCollection(CardCollectionIdentifier.Deck).InsertCards(new List<Card> { Card.Make(new CardData()) });
-                var entity = Entity.Make($"Entity{i}", new GridPosition(i, 0), player);
+                var entity = Entity.Make($"Entity{i}",  player);
 
                 foreach (var attributeKey in combatModel.AttributeMap.Values)
                 {

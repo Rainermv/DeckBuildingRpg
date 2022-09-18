@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Assets.Scripts.Core.Model.AttributeModel;
 using Assets.Scripts.Core.Model.Cards;
-using Assets.Scripts.Core.Model.GridMap;
 
 namespace Assets.Scripts.Core.Model.EntityModel
 {
@@ -14,18 +13,15 @@ namespace Assets.Scripts.Core.Model.EntityModel
         private Player _owner;
 
         public Attributes Attributes { get; set; } = new();
-        public GridPosition GridPosition { get; private set; }
-
         public Action<Entity> OnEntityUpdate { get; set; }
         public Action<Entity> OnEntitySetPosition { get; set; }
         public  Action<Entity> OnEntityFinishedMovePath { get; set; }
 
-        public static Entity Make(string name, GridPosition gridPosition, Player owner)
+        public static Entity Make(string name, Player owner)
         {
             return new Entity()
             {
                 _name = name,
-                GridPosition = gridPosition,
                 _owner = owner
             };
         }
@@ -59,28 +55,5 @@ namespace Assets.Scripts.Core.Model.EntityModel
 
         public int MovementRange { get; set; }
 
-        public void SetPosition(GridPosition gridPosition)
-        {
-            GridPosition = gridPosition;
-            OnEntitySetPosition?.Invoke(this);
-        }
-
-        public async Task SetPositionAsync(GridPosition gridPosition)
-        {
-            GridPosition = gridPosition;
-            OnEntitySetPosition(this);
-        }
-
-        public async Task MovePathAsync(List<GridPosition> movePositions, int delayTime)
-        {
-            foreach (var movePosition in movePositions)
-            {
-                await SetPositionAsync(movePosition);
-                await Task.Delay(delayTime);
-            }
-
-            OnEntityFinishedMovePath?.Invoke(this);
-
-        }
     }
 }

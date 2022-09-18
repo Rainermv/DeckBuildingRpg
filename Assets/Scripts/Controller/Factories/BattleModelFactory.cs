@@ -5,19 +5,17 @@ using Assets.Scripts.Core.Model.AttributeModel;
 using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.Core.Model.Cards.Collections;
 using Assets.Scripts.Core.Model.EntityModel;
-using Assets.Scripts.Core.Model.GridMap;
 using Assets.Scripts.Core.Utility;
 
 namespace Assets.Scripts.Controller.Factories
 {
     public class BattleModelFactory
     {
-        public static CombatModel Build(GridMapModel gridMapModel, List<CardData> cardDataList,
+        public static CombatModel Build(List<CardData> cardDataList,
             Dictionary<string, int> attributeMap)
         {
             var levelModel = new CombatModel()
             {
-                GridMapModel = gridMapModel,
                 GlobalAttributes = new Attributes(),
                 Players = CardSystemModelFactory.BuildPlayers(1),
                 CardDataList = cardDataList,
@@ -37,18 +35,18 @@ namespace Assets.Scripts.Controller.Factories
             foreach (var player in levelModel.Players)
             {
                 SetupPlayer(player);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[0].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[5].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[15].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[16].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[17].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[18].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[19].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[20].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[25].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[35].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[45].GridPosition);
-                AddEntityTo(player, levelModel, levelModel.GridMapModel.GridTiles[55].GridPosition);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
+                AddEntityTo(player, levelModel);
 
 
 
@@ -76,10 +74,9 @@ namespace Assets.Scripts.Controller.Factories
             return cards;
         }
 
-        private static void AddEntityTo(Player player, CombatModel combatModel,
-            GridPosition gridPosition)
+        private static void AddEntityTo(Player player, CombatModel combatModel)
         {
-            var entity = Entity.Make(player.Name, gridPosition, player);
+            var entity = Entity.Make(player.Name, player);
 
             entity.Attributes.Add(0, 0);
             entity.Attributes.Add(1, 0);
