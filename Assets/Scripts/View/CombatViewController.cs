@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core.Model;
+using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.View.Cards;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -11,7 +13,7 @@ namespace Assets.Scripts.View
         [SerializeField, AssetsOnly, Required] private CharacterView _characterViewPrefab;
 
         [SerializeField, SceneObjectsOnly, Required] private CameraController _cameraController;
-        [SerializeField, SceneObjectsOnly, Required] private CardSystemView _cardSystemView;
+        [SerializeField, SceneObjectsOnly, Required] private CardCanvasViewController _cardCanvasViewController;
         //[SerializeField, SceneObjectsOnly, Required] private GriMapView _gridMapView;
         [SerializeField, SceneObjectsOnly, Required] private Transform _charactersContainer;
         
@@ -24,7 +26,7 @@ namespace Assets.Scripts.View
             CardSpriteLibrary cardSpriteLibrary)
         {
           
-            _cardSystemView.Initialize(battleModel.Players, cardSpriteLibrary);
+            _cardCanvasViewController.Initialize(battleModel.Players, cardSpriteLibrary);
 
 
             //todo: move characters code to a lower level

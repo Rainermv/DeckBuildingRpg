@@ -4,5 +4,6 @@ namespace Assets.Scripts.Controller
     {
         public const string SELF = "self";
         public const string RADIUS = "radius";
+        public const string SELECT = "select";
     }
 }

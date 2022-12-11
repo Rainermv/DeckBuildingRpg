@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Assets.Scripts.Controller.CardShuffler;
+using Assets.Scripts.Controller.FindTargets;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.Core.Model.Cards.Collections;
@@ -25,9 +26,7 @@ namespace Assets.Scripts.Controller
         private List<Entity> _battleEntities;
         private CombatModel _combatModel;
 
-        private CardPlayData _cardPlayData;
-
-
+        
         public CombatController(ICardShuffler cardShuffler,
             CardScriptParser cardScriptParser)
         {
@@ -35,11 +34,19 @@ namespace Assets.Scripts.Controller
 
             _cardPlayController = new CardPlayController(cardScriptParser, FindTargetsResolver.OnCardScriptFindTarget);
 
-            GameplayEvents.OnCardEvent += (card, cardEvent) =>
-            {
-                if (cardEvent == CardEventIdentifiers.Activate)
-                    _cardPlayController.OnCardActivate(card, _controlledEntity, _combatModel);
-            };
+            
+            // Combat States
+            // - Player Turn
+            //    - Start of Turn Phase
+            //    - Draw Cards Phase
+            //    - Play Phase (CardPlay)
+            //        - Idle  (wait for player action)
+            //        - Card Selected -> Check if play is legal, activate
+            //        - Card Activated -> Wait for targets/Confirmation
+            //        - Play Card -> Card effects, go to Idle
+            // - Enemy Turn
+
+            
         }
 
 

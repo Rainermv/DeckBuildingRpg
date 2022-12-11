@@ -11,7 +11,7 @@ namespace Assets.TestsEditor
         //private Func<Entity, CombatModel, FindTargetData, List<ITargetable>> _onFindTarget;
         private Dictionary<string, int> _attributeMap;
         private IFormatProvider _provider;
-
+        
         public CardScriptParser(Dictionary<string, int> attributeMap)
         {
             _attributeMap = attributeMap;

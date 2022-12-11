@@ -50,7 +50,7 @@ namespace Assets.TestsEditor
 
                 if (string.IsNullOrEmpty(findTargetsData.Mode))
                 {
-                    DebugEvents.OnLogError(findTargetsData, $"No {FindTargetsParameters.MODE} found in FindTargetCommand");
+                    DebugEvents.LogError(findTargetsData, $"No {FindTargetsParameters.MODE} found in FindTargetCommand");
                     return commandParseResult;
                 }
 

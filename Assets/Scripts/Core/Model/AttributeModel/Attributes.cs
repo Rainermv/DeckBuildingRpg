@@ -17,7 +17,7 @@ namespace Assets.Scripts.Core.Model.AttributeModel
                 
             };
 
-            DebugEvents.OnLog(this, $"Failed to Get value from {attributeKey}. Attribute not on Dictionary (returning 0)");
+            DebugEvents.Log(this, $"Failed to Get value from {attributeKey}. Attribute not on Dictionary (returning 0)");
 
             return 0;
         }
@@ -31,7 +31,7 @@ namespace Assets.Scripts.Core.Model.AttributeModel
                 return;
             };
 
-            DebugEvents.OnLog(this, $"Failed to Set value {value} on {attributeKey}. Attribute not on Dictionary");
+            DebugEvents.Log(this, $"Failed to Set value {value} on {attributeKey}. Attribute not on Dictionary");
 
         }
 
@@ -43,7 +43,7 @@ namespace Assets.Scripts.Core.Model.AttributeModel
                 return;
             };
 
-            DebugEvents.OnLog(this, $"Failed to Modify value {sumValue} on {attributeKey}. Attribute not on Dictionary");
+            DebugEvents.Log(this, $"Failed to Modify value {sumValue} on {attributeKey}. Attribute not on Dictionary");
 
         }
 
@@ -53,7 +53,7 @@ namespace Assets.Scripts.Core.Model.AttributeModel
                 (key, value) => OnAttributeValueChange?.Invoke(key,value));
 
             _attributeDictionary.Add(attributeKey, attribute);
-            DebugEvents.OnLog(this, $"Added {attributeKey} to Dictionary");
+            DebugEvents.Log(this, $"Added {attributeKey} to Dictionary");
 
         }
 

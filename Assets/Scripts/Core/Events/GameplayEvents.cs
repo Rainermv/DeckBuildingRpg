@@ -1,7 +1,7 @@
 using System;
 using Assets.Scripts.Core.Model.Cards;
 
-namespace Assets.Scripts.View.Cards
+namespace Assets.Scripts.Core.Events
 {
     public static class GameplayEvents
     {

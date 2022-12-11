@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Controller;
+using Assets.Scripts.Controller.FindTargets;
 using Assets.Scripts.Core.Model;
 using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.Core.Model.Cards.Collections;

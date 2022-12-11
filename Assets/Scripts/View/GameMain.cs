@@ -30,7 +30,6 @@ namespace Assets.Scripts.View
                 
             };
 
-
             var cardDataModel = _cardDataLibrary.ToCardDataModelList();
             var combatModel = BattleModelFactory.Build(cardDataModel, attributeMap);
             
@@ -49,8 +48,8 @@ namespace Assets.Scripts.View
 
         private void InitializeDebugEvents()
         {
-            DebugEvents.OnLog += OnLog;
-            DebugEvents.OnLogError+= OnLogError;
+            DebugEvents.Log += OnLog;
+            DebugEvents.LogError+= OnLogError;
         }
 
         private void OnLogError(object sourceObject, string error)

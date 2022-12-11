@@ -18,6 +18,8 @@ namespace Assets.Scripts.View
         public void Initialize(Entity entity)
         {
 
+            transform.position = new Vector2(-1f, -0f);
+
             entity.OnEntityUpdate += OnEntityUpdate;
 
             entity.Attributes.OnAttributeValueChange = (index, value) =>

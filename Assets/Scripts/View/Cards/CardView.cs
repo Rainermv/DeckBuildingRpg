@@ -3,13 +3,14 @@ using Assets.Scripts.Core.Model.Cards;
 using Assets.Scripts.View.Attribute;
 using Sirenix.OdinInspector;
 using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.View.Cards
 {
-    public class CardView : SerializedMonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+    public class CardView : SerializedMonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, ISelectHandler
     {
         public RectTransform RectTransform;
 
@@ -43,7 +44,8 @@ namespace Assets.Scripts.View.Cards
 
             gameObject.SetActive(true);
             
-            _onPointerUIEvent = (data, trigger) => UIEvents.OnCardPointerUIEvent?.Invoke(card, data, trigger);
+            _onPointerUIEvent = (data, trigger) 
+                => InteractionEvents.OnCardPointerUIEvent?.Invoke(this, card, data, trigger);
 
         }
         
@@ -57,7 +59,7 @@ namespace Assets.Scripts.View.Cards
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            PointerEvent(eventData, PointerEventTrigger.DOWN);
+            PointerEvent(eventData, PointerEventTrigger.CLICK);
 
         }
 
@@ -69,6 +71,22 @@ namespace Assets.Scripts.View.Cards
         public void OnPointerExit(PointerEventData eventData)
         {
             PointerEvent(eventData, PointerEventTrigger.EXIT);
+        }
+
+        public void OnBeginDrag(PointerEventData eventData)
+        {
+            PointerEvent(eventData, PointerEventTrigger.BEGIN_DRAG);
+        }
+
+        public void OnSelect(BaseEventData eventData)
+        {
+            
+            //PointerEvent(eventData., PointerEventTrigger.SELECT);
+        }
+
+        public void MoveTo(Vector2 stateModelPointerPosition)
+        {
+            throw new NotImplementedException();
         }
     }
 }

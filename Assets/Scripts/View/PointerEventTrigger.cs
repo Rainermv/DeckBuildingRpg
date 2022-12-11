@@ -7,5 +7,8 @@ namespace Assets.Scripts.View
         public const int UP = 2;
         public const int ENTER = 3;
         public const int EXIT = 4;
+        public const int BEGIN_DRAG = 5;
+        public const int CLICK = 6;
+
     }
 }
