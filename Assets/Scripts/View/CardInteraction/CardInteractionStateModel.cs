@@ -10,7 +10,7 @@ namespace Assets.Scripts.View.CardInteraction
         public bool PointerOver { get; set; }
         public Card Card { get; set; }
         public bool PointerDown { get; set; }
-        public Vector2 PointerPosition { get; set; }
+        public Vector2 PointerWorldPosition { get; set; }
         public CardView CardView { get; set; }
         public bool InPlayArea { get; set; }
     }

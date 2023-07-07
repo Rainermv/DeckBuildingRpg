@@ -10,13 +10,14 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.View.Cards
 {
-    public class CardView : SerializedMonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IBeginDragHandler, ISelectHandler
+    public class CardView : SerializedMonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler,
+        IBeginDragHandler, ISelectHandler
     {
-        public RectTransform RectTransform;
+        //public Transform Transform;
 
-        [SerializeField, ChildGameObjectsOnly, Required] private TextMeshProUGUI _textName;
-        [SerializeField, ChildGameObjectsOnly, Required] private TextMeshProUGUI _textBlock;
-        [SerializeField, ChildGameObjectsOnly, Required] private Image _cardImage;
+        [SerializeField, ChildGameObjectsOnly, Required] private TextMeshPro _textName;
+        [SerializeField, ChildGameObjectsOnly, Required] private TextMeshPro _textBlock;
+        [SerializeField, ChildGameObjectsOnly, Required] private SpriteRenderer _imageRenderer;
 
         private Action<PointerEventData, int> _onPointerUIEvent;
         public bool ReportEvents { private get; set; }
@@ -32,7 +33,7 @@ namespace Assets.Scripts.View.Cards
             gameObject.name = card.Name;
             _textName.text = card.Name;
             _textBlock.text = card.Text;
-            _cardImage.sprite = cardSprite;
+            _imageRenderer.sprite = cardSprite;
 
             foreach (var attributeView in GetComponentsInChildren<ICardAttributeView>())
             {

@@ -50,6 +50,9 @@ TagManager:
   - name: Objects
     uniqueID: 635778345
     locked: 0
+  - name: Cards
+    uniqueID: 164103827
+    locked: 0
   - name: Text
     uniqueID: 501202799
     locked: 0

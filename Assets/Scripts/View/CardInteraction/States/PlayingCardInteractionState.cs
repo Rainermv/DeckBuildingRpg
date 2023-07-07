@@ -40,13 +40,13 @@ namespace Assets.Scripts.View.CardInteraction.States
             _playerDeckCollectionView = playerDeckCollectionView;
             DebugEvents.Log(this, $"Begin Playing {_selectedCard.Name}, dragging: {_isDragging}");
 
-            _selectedCardView.RectTransform.SetParent(_cardDragTransform, true);
+            _selectedCardView.transform.SetParent(_cardDragTransform, true);
         }
 
         public void Finalize()
         {
-            _selectedCardView.RectTransform.SetParent(_playerDeckCollectionView.transform, false);
-            _selectedCardView.RectTransform.anchoredPosition = Vector2.zero;
+            _selectedCardView.transform.SetParent(_playerDeckCollectionView.transform, false);
+            _selectedCardView.transform.localPosition = Vector2.zero;
             DebugEvents.Log(this, $"Begin Activate");
 
         }
@@ -67,7 +67,7 @@ namespace Assets.Scripts.View.CardInteraction.States
 
         public ICardInteractionState OnCardPointerMove(CardInteractionStateModel stateModel)
         {
-            _selectedCardView.RectTransform.anchoredPosition = stateModel.PointerPosition;
+            _selectedCardView.transform.position = stateModel.PointerWorldPosition;
             
             return this;
         }

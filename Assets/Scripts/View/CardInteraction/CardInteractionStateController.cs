@@ -45,9 +45,9 @@ namespace Assets.Scripts.View.CardInteraction
 
         }
 
-        public void SetPointerPosition(Vector2 pointerPosition)
+        public void SetPointerWorldPosition(Vector2 pointerPosition)
         {
-            _interactionStateModel.PointerPosition = pointerPosition;
+            _interactionStateModel.PointerWorldPosition = pointerPosition;
             SetState(_current.OnCardPointerMove(_interactionStateModel));
         }
 
@@ -58,7 +58,7 @@ namespace Assets.Scripts.View.CardInteraction
             _interactionStateModel.InPlayArea = false;
             if (ev == PointerEventTrigger.MOVE)
             {
-                _interactionStateModel.PointerPosition = pointerEventData.position;
+                //_interactionStateModel.PointerWorldPosition = pointerEventData.position;
                 _interactionStateModel.InPlayArea = true;
                 //SetState(_current.OnPlayAreaMove(_interactionStateModel));
             }
@@ -68,7 +68,7 @@ namespace Assets.Scripts.View.CardInteraction
         {
             _interactionStateModel.CardView = cardView;
             _interactionStateModel.Card = card;
-            _interactionStateModel.PointerPosition = pointerEventData.position;
+            //_interactionStateModel.PointerPosition = pointerEventData.position;
 
             switch (ev)
             {

@@ -86,7 +86,7 @@ namespace Assets.Scripts.View.Cards
                 var cardView = Instantiate<CardView>(_cardPrefab);
                 cardView.ReportEvents = true;
 
-                cardView.RectTransform.SetParent(parent, false);
+                cardView.transform.SetParent(parent, false);
                 cardViews.Add(cardView);
             }
 

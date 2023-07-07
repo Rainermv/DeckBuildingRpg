@@ -98,10 +98,12 @@ namespace Assets.Scripts.View.Cards
             }
         }
 
-
+        
         public void OnPointerMove(PointerEventData eventData)
         {
-            _cardInteractionStateController.SetPointerPosition(eventData.position);
+            var pointerWorldPosition = Camera.main.ScreenToWorldPoint(eventData.position);
+            _cardInteractionStateController.SetPointerWorldPosition(pointerWorldPosition);
         }
+        
     }
 }
